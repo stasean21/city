@@ -1,0 +1,23 @@
+[
+  { "slug": "kompressor", "title": "Компрессор", "niche": "Автотовары", "service": "Инфографика · Ozon", "icon": "gauge" },
+  { "slug": "pomada", "title": "Помада", "niche": "Косметика", "service": "Карточка · Wildberries", "icon": "lipstick" },
+  { "slug": "naushniki", "title": "Наушники", "niche": "Электроника", "service": "AI-визуал", "icon": "headphones" },
+  { "slug": "kastrulya", "title": "Кастрюля", "niche": "Дом", "service": "Предметная съёмка", "icon": "pot" },
+  { "slug": "gantel", "title": "Гантель", "niche": "Спорт", "service": "Карточка · Ozon", "icon": "dumbbell" },
+  { "slug": "konstruktor", "title": "Конструктор", "niche": "Игрушки", "service": "Инфографика · Wildberries", "icon": "blocks" },
+  { "slug": "povodok", "title": "Поводок", "niche": "Зоотовары", "service": "AI-визуал", "icon": "paw" },
+  { "slug": "futbolka", "title": "Футболка", "niche": "Одежда", "service": "Карточка · Wildberries", "icon": "tshirt" },
+  { "slug": "krossovki", "title": "Кроссовки", "niche": "Обувь", "service": "Предметная съёмка", "icon": "shoe" },
+  { "slug": "kreslo", "title": "Кресло", "niche": "Мебель", "service": "Инфографика · Ozon", "icon": "chair" },
+  { "slug": "shurupovert", "title": "Шуруповёрт", "niche": "Инструменты", "service": "Карточка · Ozon", "icon": "drill" },
+  { "slug": "chay", "title": "Чай", "niche": "Продукты", "service": "AI-визуал", "icon": "cup" },
+  { "slug": "landing", "title": "Лендинг", "niche": "Веб", "service": "Сайт-визитка", "icon": "browser" },
+  { "slug": "crm", "title": "CRM", "niche": "Автоматизация", "service": "Интеграция CRM", "icon": "network" },
+  { "slug": "dashboard", "title": "Дашборд", "niche": "Аналитика", "service": "Сквозная аналитика", "icon": "bars" },
+  { "slug": "illustracii", "title": "Иллюстрации", "niche": "ИИ-генерация", "service": "AI-иллюстрации", "icon": "sparkle" },
+  { "slug": "posty", "title": "Посты", "niche": "Контент", "service": "Посты для соцсетей", "icon": "document" },
+  { "slug": "magazin", "title": "Магазин", "niche": "Веб", "service": "Сайт на Vue", "icon": "storefront" },
+  { "slug": "chat-bot", "title": "Чат-бот", "niche": "Автоматизация", "service": "Бот для заявок", "icon": "chat" },
+  { "slug": "otchety", "title": "Отчёты", "niche": "Аналитика", "service": "Автоотчёты", "icon": "report" },
+  { "slug": "avatary", "title": "Аватары", "niche": "ИИ-генерация", "service": "AI-аватары", "icon": "avatar" }
+]

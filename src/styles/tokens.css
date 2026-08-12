@@ -1,0 +1,78 @@
+:root {
+  --f-head: 'Gilroy', 'Inter', sans-serif;
+  --f-body: 'Inter', Arial, sans-serif;
+
+  /* фоны */
+  --bg:        #F6F4F2;
+  --bg-2:      #F9F7F3;
+  --bg-3:      #EAE8E4;
+  --bg-4:      #E6E4E0;
+  --white:     #FFFFFF;
+
+  /* тёмное */
+  --ink:       #1D1E22;
+  --ink-hover: #393A3F;
+
+  /* текст */
+  --text:      #717171;
+  --text-2:    #888686;
+  --text-3:    #A1A09F;
+
+  /* тёплые серые */
+  --warm:      #B5B1A9;
+  --warm-2:    #615D55;
+
+  /* акцент */
+  --accent:    #F59958;
+  --accent-2:  #FF8E5E;
+
+  /* линии */
+  --border:      #E4E4E4;
+  --border-soft: rgba(0, 0, 0, .1);
+
+  /* футер */
+  --footer-text:       #8F8D89;
+  --footer-border:     rgba(255, 255, 255, .12);
+  --dark-section-text: #A9A7A3;
+
+  /* сетка и геометрия */
+  --container:   1048px;
+  --gutter:      20px;
+  --section-gap: 300px;
+
+  --r-lg:   10px;
+  --r-sm:   6px;
+  --r-pill: 999px;
+
+  --shadow: 0 7px 20px rgba(68, 68, 68, .11);
+  --ease:   .2s ease;
+
+  /* ширины текстовых колонок */
+  --measure-paragraph: 620px;
+  --measure-heading:   468px;
+  --measure-card-head: 434px;
+
+  /* шкала gap */
+  --gap-xs: 6px;
+  --gap-sm: 8px;
+  --gap-md: 12px;
+  --gap-lg: 24px;
+  --gap-xl: 36px;
+  --gap-2xl: 40px;
+  --gap-3xl: 60px;
+
+  /* header */
+  --header-h: 66px;
+}
+
+@media (max-width: 991px) {
+  :root {
+    --section-gap: 180px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --section-gap: 120px;
+  }
+}
