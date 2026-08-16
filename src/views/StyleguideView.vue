@@ -113,9 +113,15 @@ const steps = [
       <h2>Кнопки</h2>
       <div class="row">
         <BaseButton variant="primary">Обсудить задачу</BaseButton>
-        <BaseButton variant="primary" size="large">Обсудить задачу</BaseButton>
+        <BaseButton variant="primary" size="lg">Обсудить задачу</BaseButton>
         <BaseButton variant="secondary">Смотреть работы</BaseButton>
-        <BaseButton variant="secondary" size="large">Смотреть работы</BaseButton>
+        <BaseButton variant="secondary" size="lg">Смотреть работы</BaseButton>
+        <BaseButton variant="ghost">Подробнее</BaseButton>
+      </div>
+      <div class="row">
+        <BaseButton variant="primary" size="lg" arrow>Обсудить задачу</BaseButton>
+        <BaseButton variant="secondary" size="lg" arrow>Смотреть работы</BaseButton>
+        <BaseButton variant="primary" size="lg" roll>Обсудить задачу</BaseButton>
       </div>
     </section>
 

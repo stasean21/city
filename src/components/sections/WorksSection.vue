@@ -10,7 +10,7 @@ import WorksGrid from './WorksGrid.vue'
     </div>
     <div class="container">
       <div class="works__cta">
-        <BaseButton to="/works" variant="secondary" size="large">Все работы</BaseButton>
+        <BaseButton to="/works" variant="secondary" size="lg">Все работы</BaseButton>
       </div>
     </div>
   </section>

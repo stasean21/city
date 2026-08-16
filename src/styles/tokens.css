@@ -62,7 +62,8 @@
   --gap-3xl: 60px;
 
   /* header */
-  --header-h: 66px;
+  --header-h: 70px;
+  --header-top: 40px;
 }
 
 @media (max-width: 991px) {
@@ -74,5 +75,6 @@
 @media (max-width: 767px) {
   :root {
     --section-gap: 120px;
+    --header-top: 16px;
   }
 }

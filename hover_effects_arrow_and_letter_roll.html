@@ -1,0 +1,123 @@
+<h2 class="sr-only">Демонстрация двух эффектов наведения на кнопки: стрелка-рикошет по диагонали и прокрутка букв по одной. Наведите курсор на кнопки.</h2>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+.hx{--bg:#F6F4F2;--bg2:#F9F7F3;--ink:#1D1E22;--ink-h:#393A3F;--acc:#F59958;--bd:#E4E4E4;--tx:#717171;--mut:#A1A09F;
+    font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:20px;color:var(--tx)}
+.hx .pane{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:34px 32px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hx .pane.d{background:var(--ink);border-color:#2A2B30}
+.hx .h{font-size:12px;color:var(--tx);margin:0 0 10px}
+.hx .h2{font-size:12px;color:var(--tx);margin:26px 0 10px}
+.hx .note{font-size:11px;color:var(--mut);margin-top:10px}
+
+/* ---------- база кнопки ---------- */
+.hx .btn{display:inline-flex;align-items:center;gap:10px;font:500 13px/20px Inter;
+         border-radius:10px;padding:9px 16px;border:0;cursor:pointer;text-decoration:none;
+         transition:background .2s ease,color .2s ease,border-color .2s ease}
+.hx .btn-primary{background:var(--ink);color:#fff}
+.hx .btn-primary:hover{background:var(--ink-h)}
+.hx .btn-secondary{background:var(--bg2);color:var(--ink);border:1px solid var(--bd)}
+.hx .btn-secondary:hover{border-color:var(--ink)}
+.hx .btn-ghost{background:transparent;color:var(--ink);padding:9px 0}
+
+/* ---------- 1. стрелка-рикошет ---------- */
+.hx .arw{position:relative;width:16px;height:16px;overflow:hidden;flex:none}
+.hx .arw svg{position:absolute;width:16px;height:16px;display:block;
+             transition:transform .38s cubic-bezier(.22,1,.36,1)}
+.hx .arw svg:nth-child(1){left:0;top:0}
+.hx .arw svg:nth-child(2){left:-16px;top:16px}      /* припаркована снизу-слева */
+.hx .btn:hover .arw svg{transform:translate(16px,-16px)}   /* обе едут по диагонали */
+.hx .arw svg path{stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* кружок вокруг стрелки — второй вариант */
+.hx .arw-box{width:28px;height:28px;border:1px solid currentColor;border-radius:999px;
+             display:inline-flex;align-items:center;justify-content:center;flex:none;
+             transition:background .2s ease,color .2s ease}
+.hx .btn:hover .arw-box{background:var(--acc);border-color:var(--acc);color:#fff}
+
+/* ---------- 2. прокрутка букв ---------- */
+.hx .roll{position:relative;display:inline-block;overflow:hidden;height:20px;vertical-align:top}
+.hx .roll span{display:inline-block;white-space:pre;
+               transition:transform .42s cubic-bezier(.22,1,.36,1);
+               transition-delay:calc(var(--i) * 22ms)}
+.hx .roll .up{position:absolute;left:0;top:100%;display:flex}
+.hx .btn:hover .roll .base span{transform:translateY(-100%)}
+.hx .btn:hover .roll .up span{transform:translateY(-100%)}
+.hx .roll .base{display:flex}
+
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+
+<div class="hx">
+
+<div class="h">1 — стрелка-рикошет. Улетает туда, куда указывает, снизу-слева въезжает новая</div>
+<div class="pane">
+  <a class="btn btn-primary" href="#" aria-label="Смотреть работы">
+    Смотреть работы
+    <span class="arw" aria-hidden="true">
+      <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+      <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+    </span>
+  </a>
+
+  <a class="btn btn-secondary" href="#" aria-label="Обсудить задачу">
+    Обсудить задачу
+    <span class="arw" aria-hidden="true">
+      <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+      <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+    </span>
+  </a>
+
+  <a class="btn btn-ghost" href="#" aria-label="Все работы">
+    Все работы
+    <span class="arw-box" aria-hidden="true">
+      <span class="arw">
+        <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+        <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+      </span>
+    </span>
+  </a>
+</div>
+<div class="note">Длительность .38s, кривая cubic-bezier(.22,1,.36,1). Вторая стрелка стоит со смещением −16 / +16 и скрыта overflow.</div>
+
+<div class="h2">2 — прокрутка букв. Задержка 22 мс на букву</div>
+<div class="pane">
+  <a class="btn btn-primary" href="#" aria-label="Отправить">
+    <span class="roll" aria-hidden="true">
+      <span class="base"><span style="--i:0">О</span><span style="--i:1">т</span><span style="--i:2">п</span><span style="--i:3">р</span><span style="--i:4">а</span><span style="--i:5">в</span><span style="--i:6">и</span><span style="--i:7">т</span><span style="--i:8">ь</span></span>
+      <span class="up"><span style="--i:0">О</span><span style="--i:1">т</span><span style="--i:2">п</span><span style="--i:3">р</span><span style="--i:4">а</span><span style="--i:5">в</span><span style="--i:6">и</span><span style="--i:7">т</span><span style="--i:8">ь</span></span>
+    </span>
+  </a>
+
+  <a class="btn btn-secondary" href="#" aria-label="Обо мне">
+    <span class="roll" aria-hidden="true">
+      <span class="base"><span style="--i:0">О</span><span style="--i:1">б</span><span style="--i:2">о</span><span style="--i:3"> </span><span style="--i:4">м</span><span style="--i:5">н</span><span style="--i:6">е</span></span>
+      <span class="up"><span style="--i:0">О</span><span style="--i:1">б</span><span style="--i:2">о</span><span style="--i:3"> </span><span style="--i:4">м</span><span style="--i:5">н</span><span style="--i:6">е</span></span>
+    </span>
+  </a>
+
+  <a class="btn btn-secondary" href="#" aria-label="Services">
+    <span class="roll" aria-hidden="true">
+      <span class="base"><span style="--i:0">S</span><span style="--i:1">e</span><span style="--i:2">r</span><span style="--i:3">v</span><span style="--i:4">i</span><span style="--i:5">c</span><span style="--i:6">e</span><span style="--i:7">s</span></span>
+      <span class="up"><span style="--i:0">S</span><span style="--i:1">e</span><span style="--i:2">r</span><span style="--i:3">v</span><span style="--i:4">i</span><span style="--i:5">c</span><span style="--i:6">e</span><span style="--i:7">s</span></span>
+    </span>
+  </a>
+</div>
+<div class="note">Сравни русскую и латинскую кнопку: на кириллице волна читается тяжелее — буквы шире и её приходится делать быстрее.</div>
+
+<div class="h2">3 — оба эффекта вместе, на тёмном</div>
+<div class="pane d">
+  <a class="btn btn-secondary" style="background:#2A2B30;color:#fff;border-color:#3A3B40" href="#" aria-label="Начать проект">
+    <span class="roll" aria-hidden="true">
+      <span class="base"><span style="--i:0">Н</span><span style="--i:1">а</span><span style="--i:2">ч</span><span style="--i:3">а</span><span style="--i:4">т</span><span style="--i:5">ь</span></span>
+      <span class="up"><span style="--i:0">Н</span><span style="--i:1">а</span><span style="--i:2">ч</span><span style="--i:3">а</span><span style="--i:4">т</span><span style="--i:5">ь</span></span>
+    </span>
+    <span class="arw" aria-hidden="true">
+      <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+      <svg viewBox="0 0 16 16"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg>
+    </span>
+  </a>
+</div>
+
+</div>

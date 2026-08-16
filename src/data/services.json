@@ -1,1 +1,8 @@
-[]
+[
+  { "slug": "infografika-dlya-marketpleysov", "title": "Инфографика для маркетплейсов" },
+  { "slug": "ai-fotosessii", "title": "AI-фотосессии" },
+  { "slug": "predmetnaya-syomka", "title": "Предметная съёмка" },
+  { "slug": "videooblozhki", "title": "Видеообложки" },
+  { "slug": "lendingi-i-sayty", "title": "Лендинги и сайты" },
+  { "slug": "ii-agenty", "title": "ИИ-агенты" }
+]
