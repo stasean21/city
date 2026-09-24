@@ -41,6 +41,7 @@
   --section-gap: 300px;
 
   --r-xl:   20px;
+  --r-btn:  15px;
   --r-lg:   10px;
   --r-sm:   6px;
   --r-pill: 999px;
@@ -72,6 +73,18 @@
   --service-card-h-mobile: 200px;
   --arrow-card:            28px;
   --arrow-card-mobile:     20px;
+
+  /* кнопка и чип: общая геометрия */
+  --btn-py:   8px;
+  --btn-px:   16px;
+  --gap-icon: 10px;
+  --chip-py:  var(--btn-py);
+  --chip-px:  var(--btn-px);
+
+  /* бегущая строка стека */
+  --stack-icon:        18px;
+  --marquee-duration:  40s;
+  --marquee-fade:      8%;
 
   /* header */
   --header-h: 70px;
@@ -110,6 +123,9 @@
     --header-top: 16px;
     --service-card-h: var(--service-card-h-mobile);
     --arrow-card: var(--arrow-card-mobile);
+    --chip-py: 6px;
+    --chip-px: 14px;
+    --stack-icon: 16px;
   }
 }
 

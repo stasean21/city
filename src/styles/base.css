@@ -221,6 +221,33 @@ section {
   color: var(--warm-2);
 }
 
+/* чип — неинтерактивный близнец secondary-кнопки: та же геометрия,
+   но это элемент списка, а не ссылка и не кнопка */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-icon);
+  padding: var(--chip-py) var(--chip-px);
+  font: 500 16px/22px var(--f-body);
+  color: var(--ink);
+  background: var(--bg-2);
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--r-btn);
+  white-space: nowrap;
+  transition: border-color var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--ink);
+}
+
+@media (max-width: 767px) {
+  .chip {
+    font-size: 15px;
+    line-height: 20px;
+  }
+}
+
 .work-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

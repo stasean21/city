@@ -65,10 +65,10 @@ const classes = computed(() => [
   --roll-h: 22px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--gap-icon);
   font: 500 16px/22px var(--f-body);
-  border-radius: 15px;
-  padding: 8px 16px;
+  border-radius: var(--r-btn);
+  padding: var(--btn-py) var(--btn-px);
   border: 0;
   cursor: pointer;
   text-decoration: none;
@@ -97,7 +97,7 @@ const classes = computed(() => [
 .btn--ghost {
   background: transparent;
   color: var(--ink);
-  padding: 8px 0;
+  padding: var(--btn-py) 0;
 }
 
 .btn:focus-visible {

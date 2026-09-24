@@ -3,6 +3,7 @@
     "slug": "infografika-dlya-marketpleysov",
     "title": "Инфографика для маркетплейсов",
     "description": "Карточки, которые объясняют товар за три секунды и выделяются в выдаче",
+    "stack": ["figma", "photoshop", "illustrator", "nano-banana", "midjourney", "chatgpt"],
     "blocks": [
       {
         "title": "",
@@ -22,6 +23,7 @@
     "slug": "ai-fotosessii",
     "title": "AI-фотосессии",
     "description": "Товар в нужном интерьере и с моделями — без студии и долгой съёмки",
+    "stack": ["nano-banana", "midjourney", "flux", "comfyui", "photoshop", "magnific"],
     "blocks": [
       {
         "title": "",
@@ -41,6 +43,7 @@
     "slug": "predmetnaya-syomka",
     "title": "Предметная съёмка",
     "description": "Чистые кадры товара для карточек, сайта и рекламы",
+    "stack": ["lightroom", "capture-one", "photoshop"],
     "blocks": [
       {
         "title": "",
@@ -60,6 +63,7 @@
     "slug": "videooblozhki",
     "title": "Видеообложки",
     "description": "Короткие ролики для карточки, которые удерживают внимание покупателя",
+    "stack": ["seedance", "kling", "higgsfield", "runway", "after-effects", "premiere-pro", "capcut"],
     "blocks": [
       {
         "title": "",
@@ -79,6 +83,7 @@
     "slug": "lendingi-i-sayty",
     "title": "Лендинги и сайты",
     "description": "Сайты с понятной структурой и аналитикой, которые приводят заявки",
+    "stack": ["figma", "vue", "vite", "tilda", "github", "timeweb", "yandex-metrika", "google-analytics"],
     "blocks": [
       {
         "title": "",
@@ -98,6 +103,7 @@
     "slug": "ii-agenty",
     "title": "ИИ-агенты",
     "description": "Автоматизация заявок, ответов и отчётов, чтобы рутина не съедала время",
+    "stack": ["claude", "chatgpt", "n8n", "make", "telegram", "python"],
     "blocks": [
       {
         "title": "",

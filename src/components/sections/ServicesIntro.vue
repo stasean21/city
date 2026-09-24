@@ -2,7 +2,9 @@
 import { RouterLink } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import RicochetArrow from '../ui/RicochetArrow.vue'
+import StackMarquee from '../ui/StackMarquee.vue'
 import services from '../../data/services.json'
+import homeStack from '../../data/stack-home.json'
 </script>
 
 <template>
@@ -28,6 +30,13 @@ import services from '../../data/services.json'
           </RouterLink>
         </li>
       </ul>
+    </div>
+
+    <!-- строка стека — вне сетки с липкой вводной: sticky ограничен
+         контейнером, и внутри сетки вводная наехала бы на строку -->
+    <div class="container services__stack">
+      <p class="caption">инструменты</p>
+      <StackMarquee :items="homeStack" />
     </div>
   </section>
 </template>
@@ -182,6 +191,14 @@ import services from '../../data/services.json'
   .service-card:active .service-card__arrow {
     color: var(--accent);
   }
+}
+
+.services__stack {
+  margin-top: var(--gap-3xl);
+}
+
+.services__stack .caption {
+  margin-bottom: var(--gap-sm);
 }
 
 /* на 1024–1279 карточка в две колонки уже 32-пиксельного заголовка —
