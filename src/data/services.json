@@ -1,8 +1,116 @@
 [
-  { "slug": "infografika-dlya-marketpleysov", "title": "Инфографика для маркетплейсов" },
-  { "slug": "ai-fotosessii", "title": "AI-фотосессии" },
-  { "slug": "predmetnaya-syomka", "title": "Предметная съёмка" },
-  { "slug": "videooblozhki", "title": "Видеообложки" },
-  { "slug": "lendingi-i-sayty", "title": "Лендинги и сайты" },
-  { "slug": "ii-agenty", "title": "ИИ-агенты" }
+  {
+    "slug": "infografika-dlya-marketpleysov",
+    "title": "Инфографика для маркетплейсов",
+    "description": "Карточки, которые объясняют товар за три секунды и выделяются в выдаче",
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "slug": "ai-fotosessii",
+    "title": "AI-фотосессии",
+    "description": "Товар в нужном интерьере и с моделями — без студии и долгой съёмки",
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "slug": "predmetnaya-syomka",
+    "title": "Предметная съёмка",
+    "description": "Чистые кадры товара для карточек, сайта и рекламы",
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "slug": "videooblozhki",
+    "title": "Видеообложки",
+    "description": "Короткие ролики для карточки, которые удерживают внимание покупателя",
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "slug": "lendingi-i-sayty",
+    "title": "Лендинги и сайты",
+    "description": "Сайты с понятной структурой и аналитикой, которые приводят заявки",
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "slug": "ii-agenty",
+    "title": "ИИ-агенты",
+    "description": "Автоматизация заявок, ответов и отчётов, чтобы рутина не съедала время",
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  }
 ]

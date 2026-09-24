@@ -2,6 +2,7 @@
 import { computed, useSlots } from 'vue'
 import { RouterLink } from 'vue-router'
 import RollingText from './RollingText.vue'
+import RicochetArrow from './RicochetArrow.vue'
 
 const props = defineProps({
   variant: { type: String, default: 'primary' }, // primary | secondary | ghost
@@ -54,14 +55,7 @@ const classes = computed(() => [
     <RollingText v-if="roll" :text="label" />
     <slot v-else />
 
-    <span v-if="arrow" class="arw" aria-hidden="true">
-      <svg viewBox="0 0 16 16" fill="none">
-        <path d="M4 12L12 4M12 4H5.5M12 4v6.5" />
-      </svg>
-      <svg viewBox="0 0 16 16" fill="none">
-        <path d="M4 12L12 4M12 4H5.5M12 4v6.5" />
-      </svg>
-    </span>
+    <RicochetArrow v-if="arrow" size="var(--btn-icon)" />
   </component>
 </template>
 
@@ -111,65 +105,18 @@ const classes = computed(() => [
   outline-offset: 2px;
 }
 
-/* стрелка-рикошет: два одинаковых svg, второй запаркован снизу-слева
-   за пределами видимости; диагональ translate совпадает с направлением
-   самой стрелки, иначе эффект «улёта» разваливается */
-.arw {
-  position: relative;
-  width: var(--btn-icon);
-  height: var(--btn-icon);
-  overflow: hidden;
-  flex: none;
+/* стрелка-рикошет — RicochetArrow; у кнопки въезжающая стрелка акцентная */
+.btn {
+  --ricochet-second: var(--accent);
 }
 
-.arw svg {
-  position: absolute;
-  width: var(--btn-icon);
-  height: var(--btn-icon);
-  display: block;
-  transition: transform .38s cubic-bezier(.22, 1, .36, 1);
-}
-
-.arw svg:nth-child(1) {
-  left: 0;
-  top: 0;
-}
-
-.arw svg:nth-child(2) {
-  left: calc(var(--btn-icon) * -1);
-  top: var(--btn-icon);
-}
-
-.btn:hover .arw svg {
-  transform: translate(var(--btn-icon), calc(var(--btn-icon) * -1));
-}
-
-.arw svg path {
-  stroke: currentColor;
-  stroke-width: 1.6;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* вторая стрелка — та, что въезжает на смену первой при наведении */
-.arw svg:nth-child(2) path {
-  stroke: var(--accent);
+.btn:hover {
+  --ricochet-p: 1;
 }
 
 /* буквы катаются внутри RollingText — она свой хук на hover не ставит,
    сдвиг запускает владелец эффекта, здесь :deep() пробивает её scoped-стили */
 .btn:hover :deep(.roll span) {
   transform: translateY(-100%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .arw svg {
-    transition: none;
-  }
-
-  .arw svg:nth-child(2) {
-    display: none;
-  }
 }
 </style>
