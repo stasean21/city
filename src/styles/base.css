@@ -100,7 +100,7 @@ h3 {
 /* заголовок карточки — между .h3 и .h2, без отступа снизу:
    ритм внутри карточки задаёт сама карточка */
 .card-title {
-  font: 500 24px/1.25 var(--f-head);
+  font: 600 24px/1.25 var(--f-head);
   letter-spacing: -0.4px;
   color: var(--ink);
   margin-bottom: 0;
