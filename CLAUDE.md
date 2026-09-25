@@ -120,7 +120,7 @@ section { padding: 0 0 var(--section-gap) }
 
 `.chip` — неинтерактивный близнец secondary-кнопки (`<li>`, не ссылка): те же шрифт, паддинги `--chip-py`/`--chip-px`, радиус `--r-btn`, зазор `--gap-icon`, ховер — `border-color: var(--ink)`. На ≤767px 15/20 и паддинги меньше.
 
-`.card-title` — заголовок внутри карточки: 24px/1.25, трекинг −0.4px, вес 600, `max-width: var(--measure-card-head)`, `margin-bottom: 0` — ритм внутри карточки задаёт сама карточка. На ≤1023px 22px, на ≤767px 20px/1.3 и −0.2px.
+`.card-title` — заголовок внутри карточки: 28px/1.2, трекинг −0.56px, вес 600, `max-width: var(--measure-card-head)`, `margin-bottom: 0` — ритм внутри карточки задаёт сама карточка. На ≤1279px 24px (узкие карточки мозаики), на ≤1023px 26px, на ≤767px 22px/1.3 и −0.3px.
 
 ---
 
