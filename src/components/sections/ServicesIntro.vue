@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import BaseButton from '../ui/BaseButton.vue'
 import RicochetArrow from '../ui/RicochetArrow.vue'
 import StackMarquee from '../ui/StackMarquee.vue'
 import services from '../../data/services.json'
@@ -12,12 +11,11 @@ import homeStack from '../../data/stack-home.json'
     <div class="container services__layout">
       <div class="services__intro once-in">
         <span class="pill">Что я делаю</span>
-        <h2 class="h2 services__title">Услуги и решения</h2>
+        <h2 class="h1 services__title">Услуги и решения</h2>
         <p class="services__lead">
           Собираю визуал, сайты и автоматизацию под одну задачу — чтобы товар продавался,
           а заявки доходили до вас.
         </p>
-        <BaseButton variant="primary" arrow to="/contacts">Обсудить задачу</BaseButton>
       </div>
 
       <ul class="services__grid once-in">
@@ -69,13 +67,15 @@ import homeStack from '../../data/stack-home.json'
 
 .services__lead {
   color: var(--text);
-  margin-bottom: var(--gap-xl);
 }
 
+/* мозаика крест-накрест: высокая карточка — 3 ряда, низкая — 2;
+   порядок в DOM 1…6 как в services.json, позиции заданы явно.
+   колонки заканчиваются на разной высоте — так задумано */
 .services__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-auto-rows: 1fr;
+  grid-auto-rows: var(--mosaic-row);
   gap: var(--gap-lg);
 }
 
@@ -84,11 +84,17 @@ import homeStack from '../../data/stack-home.json'
   min-width: 0;
 }
 
+.services__grid li:nth-child(1) { grid-column: 1; grid-row: 1 / span 3; }
+.services__grid li:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
+.services__grid li:nth-child(3) { grid-column: 1; grid-row: 4 / span 2; }
+.services__grid li:nth-child(4) { grid-column: 2; grid-row: 3 / span 3; }
+.services__grid li:nth-child(5) { grid-column: 1; grid-row: 6 / span 3; }
+.services__grid li:nth-child(6) { grid-column: 2; grid-row: 6 / span 2; }
+
 .service-card {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: var(--service-card-h);
   padding: var(--gap-lg);
   background-color: var(--white);
   border-radius: var(--r-xl);
@@ -201,33 +207,32 @@ import homeStack from '../../data/stack-home.json'
   margin-bottom: var(--gap-sm);
 }
 
-/* на 1024–1279 карточка в две колонки уже 32-пиксельного заголовка —
-   «маркетплейсов» рвётся посреди слова; ставим карточки в столбик рядом
-   с липкой вводной, на ≤1023 вводная уходит наверх и место возвращается */
-@media (max-width: 1279px) {
-  .services__grid {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* вводная уходит наверх, мозаика остаётся в две колонки */
 @media (max-width: 1023px) {
-  .services__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .services__layout {
     grid-template-columns: 1fr;
   }
 
   .services__intro {
     position: static;
-    margin-bottom: var(--gap-2xl);
+    margin-bottom: var(--gap-3xl);
   }
 }
 
+/* мозаика выключается: один столбик, естественный порядок 1…6 */
 @media (max-width: 767px) {
   .services__grid {
     grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .services__grid li:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .service-card {
+    min-height: var(--service-card-h-mobile);
   }
 }
 </style>

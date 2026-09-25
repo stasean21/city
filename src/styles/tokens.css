@@ -69,7 +69,7 @@
 
   /* карточка услуги */
   --card-mark-w:           112px;
-  --service-card-h:        320px;
+  --mosaic-row:            120px;
   --service-card-h-mobile: 200px;
   --arrow-card:            28px;
   --arrow-card-mobile:     20px;
@@ -121,7 +121,6 @@
     --gutter: 20px;
     --section-gap: 120px;
     --header-top: 16px;
-    --service-card-h: var(--service-card-h-mobile);
     --arrow-card: var(--arrow-card-mobile);
     --chip-py: 6px;
     --chip-px: 14px;

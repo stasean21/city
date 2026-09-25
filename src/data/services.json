@@ -22,7 +22,7 @@
   {
     "slug": "ai-fotosessii",
     "title": "AI-фотосессии",
-    "description": "Товар в нужном интерьере и с моделями — без студии и долгой съёмки",
+    "description": "Товар в нужном интерьере — без студии",
     "stack": ["nano-banana", "midjourney", "flux", "comfyui", "photoshop", "magnific"],
     "blocks": [
       {
@@ -42,7 +42,7 @@
   {
     "slug": "predmetnaya-syomka",
     "title": "Предметная съёмка",
-    "description": "Чистые кадры товара для карточек, сайта и рекламы",
+    "description": "Чистые кадры для карточек и рекламы",
     "stack": ["lightroom", "capture-one", "photoshop"],
     "blocks": [
       {
@@ -102,7 +102,7 @@
   {
     "slug": "ii-agenty",
     "title": "ИИ-агенты",
-    "description": "Автоматизация заявок, ответов и отчётов, чтобы рутина не съедала время",
+    "description": "Берут на себя заявки, ответы и отчёты",
     "stack": ["claude", "chatgpt", "n8n", "make", "telegram", "python"],
     "blocks": [
       {
