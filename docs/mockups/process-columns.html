@@ -1,0 +1,118 @@
+<!doctype html>
+<!-- Макет-референс блока «Как работаем» (вариант с раскрывающимися колонками) для главной.
+     Не часть сайта: значения здесь захардкожены, в компоненте всё переводится на токены.
+     Открыть: npm run dev → http://localhost:5173/docs/mockups/process-columns.html -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Как работаем — колонки</title>
+<link rel="stylesheet" href="/src/styles/tokens.css">
+<link rel="stylesheet" href="/src/styles/base.css">
+<style>
+body { background: var(--bg); padding: 60px 0 400px; }
+.lab { font: 500 13px var(--f-body); color: var(--ink); background: var(--white); display: inline-block; padding: 6px 12px; border-radius: 999px; margin-bottom: 40px; }
+.block { margin-bottom: 260px; }
+.pill { margin-bottom: 24px; }
+.muted { color: var(--text); }
+.head2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; margin-bottom: 80px; }
+.head2 h2 { margin: 0; }
+.chipout { display: inline-flex; gap: 6px; align-items: center; font: 500 12px/18px var(--f-body); color: var(--ink); background: var(--white); border-radius: 999px; padding: 4px 10px; }
+.chipout::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+/* ===== A — линия, которая заполняется при скролле ===== */
+.A .track { position: relative; height: 1px; background: var(--bg-4); margin-bottom: 0; }
+.A .fill { position: absolute; inset: 0; background: var(--ink); transform-origin: left; transform: scaleX(0); }
+.A .cols { display: grid; grid-template-columns: repeat(6, 1fr); }
+.A .col { position: relative; padding: 28px 20px 0 0; }
+.A .dot { position: absolute; top: -6px; left: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--bg-4); transition: background .3s ease, border-color .3s ease; }
+.A .col.on .dot { background: var(--ink); border-color: var(--ink); }
+.A .col:first-child.on .dot { background: var(--accent); border-color: var(--accent); }
+.A .n { display: block; font: 500 72px/1 var(--f-head); letter-spacing: -2.5px; color: var(--bg-4); margin-bottom: 24px; transition: color .5s ease; }
+.A .col.on .n { color: var(--ink); }
+.A h3 { margin-bottom: 8px; }
+.A p { font-size: 14px; line-height: 22px; color: var(--text); margin-bottom: 14px; }
+.A .txt { opacity: .25; transform: translateY(12px); transition: opacity .5s ease, transform .6s cubic-bezier(.22,1,.36,1); }
+.A .col.on .txt { opacity: 1; transform: none; }
+
+/* ===== B — раскрывающиеся колонки ===== */
+.B .row { display: flex; gap: 12px; height: 440px; }
+.B .cl { flex: 1; min-width: 0; background: var(--white); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; position: relative; overflow: hidden; cursor: pointer; transition: flex-grow .6s cubic-bezier(.22,1,.36,1), background-color .3s ease; }
+.B .cl.on { flex-grow: 3.4; background: var(--ink); }
+.B .n { font: 500 48px/1 var(--f-head); letter-spacing: -1.5px; color: var(--bg-4); transition: color .3s ease; }
+.B .cl.on .n { color: var(--accent); }
+.B .vt { position: absolute; left: 24px; bottom: 24px; font: 500 18px var(--f-head); color: var(--ink); writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; transition: opacity .25s ease; }
+.B .cl.on .vt { opacity: 0; }
+.B .inner { margin-top: auto; width: 100%; min-width: 260px; opacity: 0; transform: translateY(16px); transition: opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1); }
+.B .cl.on .inner { opacity: 1; transform: none; transition-delay: .25s; }
+.B .inner h3 { font: 600 28px/1.2 var(--f-head); letter-spacing: -.5px; color: #fff; margin-bottom: 12px; }
+.B .inner p { color: var(--dark-section-text); margin-bottom: 20px; }
+.B .inner .chipout { background: #2c2d32; color: #fff; }
+.B .ico { position: absolute; top: 24px; right: 24px; width: 56px; height: 56px; border-radius: 16px; background: #2c2d32; opacity: 0; transition: opacity .3s ease; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 24px; }
+.B .cl.on .ico { opacity: 1; transition-delay: .3s; }
+
+/* ===== C — процесс как переписка ===== */
+.C .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.C .list { margin-top: 40px; border-top: 1px solid var(--border-soft); }
+.C .list li { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-soft); font: 500 18px/1.33 var(--f-head); color: var(--text-3); transition: color .3s ease; }
+.C .list li span { font: 400 12px var(--f-body); color: var(--text-3); transition: color .3s ease; }
+.C .list li em { font-style: normal; font: 400 12px var(--f-body); color: var(--text-3); opacity: 0; transition: opacity .3s ease; }
+.C .list li.done { color: var(--ink); } .C .list li.done em { opacity: 1; }
+.C .list li.cur span { color: var(--accent); }
+.chat { background: var(--white); border-radius: 27px; padding: 12px; }
+.chat .top { display: flex; align-items: center; gap: 12px; padding: 10px 12px 14px; }
+.chat .av { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-3); }
+.chat .top b { font: 500 14px var(--f-body); color: var(--ink); display: block; } .chat .top small { font-size: 12px; color: var(--text-3); }
+.chat .scr { background: var(--bg-2); border-radius: 15px; height: 560px; padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; overflow: hidden; }
+.m { max-width: 78%; padding: 10px 14px; border-radius: 16px; font: 400 14px/20px var(--f-body); opacity: 0; transform: translateY(10px); }
+.m.in { background: var(--white); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 4px; }
+.m.out { background: var(--ink); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.m .tag { display: block; font: 500 11px var(--f-body); color: var(--accent); margin-bottom: 4px; }
+.m .file { display: flex; gap: 10px; align-items: center; margin-top: 8px; background: #2c2d32; border-radius: 10px; padding: 8px 10px; font-size: 12px; }
+.m .file i { width: 26px; height: 32px; border-radius: 4px; background: var(--accent); flex: none; }
+.m .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 8px; }
+.m .thumbs i { aspect-ratio: 3/4; border-radius: 6px; background: #efe7dd; }
+.typing { align-self: flex-end; background: var(--ink); border-radius: 16px; padding: 12px 14px; display: none; gap: 4px; }
+.typing.in-side { align-self: flex-start; background: var(--white); }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); animation: bl 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes bl { 0%, 60%, 100% { opacity: .3; } 30% { opacity: 1; } }
+.day { align-self: center; font: 500 11px var(--f-body); color: var(--text-3); background: var(--white); padding: 3px 10px; border-radius: 999px; opacity: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- B -->
+<span class="lab">B — колонки: наведите на этап, он раскрывается</span>
+<div class="block B" id="B">
+  <div class="head2"><div><span class="pill">Процесс</span><h2 class="h1">Как работаем</h2></div><p class="muted">Наведите на этап, чтобы узнать подробнее.</p></div>
+  <div class="row">
+    <div class="cl on"><span class="n">01</span><span class="ico">✉</span><span class="vt">Заявка</span><div class="inner"><h3>Заявка</h3><p>Пишете в Telegram или через форму. Отвечаю и задаю пару уточняющих вопросов.</p><span class="chipout">созвон или переписка</span></div></div>
+    <div class="cl"><span class="n">02</span><span class="ico">✎</span><span class="vt">Бриф</span><div class="inner"><h3>Бриф</h3><p>Разбираю товар, аудиторию и конкурентов, собираю референсы.</p><span class="chipout">бриф-документ</span></div></div>
+    <div class="cl"><span class="n">03</span><span class="ico">₽</span><span class="vt">Смета</span><div class="inner"><h3>Смета</h3><p>Фиксируем объём, стоимость и дату сдачи — до начала работы.</p><span class="chipout">смета и дата сдачи</span></div></div>
+    <div class="cl"><span class="n">04</span><span class="ico">◐</span><span class="vt">Концепция</span><div class="inner"><h3>Концепция</h3><p>Показываю направление на одном слайде, прежде чем делать весь объём.</p><span class="chipout">концепция на согласование</span></div></div>
+    <div class="cl"><span class="n">05</span><span class="ico">✦</span><span class="vt">Работа</span><div class="inner"><h3>Работа</h3><p>Делаю весь объём, показываю промежуточные результаты, вношу правки.</p><span class="chipout">готовые материалы</span></div></div>
+    <div class="cl"><span class="n">06</span><span class="ico">↓</span><span class="vt">Сдача</span><div class="inner"><h3>Сдача</h3><p>Передаю файлы в нужных форматах под каждую площадку.</p><span class="chipout">файлы в нужных форматах</span></div></div>
+  </div>
+</div>
+
+</div>
+<script type="module">
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+
+// B — раскрытие по наведению, без наведения этапы листаются сами
+const B = document.getElementById('B')
+const cls = [...B.querySelectorAll('.cl')]
+let bi = 0, bt
+const setB = i => { bi = i; cls.forEach((c, k) => c.classList.toggle('on', k === i)) }
+const autoB = () => { clearInterval(bt); bt = setInterval(() => setB((bi + 1) % cls.length), 3000) }
+cls.forEach((c, k) => c.addEventListener('mouseenter', () => { clearInterval(bt); setB(k) }))
+B.querySelector('.row').addEventListener('mouseleave', autoB)
+ScrollTrigger.create({ trigger: B, start: 'top 70%', onEnter: autoB })
+
+</script>
+</body>
+</html>

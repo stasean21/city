@@ -22,6 +22,7 @@ html {
   /* тёмное */
   --ink:       #1D1E22;
   --ink-hover: #393A3F;
+  --ink-soft:  #2C2D32;   /* плашки и иконки внутри тёмного блока */
 
   /* текст */
   --text:      #717171;
@@ -58,6 +59,7 @@ html {
   --t-caption: .75rem;    /* 12 */
   --t-ui:      1rem;      /* 16 */
   --t-num:     5rem;      /* 80 */
+  --t-num-sm:  3rem;      /* 48 */
 
   /* трекинг ролей */
   --ls-display: -.094rem; /* −1.5 */
@@ -65,6 +67,7 @@ html {
   --ls-card:    -.031rem; /* −0.5 */
   --ls-h3:      -.019rem; /* −0.3 */
   --ls-num:     -.19rem;  /* −3 */
+  --ls-num-sm:  -.094rem; /* −1.5 */
 
   /* шкала отступов — других значений нет */
   --s-4:   .25rem;
@@ -132,6 +135,16 @@ html {
   /* карточка этапа */
   --step-card-h: 22rem;   /* 352 */
 
+  /* блок «Как работаем» — раскрывающиеся колонки */
+  --process-h:           27.5rem; /* 440 — высота ряда колонок */
+  --process-grow:        3.4;     /* во сколько раз шире активная колонка */
+  --process-content-min: 16rem;   /* 256 — текст не переносится посимвольно при раскрытии */
+  --process-row-h:       4rem;    /* 64 — строка аккордеона на мобилке */
+  --process-icon-box:    3.5rem;  /* 56 */
+  --process-icon-r:      1rem;    /* 16 */
+  --process-icon:        1.5rem;  /* 24 */
+  --dot:                 .375rem; /* 6 — точка-маркер */
+
   /* бегущая строка стека */
   --stack-icon:       1.125rem; /* 18 */
   --marquee-duration: 40s;
@@ -157,6 +170,7 @@ html {
 @media (max-width: 991px) {
   :root {
     --section-gap: 10rem;       /* 160 */
+    --process-h:   25rem;       /* 400 */
     --sec-pill:    var(--s-20);
     --sec-lead:    var(--s-16);
     --sec-content: 3rem;        /* 48 */
@@ -173,6 +187,8 @@ html {
     --t-body:    .875rem;   /* 14 */
     --t-ui:      .9375rem;  /* 15 */
     --t-num:     3.5rem;    /* 56 */
+    --t-num-sm:  1.5rem;    /* 24 */
+    --process-icon-box: 2.5rem; /* 40 */
     --ls-display: -.04rem;  /* −0.64 */
 
     --section-gap: 6.25rem; /* 100 */

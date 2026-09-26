@@ -104,6 +104,15 @@ onUnmounted(() => {
             </div>
             <div class="num">01 &nbsp;02 &nbsp;03</div>
           </div>
+
+          <div class="sg-role">
+            <div class="sg-role__meta">
+              <b>Number small</b>
+              <span>48 / 500 · мобилка 24</span>
+              <span>номера в узких колонках</span>
+            </div>
+            <div class="num-sm">01 &nbsp;02 &nbsp;03</div>
+          </div>
         </div>
       </div>
     </section>

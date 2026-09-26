@@ -135,6 +135,12 @@ h3 {
   color: var(--ink);
 }
 
+.num-sm {
+  font: 500 var(--t-num-sm)/1 var(--f-head);
+  letter-spacing: var(--ls-num-sm);
+  color: var(--ink);
+}
+
 p {
   max-width: var(--measure-paragraph);
 }
