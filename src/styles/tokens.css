@@ -84,7 +84,8 @@ html {
   --sec-pill:    var(--s-24);  /* pill → заголовок */
   --sec-lead:    var(--s-20);  /* заголовок → lead */
   --sec-content: var(--s-80);  /* lead → контент */
-  --hero-bottom: 10rem;   /* 160 */
+  --hero-top:    var(--s-80);
+  --hero-bottom: var(--s-120);
 
   /* сетка и геометрия */
   --container: 65.5rem;   /* 1048 */
@@ -178,6 +179,7 @@ html {
     --sec-pill:    var(--s-16);
     --sec-lead:    var(--s-12);
     --sec-content: var(--s-32);
+    --hero-top:    var(--s-40);
     --hero-bottom: var(--s-80);
 
     --header-top: var(--s-16);

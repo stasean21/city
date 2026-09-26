@@ -117,7 +117,7 @@ section { padding: 0 0 var(--section-gap) }
 
 Не сокращай «чтобы влезло»: воздух здесь и есть дизайн.
 
-Исключения: hero — сверху `--s-32`, снизу `--hero-bottom` (160, моб. 80); `.dark-section` — внутренние `--s-120` сверху и снизу.
+Исключения: hero — сверху `--hero-top` (80, моб. 40), снизу `--hero-bottom` (120, моб. 80); подзаголовок с `text-wrap: balance`; `.dark-section` — внутренние `--s-120` сверху и снизу.
 
 `main` уже имеет `padding-top: calc(var(--header-top) + var(--header-h))`, повторять в секциях не нужно.
 

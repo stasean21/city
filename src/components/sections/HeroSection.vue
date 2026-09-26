@@ -69,7 +69,7 @@ onUnmounted(() => {
 <style scoped>
 /* main уже даёт клиренс под шапку (--header-top + --header-h) */
 .hero {
-  padding-top: var(--s-32);
+  padding-top: var(--hero-top);
   padding-bottom: var(--hero-bottom);
 }
 
@@ -114,6 +114,8 @@ onUnmounted(() => {
 
 .hero__lead {
   max-width: var(--measure-lead);
+  /* без одинокого слова в последней строке */
+  text-wrap: balance;
   margin-bottom: var(--s-32);
 }
 
