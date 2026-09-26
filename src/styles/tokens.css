@@ -147,6 +147,11 @@ html {
   --process-icon:        1.5rem;  /* 24 */
   --dot:                 .375rem; /* 6 — точка-маркер */
 
+  /* блок «Что говорят клиенты» — стена скринов */
+  --reviews-h:     47.5rem; /* 760 — высота стены */
+  --reviews-speed: 60s;     /* полный круг ленты */
+  --reviews-fade:  12%;     /* растворение сверху и снизу */
+
   /* бегущая строка стека */
   --stack-icon:       1.125rem; /* 18 */
   --marquee-duration: 40s;
@@ -174,6 +179,7 @@ html {
     --section-gap: 10rem;       /* 160 */
     --process-h:   25rem;       /* 400 */
     --t-num-xl:    10rem;       /* 160 */
+    --reviews-h:   38.75rem;    /* 620 */
     --sec-pill:    var(--s-20);
     --sec-lead:    var(--s-16);
     --sec-content: 3rem;        /* 48 */
@@ -192,6 +198,7 @@ html {
     --t-num:     3.5rem;    /* 56 */
     --t-num-sm:  1.5rem;    /* 24 */
     --process-icon-box: 2.5rem; /* 40 */
+    --reviews-h:  32.5rem;  /* 520 */
     --ls-display: -.04rem;  /* −0.64 */
 
     --section-gap: 6.25rem; /* 100 */

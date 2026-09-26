@@ -125,7 +125,7 @@ section { padding: 0 0 var(--section-gap) }
 
 Шкала отступов: `--s-4` · `--s-8` · `--s-12` · `--s-16` · `--s-20` · `--s-24` · `--s-32` · `--s-40` · `--s-60` · `--s-80` · `--s-120`. Других значений не вводим.
 
-Сетки: `1fr 1fr 1fr`, `1fr 1fr`, `2fr 3fr` (текст ~40% + контент ~60%), `1fr minmax(200px, 280px)`.
+Сетки: `1fr 1fr 1fr`, `1fr 1fr`, `2fr 3fr` (текст ~40% + контент ~60%), `1.9fr 1fr` (стена отзывов + текст), `1fr minmax(200px, 280px)`.
 
 Заголовки не рвутся посреди слова: в `base.css` у всех ролей заголовков `overflow-wrap: normal; word-break: normal; hyphens: manual; text-wrap: balance`. Не ставь на заголовки `break-word` / `anywhere` — если слово не помещается, расширяй колонку или уменьшай роль токеном.
 
@@ -156,6 +156,10 @@ section { padding: 0 0 var(--section-gap) }
 Карточка услуги: `--r-card` (20), `--card-mark-w` (112, линия-маркер), `--mosaic-row` (120, ряд мозаики), `--arrow-card` (28, на ≤767px 20 через `--arrow-card-mobile`), `--service-card-h-mobile` (200, min-height на ≤767px). Стек: `--stack-icon` (18, на ≤767px 16), `--marquee-duration`, `--marquee-fade`.
 
 **Блок процесса** — `src/components/sections/ProcessColumns.vue`, данные `src/data/process.json` (`title`, `text`, `result`, `icon` — имя SVG в `src/assets/icons/process/`, встраивается через `?raw`). Макет — `docs/mockups/process-columns.html` (композиция и поведение; размеры — из системы). Шесть колонок высотой `--process-h` (440, на ≤991 400), активная шире в `--process-grow` раз, тёмная, с содержимым снизу и иконкой справа сверху; маленький номер `.num-sm` в ней гаснет, вместо него фоном встаёт огромный `.num-xl` (`aria-hidden`, появляется opacity + translateY с задержкой .15s, кегль не анимируется). На ≤767 огромного номера нет — в раскрытой строке `.num-sm` акцентным цветом. Колонка — `<li>` с кнопкой поверх (`aria-expanded`, `aria-controls`), содержимое — соседний блок, скрыт прозрачностью, но есть в HTML. Мышь/фокус раскрывают колонку и останавливают автоплей; без наведения колонки листаются каждые 3 с, только пока блок в экране (`IntersectionObserver` 0.4) и вкладка видна; клик — пауза 8 с. На ≤767 — аккордеон (`grid-template-rows: 0fr → 1fr`) без автоплея; при reduced motion автоплея и переходов нет. Токены: `--process-h`, `--process-grow`, `--process-content-min`, `--process-row-h`, `--process-icon-box` (56, моб. 40), `--process-icon-r`, `--process-icon`, `--dot`.
+
+**Стена отзывов** — `src/components/sections/ReviewsWall.vue`, данные `src/data/reviews.json`, макет `docs/mockups/reviews-wall.html`. Сетка `1.9fr 1fr`: слева стена высотой `--reviews-h` (760, ≤991 620, ≤767 520) из двух лент (чётные отзывы в левой, нечётные в правой; на ≤767 одна лента), справа pill, Display, lead и цифры. Ленты едут навстречу CSS-анимацией `translateY(0 → −50%)` за `--reviews-speed` (60s), содержимое продублировано (вторая копия `aria-hidden`, `alt=""`); зазор после последней карточки — внутри копии, иначе на петле виден стык. Края гаснут маской `--reviews-fade` (обрезка, не декор). Пауза при наведении, вне экрана (`IntersectionObserver`) и кнопкой в углу (видна при фокусе и на тач). При reduced motion — одна копия, стена прокручивается вручную.
+
+Формат `reviews.json`: `stats` — `[{ value, label }]`, элемент выводится только при непустом `value` (выдуманные цифры запрещены); `items` — `[{ image, width, height, name, niche, service, alt }]`. Скрины — **Yandex Object Storage** по абсолютному URL (`…/reviews/NN.webp`), WebP, в репозиторий не кладём; `width`/`height` — реальные размеры скрина. Пустой `image` — нейтральная заглушка «скрин отзыва»; пустые `name`/`niche`/`service` — подпись не выводится. Сейчас в данных 8 заглушек без имён.
 
 **Прокрутка букв** — `src/components/ui/RollingText.vue`, задержка 25 мс на букву. Используется на пунктах меню. На кнопках — только `arrow`, без `roll`: один элемент, один приём.
 
@@ -220,7 +224,7 @@ GitHub → Timeweb Cloud App Platform, тип «фронтенд», команд
 
 ## Текущее состояние
 
-На главной (`HomeView.vue`) сейчас подключены `HeroSection`, `ServicesIntro` и `ProcessColumns` (блок «Как работаем», `#process`). Работаем по одному модулю за раз, сверху вниз.
+На главной (`HomeView.vue`) сейчас подключены `HeroSection`, `ServicesIntro`, `ProcessColumns` (блок «Как работаем», `#process`) и `ReviewsWall` (блок «Что говорят клиенты», `#reviews`, пока на заглушках). Работаем по одному модулю за раз, сверху вниз.
 
 **`WorksSection.vue` и `WorksGrid.vue` отключены намеренно** — блок работ будет переделан полностью. Не подключай их обратно и не правь, пока не поступит отдельная задача.
 
