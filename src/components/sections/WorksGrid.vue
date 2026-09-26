@@ -117,7 +117,7 @@ const displayedWorks = computed(() =>
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .works-grid {
     grid-template-columns: repeat(4, 1fr);
   }
