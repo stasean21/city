@@ -88,8 +88,8 @@ const repeats = computed(() => Math.max(1, Math.ceil(MIN_PER_HALF / (tools.value
    на половину зазора и петля дёргается */
 .marquee__list {
   display: flex;
-  gap: var(--gap-md);
-  padding-right: var(--gap-md);
+  gap: var(--s-12);
+  padding-right: var(--s-12);
 }
 
 .marquee__icon {

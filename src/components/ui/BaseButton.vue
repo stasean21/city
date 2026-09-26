@@ -6,7 +6,9 @@ import RicochetArrow from './RicochetArrow.vue'
 
 const props = defineProps({
   variant: { type: String, default: 'primary' }, // primary | secondary | ghost
-  size: { type: String, default: 'md' }, // md | lg
+  // md | lg — размеры теперь одинаковые (как кнопка в шапке),
+  // lg оставлен алиасом, чтобы не ломать вызовы
+  size: { type: String, default: 'md' },
   arrow: { type: Boolean, default: false },
   roll: { type: Boolean, default: false },
   to: { type: String, default: null },
@@ -37,11 +39,7 @@ const linkAttrs = computed(() => {
   return {}
 })
 
-const classes = computed(() => [
-  'btn',
-  `btn--${props.variant}`,
-  props.size === 'lg' ? 'btn--lg' : null,
-])
+const classes = computed(() => ['btn', `btn--${props.variant}`])
 </script>
 
 <template>
@@ -61,15 +59,15 @@ const classes = computed(() => [
 
 <style scoped>
 .btn {
-  --btn-icon: 16px;
-  --roll-h: 22px;
+  --roll-h: 1.375em;
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-icon);
-  font: 500 16px/22px var(--f-body);
+  gap: var(--s-12);
+  font: 500 var(--t-ui)/1.375 var(--f-body);
   border-radius: var(--r-btn);
-  padding: var(--btn-py) var(--btn-px);
-  border: 0;
+  padding: var(--s-8) var(--s-16);
+  /* прозрачная рамка у всех вариантов — высота primary и secondary одна */
+  border: var(--hairline) solid transparent;
   cursor: pointer;
   text-decoration: none;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
@@ -87,7 +85,7 @@ const classes = computed(() => [
 .btn--secondary {
   background: var(--bg-2);
   color: var(--ink);
-  border: 1px solid var(--border);
+  border: var(--hairline) solid var(--border);
 }
 
 .btn--secondary:hover {
@@ -97,12 +95,34 @@ const classes = computed(() => [
 .btn--ghost {
   background: transparent;
   color: var(--ink);
-  padding: var(--btn-py) 0;
+  padding: var(--s-8) 0;
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
+  outline: var(--focus-ring) solid var(--ink);
+  outline-offset: var(--focus-ring);
+}
+
+/* на тёмном фоне (футер, тёмные секции) — те же primary/secondary,
+   инвертированные: владелец ставит на предке класс .on-dark */
+:global(.on-dark .btn--primary),
+:global(.on-dark .btn--primary:hover) {
+  background: var(--white);
+  color: var(--ink);
+}
+
+:global(.on-dark .btn--secondary) {
+  background: transparent;
+  color: var(--white);
+  border-color: var(--on-dark-border);
+}
+
+:global(.on-dark .btn--secondary:hover) {
+  border-color: var(--white);
+}
+
+:global(.on-dark .btn:focus-visible) {
+  outline-color: var(--white);
 }
 
 /* стрелка-рикошет — RicochetArrow; у кнопки въезжающая стрелка акцентная */

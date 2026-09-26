@@ -11,7 +11,7 @@ import homeStack from '../../data/stack-home.json'
     <div class="container services__layout">
       <div class="services__intro once-in">
         <span class="pill">Что я делаю</span>
-        <h2 class="h1 services__title">Услуги и решения</h2>
+        <h2 class="display services__title">Услуги и решения</h2>
         <p class="services__lead">
           Собираю визуал, сайты и автоматизацию под одну задачу — чтобы товар продавался,
           а заявки доходили до вас.
@@ -43,14 +43,14 @@ import homeStack from '../../data/stack-home.json'
 .services__layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--gap-lg);
+  gap: var(--s-24);
 }
 
 /* обычный CSS sticky: без align-self: start колонка растянется
    на высоту сетки и прилипать будет нечему */
 .services__intro {
   position: sticky;
-  top: calc(var(--header-top) + var(--header-h) + var(--gap-lg));
+  top: calc(var(--header-top) + var(--header-h) + var(--s-24));
   align-self: start;
   display: flex;
   flex-direction: column;
@@ -58,11 +58,12 @@ import homeStack from '../../data/stack-home.json'
 }
 
 .services__intro .pill {
-  margin-bottom: var(--gap-lg);
+  margin-bottom: var(--sec-pill);
 }
 
 .services__title {
   max-width: var(--measure-heading);
+  margin-bottom: var(--sec-lead);
 }
 
 .services__lead {
@@ -76,7 +77,7 @@ import homeStack from '../../data/stack-home.json'
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: var(--mosaic-row);
-  gap: var(--gap-lg);
+  gap: var(--s-24);
 }
 
 .services__grid li {
@@ -95,9 +96,9 @@ import homeStack from '../../data/stack-home.json'
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: var(--gap-lg);
+  padding: var(--s-24);
   background-color: var(--white);
-  border-radius: var(--r-xl);
+  border-radius: var(--r-card);
   color: var(--text);
   transition: background-color var(--ease), color var(--ease);
 }
@@ -106,7 +107,7 @@ import homeStack from '../../data/stack-home.json'
   display: block;
   width: var(--card-mark-w);
   height: var(--hairline);
-  margin-bottom: var(--gap-lg);
+  margin-bottom: var(--s-24);
   background-color: var(--ink);
   transition: background-color var(--ease);
 }
@@ -117,7 +118,7 @@ import homeStack from '../../data/stack-home.json'
 }
 
 .service-card__text {
-  margin-top: var(--gap-md);
+  margin-top: var(--s-12);
   color: var(--text);
   transition: color var(--ease);
 }
@@ -200,22 +201,22 @@ import homeStack from '../../data/stack-home.json'
 }
 
 .services__stack {
-  margin-top: var(--gap-3xl);
+  margin-top: var(--s-60);
 }
 
 .services__stack .caption {
-  margin-bottom: var(--gap-sm);
+  margin-bottom: var(--s-8);
 }
 
 /* вводная уходит наверх, мозаика остаётся в две колонки */
-@media (max-width: 1023px) {
+@media (max-width: 991px) {
   .services__layout {
     grid-template-columns: 1fr;
   }
 
   .services__intro {
     position: static;
-    margin-bottom: var(--gap-3xl);
+    margin-bottom: var(--s-60);
   }
 }
 

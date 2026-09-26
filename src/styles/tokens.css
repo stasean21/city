@@ -1,3 +1,13 @@
+/* эталон системы — docs/mockups/foundation.html.
+   все размеры в rem: 1rem = 16px на ширине 1440, выше экрана
+   корневой кегль растёт (см. html ниже), и вместе с ним — весь сайт */
+
+/* масштаб: до 1440 — ровно 16px, выше растёт с экраном, потолок ×2.
+   100% снизу сохраняет пользовательскую настройку кегля в браузере */
+html {
+  font-size: clamp(100%, 100vw / 90, 200%);
+}
+
 :root {
   --f-head: 'Gilroy', 'Inter', sans-serif;
   --f-body: 'Inter', Arial, sans-serif;
@@ -30,107 +40,153 @@
   --border:      #E4E4E4;
   --border-soft: rgba(0, 0, 0, .1);
 
-  /* футер */
+  /* футер и тёмный фон */
   --footer-text:       #8F8D89;
+  --footer-link:       #D9D7D3;
   --footer-border:     rgba(255, 255, 255, .12);
   --dark-section-text: #A9A7A3;
+  --on-dark-border:    rgba(255, 255, 255, .25);
+
+  /* типографика — роли (десктоп; мобилка ниже) */
+  --t-display: 3.625rem;  /* 58 */
+  --t-h2:      2.25rem;   /* 36 */
+  --t-card:    1.75rem;   /* 28 */
+  --t-h3:      1.375rem;  /* 22 */
+  --t-lead:    1.25rem;   /* 20 */
+  --t-body:    .9375rem;  /* 15 */
+  --t-small:   .8125rem;  /* 13 */
+  --t-caption: .75rem;    /* 12 */
+  --t-ui:      1rem;      /* 16 */
+  --t-num:     5rem;      /* 80 */
+
+  /* трекинг ролей */
+  --ls-display: -.094rem; /* −1.5 */
+  --ls-h2:      -.045rem; /* −0.72 */
+  --ls-card:    -.031rem; /* −0.5 */
+  --ls-h3:      -.019rem; /* −0.3 */
+  --ls-num:     -.19rem;  /* −3 */
+
+  /* шкала отступов — других значений нет */
+  --s-4:   .25rem;
+  --s-8:   .5rem;
+  --s-12:  .75rem;
+  --s-16:  1rem;
+  --s-20:  1.25rem;
+  --s-24:  1.5rem;
+  --s-32:  2rem;
+  --s-40:  2.5rem;
+  --s-60:  3.75rem;
+  --s-80:  5rem;
+  --s-120: 7.5rem;
+
+  /* ритм секции */
+  --section-gap: 15rem;   /* 240 — между секциями */
+  --sec-pill:    var(--s-24);  /* pill → заголовок */
+  --sec-lead:    var(--s-20);  /* заголовок → lead */
+  --sec-content: var(--s-80);  /* lead → контент */
+  --hero-bottom: 10rem;   /* 160 */
 
   /* сетка и геометрия */
-  --container:   1550px;
-  --gutter:      60px;
-  --section-gap: 300px;
+  --container: 65.5rem;   /* 1048 */
+  --gutter:    1.5rem;    /* 24 */
 
-  --r-xl:   20px;
-  --r-btn:  15px;
-  --r-lg:   10px;
-  --r-sm:   6px;
+  --r-card: 1.25rem;      /* 20 */
+  --r-btn:  .9375rem;     /* 15 */
+  --r-lg:   .625rem;      /* 10 */
+  --r-sm:   .375rem;      /* 6 */
   --r-pill: 999px;
 
-  --shadow: 0 7px 20px rgba(68, 68, 68, .11);
+  --shadow: 0 .4375rem 1.25rem rgba(68, 68, 68, .11);
   --ease:   .2s ease;
 
   /* ширины текстовых колонок */
-  --measure-paragraph: 620px;
-  --measure-heading:   468px;
-  --measure-card-head: 434px;
+  --measure-paragraph: 38.75rem; /* 620 */
+  --measure-heading:   29.25rem; /* 468 */
+  --measure-card-head: 27.125rem; /* 434 */
+  --measure-lead:      40rem;    /* 640 — lead в hero */
+  --measure-title:     32.5rem;  /* 520 — Display в заголовке секции */
+  --measure-note:      16rem;    /* 256 — короткая подпись в колонке */
+  --measure-display:   62rem;    /* 992 — Display в hero */
 
-  /* шкала gap */
-  --gap-xs: 6px;
-  --gap-sm: 8px;
-  --gap-md: 12px;
-  --gap-lg: 24px;
-  --gap-xl: 36px;
-  --gap-2xl: 40px;
-  --gap-3xl: 60px;
-
-  /* линии и фокус */
+  /* линии и фокус — в px намеренно: волосяная линия не должна толстеть */
   --hairline:   1px;
   --focus-ring: 2px;
 
-  /* карточка услуги */
-  --card-mark-w:           112px;
-  --mosaic-row:            120px;
-  --service-card-h-mobile: 200px;
-  --arrow-card:            28px;
-  --arrow-card-mobile:     20px;
+  /* пилюля и чип */
+  --pill-py: .375rem;     /* 6 */
+  --pill-px: .875rem;     /* 14 */
+  --chip-py: var(--s-8);
+  --chip-px: var(--s-16);
 
-  /* кнопка и чип: общая геометрия */
-  --btn-py:   8px;
-  --btn-px:   16px;
-  --gap-icon: 10px;
-  --chip-py:  var(--btn-py);
-  --chip-px:  var(--btn-px);
+  /* иконка в кнопке */
+  --btn-icon: 1rem;
+
+  /* карточка услуги */
+  --card-mark-w:           7rem;    /* 112 */
+  --mosaic-row:            7.5rem;  /* 120 */
+  --service-card-h-mobile: 12.5rem; /* 200 */
+  --arrow-card:            1.75rem; /* 28 */
+  --arrow-card-mobile:     1.25rem; /* 20 */
+
+  /* карточка этапа */
+  --step-card-h: 22rem;   /* 352 */
 
   /* бегущая строка стека */
-  --stack-icon:        18px;
-  --marquee-duration:  40s;
-  --marquee-fade:      8%;
+  --stack-icon:       1.125rem; /* 18 */
+  --marquee-duration: 40s;
+  --marquee-fade:     8%;
 
   /* header */
-  --header-h: 70px;
-  --header-top: 40px;
+  --header-h:     4.375rem; /* 70 */
+  --header-top:   2.5rem;   /* 40 */
+  --logo-h:       1.5rem;   /* 24 */
+  --nav-gap:      3rem;     /* 48 — от текста до текста пунктов меню */
+  --nav-link-py:  .625rem;  /* 10 */
+  --nav-link-px:  1.25rem;  /* 20 */
+
+  /* плавающий объект в hero */
+  --hero-object-w:      9.375rem; /* 150 */
+  --hero-object-w-sm:   6.875rem; /* 110 */
+  --hero-object-top:    1.25rem;  /* 20 */
+  --hero-object-top-sm: -1.875rem; /* −30 */
+  --hero-object-shift:  5.625rem; /* 90 — максимум выноса вправо */
 }
 
-/* шкала контейнера и гаттера — строго от большего к меньшему:
-   при равной специфичности побеждает правило ниже по файлу */
-@media (max-width: 1549px) {
+/* брейкпоинты: 991 / 767 / 479, строго от большего к меньшему */
+@media (max-width: 991px) {
   :root {
-    --container: 1320px;
-    --gutter: 40px;
-  }
-}
-
-@media (max-width: 1279px) {
-  :root {
-    --container: 1120px;
-    --gutter: 32px;
-  }
-}
-
-@media (max-width: 1023px) {
-  :root {
-    --container: 100%;
-    --gutter: 24px;
-    --section-gap: 180px;
+    --section-gap: 10rem;       /* 160 */
+    --sec-pill:    var(--s-20);
+    --sec-lead:    var(--s-16);
+    --sec-content: 3rem;        /* 48 */
   }
 }
 
 @media (max-width: 767px) {
   :root {
-    --container: 100%;
-    --gutter: 20px;
-    --section-gap: 120px;
-    --header-top: 16px;
-    --arrow-card: var(--arrow-card-mobile);
-    --chip-py: 6px;
-    --chip-px: 14px;
-    --stack-icon: 16px;
-  }
-}
+    --t-display: 2.125rem;  /* 34 */
+    --t-h2:      1.5rem;    /* 24 */
+    --t-card:    1.375rem;  /* 22 */
+    --t-h3:      1.125rem;  /* 18 */
+    --t-lead:    1rem;      /* 16 */
+    --t-body:    .875rem;   /* 14 */
+    --t-ui:      .9375rem;  /* 15 */
+    --t-num:     3.5rem;    /* 56 */
+    --ls-display: -.04rem;  /* −0.64 */
 
-@media (max-width: 479px) {
-  :root {
-    --container: 100%;
-    --gutter: 16px;
+    --section-gap: 6.25rem; /* 100 */
+    --sec-pill:    var(--s-16);
+    --sec-lead:    var(--s-12);
+    --sec-content: var(--s-32);
+    --hero-bottom: var(--s-80);
+
+    --header-top: var(--s-16);
+    --header-h:   3.5rem;   /* 56 */
+    --logo-h:     1.25rem;  /* 20 */
+
+    --arrow-card: var(--arrow-card-mobile);
+    --chip-py:    var(--pill-py);
+    --chip-px:    var(--pill-px);
+    --stack-icon: var(--s-16);
   }
 }

@@ -26,7 +26,7 @@ defineProps({
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: var(--r-sm);
-  margin-bottom: var(--gap-md);
+  margin-bottom: var(--s-12);
 }
 
 .work-card__image--placeholder {
@@ -35,7 +35,7 @@ defineProps({
 
 .work-card__title {
   display: block;
-  font: 400 15px var(--f-body);
+  font: 400 var(--t-body) var(--f-body);
   color: var(--ink);
 }
 </style>

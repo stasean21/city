@@ -26,7 +26,7 @@ const stepMs = computed(() => `${props.step}ms`)
   position: relative;
   display: inline-block;
   overflow: hidden;
-  height: var(--roll-h, 20px);
+  height: var(--roll-h, 1.25rem);
   vertical-align: top;
 }
 

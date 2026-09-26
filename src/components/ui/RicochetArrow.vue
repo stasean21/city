@@ -3,7 +3,7 @@
 // выставляя на себе --ricochet-p: 1 (hover, :active на тач, :focus-visible).
 // цвет — currentColor; второй стрелке владелец может задать --ricochet-second
 defineProps({
-  size: { type: String, default: '16px' },
+  size: { type: String, default: '1rem' },
 })
 </script>
 

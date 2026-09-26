@@ -79,7 +79,7 @@ onUnmounted(() => {
         </RouterLink>
       </nav>
 
-      <BaseButton to="/contacts" variant="primary" size="lg" arrow class="site-header__cta">
+      <BaseButton to="/contacts" variant="primary" arrow class="site-header__cta">
         Обсудить задачу
       </BaseButton>
 
@@ -122,7 +122,7 @@ onUnmounted(() => {
         </RouterLink>
       </nav>
 
-      <BaseButton to="/contacts" variant="primary" size="lg" arrow class="mobile-menu__cta" @click="closeMenu">
+      <BaseButton to="/contacts" variant="primary" arrow class="mobile-menu__cta" @click="closeMenu">
         Обсудить задачу
       </BaseButton>
     </div>
@@ -145,14 +145,16 @@ onUnmounted(() => {
    иначе при скролле подсвечивался бы прямоугольник во всю ширину экрана,
    а не плавающая «таблетка» в границах контейнера */
 .site-header__inner {
-  max-width: var(--container);
+  /* как .container: содержимое шапки ровно по краям контента страницы */
+  max-width: calc(var(--container) + 2 * var(--gutter));
   height: 100%;
   margin: 0 auto;
   padding: 0 var(--gutter);
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
-  border-radius: 35px;
+  /* от текста последнего пункта до кнопки — тот же --nav-gap */
+  gap: calc(var(--nav-gap) - var(--nav-link-px));
+  border-radius: calc(var(--header-h) / 2);
   background: transparent;
   transition: transform var(--ease), background-color var(--ease), box-shadow var(--ease);
   pointer-events: auto;
@@ -162,7 +164,7 @@ onUnmounted(() => {
    реально показана (проскроллили вниз и сейчас скроллим вверх) */
 .site-header.has-bg .site-header__inner {
   background: var(--bg);
-  box-shadow: 0 0 16px rgba(255, 0, 0, .15);
+  box-shadow: 0 0 var(--s-16) rgba(255, 0, 0, .15);
 }
 
 .site-header__inner.is-hidden {
@@ -181,23 +183,24 @@ onUnmounted(() => {
 
 .site-header__logo img {
   display: block;
-  height: 35px;
+  height: var(--logo-h);
   width: auto;
 }
 
+/* --nav-gap — расстояние от текста до текста; паддинги подложки
+   ховера съедают часть зазора, поэтому вычитаем их */
 .site-header__nav {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
+  gap: calc(var(--nav-gap) - 2 * var(--nav-link-px));
 }
 
 .site-header__link {
-  --roll-h: 22px;
-  font: 500 16px/22px var(--f-body);
+  --roll-h: 1.375em;
+  font: 500 var(--t-ui)/1.375 var(--f-body);
   color: var(--ink);
   opacity: 0.85;
-  /* рамка вокруг текста — тот же масштаб 13→16px применён и к паддингу */
-  padding: 10px 20px;
+  padding: var(--nav-link-py) var(--nav-link-px);
   border-radius: var(--r-pill);
   background: transparent;
   transition: opacity .2s ease, background-color .2s ease;
@@ -224,7 +227,7 @@ onUnmounted(() => {
   background: none;
   border: 0;
   color: var(--ink);
-  padding: 8px;
+  padding: var(--s-8);
 }
 
 .mobile-menu {
@@ -249,18 +252,18 @@ onUnmounted(() => {
   background: none;
   border: 0;
   color: var(--ink);
-  padding: 8px;
+  padding: var(--s-8);
 }
 
 .mobile-menu__nav {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
-  margin-top: var(--gap-3xl);
+  gap: var(--s-24);
+  margin-top: var(--s-60);
 }
 
 .mobile-menu__link {
-  font: 500 22px var(--f-head);
+  font: 500 var(--t-h3) var(--f-head);
   color: var(--ink);
 }
 

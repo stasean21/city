@@ -391,8 +391,8 @@ onUnmounted(() => {
 }
 
 .the-loader__word {
-  font: 600 clamp(28px, 5vw, 64px) / 1 var(--f-head);
-  letter-spacing: -1px;
+  font: 600 clamp(1.75rem, 5vw, 4rem) / 1 var(--f-head);
+  letter-spacing: -.0625rem;
   color: #F1EFEC;
   white-space: nowrap;
 }
@@ -414,8 +414,8 @@ onUnmounted(() => {
 }
 
 .the-loader__page-label {
-  font: 600 clamp(28px, 5vw, 64px) / 1 var(--f-head);
-  letter-spacing: -1px;
+  font: 600 clamp(1.75rem, 5vw, 4rem) / 1 var(--f-head);
+  letter-spacing: -.0625rem;
   color: #F1EFEC;
   white-space: nowrap;
   opacity: 0;

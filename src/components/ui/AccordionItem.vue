@@ -26,7 +26,7 @@ const isOpen = ref(false)
 
 <style scoped>
 .accordion-item {
-  border-bottom: 1px solid var(--border-soft);
+  border-bottom: var(--hairline) solid var(--border-soft);
 }
 
 .accordion-item__head {
@@ -34,11 +34,11 @@ const isOpen = ref(false)
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-md);
+  gap: var(--s-12);
   background: none;
   border: 0;
-  padding: 20px 0;
-  font: 500 15px var(--f-body);
+  padding: var(--s-20) 0;
+  font: 500 var(--t-body) var(--f-body);
   color: var(--ink);
   text-align: left;
 }
@@ -69,8 +69,8 @@ const isOpen = ref(false)
 }
 
 .accordion-item__body-inner p {
-  padding-bottom: 20px;
-  font: 400 15px/25px var(--f-body);
+  padding-bottom: var(--s-20);
+  font: 400 var(--t-body)/1.667 var(--f-body);
   color: var(--text);
   max-width: none;
 }
