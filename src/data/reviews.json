@@ -1,11 +1,11 @@
 {
   "stats": [
     {
-      "value": "",
+      "value": "30+",
       "label": "отзывов"
     },
     {
-      "value": "",
+      "value": "130",
       "label": "повторных заказов"
     }
   ],
@@ -13,7 +13,7 @@
     {
       "image": "",
       "width": 600,
-      "height": 780,
+      "height": 700,
       "name": "",
       "niche": "",
       "service": "",
@@ -22,7 +22,7 @@
     {
       "image": "",
       "width": 600,
-      "height": 640,
+      "height": 820,
       "name": "",
       "niche": "",
       "service": "",
@@ -31,7 +31,7 @@
     {
       "image": "",
       "width": 600,
-      "height": 900,
+      "height": 560,
       "name": "",
       "niche": "",
       "service": "",
@@ -58,7 +58,7 @@
     {
       "image": "",
       "width": 600,
-      "height": 600,
+      "height": 560,
       "name": "",
       "niche": "",
       "service": "",
@@ -67,7 +67,7 @@
     {
       "image": "",
       "width": 600,
-      "height": 860,
+      "height": 700,
       "name": "",
       "niche": "",
       "service": "",
@@ -76,11 +76,47 @@
     {
       "image": "",
       "width": 600,
-      "height": 720,
+      "height": 820,
       "name": "",
       "niche": "",
       "service": "",
       "alt": "Скрин отзыва 8 — заглушка"
+    },
+    {
+      "image": "",
+      "width": 600,
+      "height": 560,
+      "name": "",
+      "niche": "",
+      "service": "",
+      "alt": "Скрин отзыва 9 — заглушка"
+    },
+    {
+      "image": "",
+      "width": 600,
+      "height": 700,
+      "name": "",
+      "niche": "",
+      "service": "",
+      "alt": "Скрин отзыва 10 — заглушка"
+    },
+    {
+      "image": "",
+      "width": 600,
+      "height": 820,
+      "name": "",
+      "niche": "",
+      "service": "",
+      "alt": "Скрин отзыва 11 — заглушка"
+    },
+    {
+      "image": "",
+      "width": 600,
+      "height": 560,
+      "name": "",
+      "niche": "",
+      "service": "",
+      "alt": "Скрин отзыва 12 — заглушка"
     }
   ]
 }
