@@ -139,6 +139,21 @@ p {
   max-width: var(--measure-paragraph);
 }
 
+/* заголовки не рвутся посреди слова: переносим только по пробелам,
+   строки выравниваем по длине */
+h1,
+h2,
+h3,
+.display,
+.h2,
+.card-title,
+.h3 {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
+  text-wrap: balance;
+}
+
 /* утилиты */
 
 .container {

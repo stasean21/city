@@ -42,7 +42,8 @@ import homeStack from '../../data/stack-home.json'
 <style scoped>
 .services__layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* текст ~40%, карточки ~60% — иначе в мозаике не помещаются названия */
+  grid-template-columns: 2fr 3fr;
   gap: var(--s-24);
 }
 
@@ -113,7 +114,6 @@ import homeStack from '../../data/stack-home.json'
 }
 
 .service-card__title {
-  overflow-wrap: break-word;
   transition: color var(--ease);
 }
 
