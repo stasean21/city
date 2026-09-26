@@ -162,17 +162,33 @@ onUnmounted(() => {
         <div class="reviews__summary">
           <!-- стопка аватаров — графика; смысл дублирует легенда -->
           <div class="reviews__avatars" aria-hidden="true">
+            <!-- внешний слой — разделитель цвета фона, внутренний — сам круг;
+                 кольцо «повторный заказ» внутри разделителя -->
             <span
               v-for="(client, i) in clients"
               :key="i"
               class="reviews__avatar"
               :class="{ 'is-repeat': client.repeat }"
-              :style="client.photo ? null : { background: AVATAR_BG[i % AVATAR_BG.length] }"
             >
-              <img v-if="client.photo" :src="client.photo" alt="" width="48" height="48" loading="lazy" decoding="async" />
-              <span v-else class="h3">{{ client.initial }}</span>
+              <img
+                v-if="client.photo"
+                class="reviews__avatar-in"
+                :src="client.photo"
+                alt=""
+                width="48"
+                height="48"
+                loading="lazy"
+                decoding="async"
+              />
+              <span
+                v-else
+                class="h3 reviews__avatar-in"
+                :style="{ background: AVATAR_BG[i % AVATAR_BG.length] }"
+              >{{ client.initial }}</span>
             </span>
-            <span class="h3 reviews__count">{{ summary.reviews }}</span>
+            <span class="reviews__count">
+              <span class="h3 reviews__count-in">{{ summary.reviews }}</span>
+            </span>
           </div>
 
           <p class="visually-hidden">{{ summary.reviews }} отзывов, {{ summary.repeat }} повторных заказов</p>
@@ -283,20 +299,19 @@ onUnmounted(() => {
   align-items: center;
 }
 
-/* рамка цвета фона отделяет круг от соседа, на который он наложен */
+/* наложение — естественное: каждый следующий круг лежит на предыдущем.
+   внешний слой цвета фона даёт тонкую полоску-разделитель между кругами */
 .reviews__avatar,
 .reviews__count {
+  flex: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
   height: var(--avatar);
-  border: 3px solid var(--bg);
+  padding: 3px;
+  background: var(--bg);
   border-radius: var(--r-pill);
 }
 
 .reviews__avatar {
-  position: relative;
-  flex: none;
   width: var(--avatar);
 }
 
@@ -305,36 +320,34 @@ onUnmounted(() => {
   margin-left: var(--avatar-overlap);
 }
 
-/* кольцо «возвращался с новым заказом» — обводка, не тень. Отдельным
-   слоем поверх всех кругов: у соседей с кольцом (М и Д) outline на самом
-   круге ушёл бы под наложенного соседа. Круги z-index не получают, чтобы
-   не заводить свой контекст наложения — тогда кольцо над всеми */
-.reviews__avatar.is-repeat::after {
-  content: "";
-  position: absolute;
-  inset: -5px; /* снаружи рамки 3px, как outline с offset 0 */
-  z-index: 1;
-  border: 2px solid var(--accent);
-  border-radius: var(--r-pill);
-  pointer-events: none;
-}
-
-.reviews__avatar img {
+.reviews__avatar-in,
+.reviews__count-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: var(--r-pill);
 }
 
-.reviews__avatar .h3 {
+.reviews__avatar-in {
+  font-weight: 600;
   color: var(--ink);
 }
 
-.reviews__count {
-  position: relative;
+img.reviews__avatar-in {
+  object-fit: cover;
+}
+
+/* кольцо «возвращался с новым заказом» — внутри разделителя */
+.reviews__avatar.is-repeat .reviews__avatar-in {
+  border: 2px solid var(--accent);
+}
+
+.reviews__count-in {
   padding: 0 var(--s-16);
-  color: var(--white);
   font-weight: 600;
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -367,8 +380,7 @@ onUnmounted(() => {
 
 .reviews__mark.is-ring {
   background: transparent;
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
+  border: 2px solid var(--accent);
 }
 
 /* reduced motion: ленты стоят, окно стены листается само по себе */
