@@ -136,6 +136,10 @@ onUnmounted(() => {
           :class="{ 'is-active': active === i }"
           @pointerenter="onEnter(i, $event)"
         >
+          <!-- огромный номер раскрытой колонки — фон под текстом;
+               для скринридера номер уже есть в подписи кнопки -->
+          <span class="num-xl process__num-xl" aria-hidden="true">{{ item.num }}</span>
+
           <!-- кнопка накрывает колонку целиком; содержимое — соседний блок,
                а не потомок: заголовок и абзац внутри <button> недопустимы -->
           <button
@@ -223,10 +227,12 @@ onUnmounted(() => {
   background: var(--ink);
 }
 
+/* слои: огромный номер (0) → содержимое (1) → кнопка (2), чтобы
+   клик по тексту всё равно попадал в кнопку */
 .process__trigger {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   /* flex, а не block: браузер центрирует содержимое <button> по вертикали,
      номер должен стоять сверху */
   display: flex;
@@ -253,11 +259,32 @@ onUnmounted(() => {
 .process__num {
   display: block;
   color: var(--bg-4);
-  transition: color var(--ease);
+  transition: color var(--ease), opacity .2s ease;
 }
 
 .is-active .process__num {
-  color: var(--accent);
+  opacity: 0;
+}
+
+/* огромный номер: только opacity и transform, кегль не анимируем.
+   left — компенсация внутреннего отступа глифа */
+.process__num-xl {
+  position: absolute;
+  top: var(--s-24);
+  left: calc(var(--s-24) - var(--s-8));
+  z-index: 0;
+  opacity: 0;
+  transform: translateY(var(--s-24));
+  transition:
+    opacity .5s cubic-bezier(.22, 1, .36, 1),
+    transform .5s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+}
+
+.is-active .process__num-xl {
+  opacity: 1;
+  transform: none;
+  transition-delay: .15s;
 }
 
 /* вертикальное название у левого нижнего края */
@@ -307,6 +334,8 @@ onUnmounted(() => {
    доступно скринридеру. min-width — чтобы во время раскрытия текст
    не переносился посимвольно */
 .process__content {
+  position: relative;
+  z-index: 1;
   margin-top: auto;
   width: 100%;
   min-width: var(--process-content-min);
@@ -395,6 +424,16 @@ onUnmounted(() => {
     color: var(--white);
   }
 
+  /* в аккордеоне огромного номера нет — остаётся обычный, акцентный */
+  .process__num-xl {
+    display: none;
+  }
+
+  .is-active .process__num {
+    opacity: 1;
+    color: var(--accent);
+  }
+
   .process__icon {
     position: static;
     margin-left: auto;
@@ -407,6 +446,7 @@ onUnmounted(() => {
 
   /* раскрытие по высоте: 0fr → 1fr */
   .process__content {
+    position: static;
     display: grid;
     grid-template-rows: 0fr;
     min-width: 0;
@@ -443,6 +483,7 @@ onUnmounted(() => {
 @media (prefers-reduced-motion: reduce) {
   .process__col,
   .process__num,
+  .process__num-xl,
   .process__label,
   .process__icon,
   .process__content {

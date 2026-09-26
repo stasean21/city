@@ -60,6 +60,7 @@ html {
   --t-ui:      1rem;      /* 16 */
   --t-num:     5rem;      /* 80 */
   --t-num-sm:  3rem;      /* 48 */
+  --t-num-xl:  12.5rem;   /* 200 — только номер в раскрытой колонке процесса */
 
   /* трекинг ролей */
   --ls-display: -.094rem; /* −1.5 */
@@ -68,6 +69,7 @@ html {
   --ls-h3:      -.019rem; /* −0.3 */
   --ls-num:     -.19rem;  /* −3 */
   --ls-num-sm:  -.094rem; /* −1.5 */
+  --ls-num-xl:  -.625rem; /* −10 */
 
   /* шкала отступов — других значений нет */
   --s-4:   .25rem;
@@ -171,6 +173,7 @@ html {
   :root {
     --section-gap: 10rem;       /* 160 */
     --process-h:   25rem;       /* 400 */
+    --t-num-xl:    10rem;       /* 160 */
     --sec-pill:    var(--s-20);
     --sec-lead:    var(--s-16);
     --sec-content: 3rem;        /* 48 */
