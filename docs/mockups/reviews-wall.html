@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- Макет-референс блока «Что говорят клиенты» (стена скринов, вариант A1) для главной.
+     Не часть сайта: значения захардкожены, скрины и тексты — заглушки. В компоненте всё на токенах, скрины — реальные изображения.
+     Открыть: npm run dev → http://localhost:5173/docs/mockups/reviews-wall.html -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Отзывы — стена скринов</title>
+<link rel="stylesheet" href="/src/styles/tokens.css">
+<link rel="stylesheet" href="/src/styles/base.css">
+<style>
+body { background: var(--bg); padding: 60px 0 300px; }
+.lab { font: 500 13px var(--f-body); color: var(--ink); background: var(--white); display: inline-block; padding: 6px 12px; border-radius: 999px; margin-bottom: 40px; }
+.block { margin-bottom: 240px; }
+.pill { margin-bottom: 24px; }
+.muted { color: var(--text); }
+
+/* общий «скрин переписки» */
+.shot { background: var(--white); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.shot .who { display: flex; align-items: center; gap: 10px; padding-bottom: 8px; }
+.shot .av { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-3); flex: none; }
+.shot .who b { font: 500 13px var(--f-body); color: var(--ink); display: block; } .shot .who small { font-size: 11px; color: var(--text-3); }
+.msg { max-width: 88%; padding: 9px 12px; border-radius: 14px; font: 400 13px/19px var(--f-body); background: var(--bg-2); color: var(--ink); border-bottom-left-radius: 4px; }
+.msg.me { align-self: flex-end; background: var(--ink); color: #fff; border-bottom-left-radius: 14px; border-bottom-right-radius: 4px; }
+.msg .pic { display: block; margin-top: 6px; aspect-ratio: 4/3; border-radius: 8px; background: #efe7dd; }
+.tagsvc { align-self: flex-start; font: 500 11px var(--f-body); color: var(--text-3); margin-top: 4px; }
+
+/* ===== A — стена скринов, две колонки едут навстречу ===== */
+.A .wrap { display: grid; grid-template-columns: 1.25fr 1fr; gap: 60px; align-items: center; }
+.A .wall { height: 620px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
+.A .lane { display: flex; flex-direction: column; gap: 16px; animation: up 40s linear infinite; }
+.A .lane.down { animation-name: down; }
+.A .wall:hover .lane { animation-play-state: paused; }
+@keyframes up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.A .stats { display: flex; gap: 32px; margin-top: 40px; }
+.A .stats div { font-size: 13px; color: var(--text-3); } .A .stats b { display: block; font: 600 32px var(--f-head); letter-spacing: -1px; color: var(--ink); }
+
+/* ===== B — крупная цитата + работа, о которой отзыв ===== */
+.B .stage { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+.B .quote { background: var(--white); border-radius: 27px; padding: 48px; display: flex; flex-direction: column; min-height: 520px; position: relative; }
+.B .mark { font: 600 96px/0.6 var(--f-head); color: var(--accent); height: 44px; }
+.B .q { font: 500 34px/1.25 var(--f-head); letter-spacing: -.8px; color: var(--ink); margin: 24px 0 auto; max-width: 560px; }
+.B .q .w { display: inline-block; opacity: 0; transform: translateY(12px); }
+.B .by { display: flex; align-items: center; gap: 14px; margin-top: 40px; }
+.B .by .av { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-3); }
+.B .by b { display: block; font: 500 15px var(--f-body); color: var(--ink); } .B .by small { font-size: 13px; color: var(--text-3); }
+.B .src { margin-left: auto; font: 500 12px var(--f-body); color: var(--text-3); background: var(--bg-2); border-radius: 999px; padding: 6px 12px; }
+.B .work { border-radius: 27px; background: #efe7dd; position: relative; overflow: hidden; }
+.B .work .img { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.B .work .bt { position: absolute; left: 20px; bottom: 20px; background: var(--white); border-radius: 999px; padding: 6px 12px; font: 500 12px var(--f-body); color: var(--ink); }
+.B .prod { width: 26%; aspect-ratio: 1/2.3; background: #fff; border-radius: 16px; position: relative; }
+.B .prod::before { content: ""; position: absolute; top: -9%; left: 30%; width: 40%; height: 10%; background: var(--ink); border-radius: 4px 4px 0 0; }
+.B .disc { position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: #e3d6c6; }
+.B .nav { display: flex; align-items: center; gap: 12px; margin-top: 24px; }
+.B .dots { display: flex; gap: 8px; }
+.B .dot { width: 56px; height: 56px; border-radius: 50%; background: var(--bg-3); border: 2px solid transparent; cursor: pointer; position: relative; transition: border-color .2s ease; }
+.B .dot.on { border-color: var(--ink); }
+.B .dot svg { position: absolute; inset: -6px; width: 68px; height: 68px; transform: rotate(-90deg); }
+.B .dot circle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 201; stroke-dashoffset: 201; }
+.B .arrows { margin-left: auto; display: flex; gap: 8px; }
+.B .arrows span { width: 48px; height: 48px; border-radius: 15px; background: var(--bg-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+/* ===== C — колода: верхний скрин улетает назад ===== */
+.C .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.C .deck { position: relative; height: 560px; }
+.C .card { position: absolute; left: 50%; top: 20px; width: 340px; margin-left: -170px; cursor: grab; user-select: none; }
+.C .card .shot { height: 460px; }
+.C .hint { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: 12px; color: var(--text-3); }
+.C .count { font: 600 64px/1 var(--f-head); letter-spacing: -2px; color: var(--ink); margin-top: 40px; }
+.C .count small { font: 400 15px var(--f-body); color: var(--text-3); letter-spacing: 0; }
+.C .btns { display: flex; gap: 8px; margin-top: 24px; }
+.C .btns span { padding: 8px 16px; border-radius: 15px; background: var(--bg-2); border: 1px solid var(--border); font: 500 15px var(--f-body); color: var(--ink); cursor: pointer; }
+
+.A1 .wrap { grid-template-columns: 1.9fr 1fr; }
+.A1 .wall { height: 760px; gap: 20px; }
+.A1 .lane { gap: 20px; }
+</style>
+</head>
+<body>
+<template id="shots">
+  <div class="shot"><div class="who"><span class="av"></span><div><b>Анна, косметика</b><small>Wildberries</small></div></div><div class="msg me">Готово, отправляю финальные слайды</div><div class="msg">Посмотрела — очень круто! Именно то, что хотели</div><div class="msg">Уже загрузили в карточку</div><span class="tagsvc">инфографика</span></div>
+  <div class="shot"><div class="who"><span class="av"></span><div><b>Игорь, термокружки</b><small>Ozon</small></div></div><div class="msg">Фото огонь, не отличить от студийной съёмки<span class="pic"></span></div><div class="msg me">Спасибо! Рад, что зашло</div><span class="tagsvc">AI-фотосессия</span></div>
+  <div class="shot"><div class="who"><span class="av"></span><div><b>Марина, студия йоги</b><small>лендинг</small></div></div><div class="msg me">Лендинг опубликован, ссылка в чате</div><div class="msg">Супер, всё понятно и красиво. Уже пошли заявки</div><span class="tagsvc">лендинг</span></div>
+  <div class="shot"><div class="who"><span class="av"></span><div><b>Дмитрий, аксессуары</b><small>Wildberries</small></div></div><div class="msg">Видеообложка отличная, берём ещё на три товара</div><span class="tagsvc">видеообложка</span></div>
+  <div class="shot"><div class="who"><span class="av"></span><div><b>Ольга, детские товары</b><small>Ozon</small></div></div><div class="msg me">Вот концепция на согласование<span class="pic"></span></div><div class="msg">Ой, как мило! Согласовываем, делаем дальше</div><span class="tagsvc">инфографика</span></div>
+  <div class="shot"><div class="who"><span class="av"></span><div><b>Сергей, онлайн-школа</b><small>ИИ-агент</small></div></div><div class="msg">Бот сам отвечает на вопросы, менеджеры выдохнули</div><div class="msg">Спасибо за настройку!</div><span class="tagsvc">ИИ-агент</span></div>
+</template>
+
+<div class="container"><span class="lab">A1 — колонка со скринами шире (≈ 2/3 ширины) и выше</span>
+<div class="block A A1">
+  <div class="wrap">
+    <div class="wall"><div class="lane" id="l1"></div><div class="lane down" id="l2"></div></div>
+    <div><span class="pill">Отзывы</span><h2 class="h1">Что говорят клиенты</h2><p class="muted">Настоящие переписки — как есть, без редактуры.</p>
+      <div class="stats"><div><b>[—]</b>отзывов</div><div><b>[—]</b>повторных заказов</div></div></div>
+  </div>
+</div>
+
+</div>
+<script type="module">
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
+const tpl = document.getElementById('shots').content
+const shots = () => [...tpl.cloneNode(true).children]
+
+// A — две ленты, каждая продублирована для бесшовной прокрутки
+const l1 = document.getElementById('l1'), l2 = document.getElementById('l2')
+const all = shots()
+const a = [all[0], all[2], all[4]], b = [all[1], all[3], all[5]]
+;[...a, ...a.map(n => n.cloneNode(true))].forEach(n => l1.appendChild(n))
+;[...b, ...b.map(n => n.cloneNode(true))].forEach(n => l2.appendChild(n))
+
+
+
+</script>
+</body>
+</html>
