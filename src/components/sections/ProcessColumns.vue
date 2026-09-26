@@ -122,10 +122,7 @@ onUnmounted(() => {
           <span class="pill">Процесс</span>
           <h2 class="display">Как работаем</h2>
         </div>
-        <p class="lead process__hint">
-          <span class="process__hint--hover">Наведите на этап, чтобы узнать подробнее.</span>
-          <span class="process__hint--touch">Нажмите на этап, чтобы узнать подробнее.</span>
-        </p>
+        <p class="lead">Шесть шагов от заявки до результата.</p>
       </div>
 
       <ol ref="rowEl" class="process__row" @pointerleave="onRowLeave">
@@ -184,20 +181,6 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sec-pill);
-}
-
-.process__hint--touch {
-  display: none;
-}
-
-@media (hover: none) {
-  .process__hint--hover {
-    display: none;
-  }
-
-  .process__hint--touch {
-    display: inline;
-  }
 }
 
 /* ряд колонок */
