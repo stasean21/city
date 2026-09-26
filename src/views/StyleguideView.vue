@@ -1,285 +1,406 @@
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue'
 import BaseButton from '../components/ui/BaseButton.vue'
-import WorkCard from '../components/ui/WorkCard.vue'
-import AccordionItem from '../components/ui/AccordionItem.vue'
+import HeroSection from '../components/sections/HeroSection.vue'
 
-const colorGroups = [
-  {
-    title: 'Фоны',
-    tokens: [
-      ['--bg', '#F6F4F2'],
-      ['--bg-2', '#F9F7F3'],
-      ['--bg-3', '#EAE8E4'],
-      ['--bg-4', '#E6E4E0'],
-      ['--white', '#FFFFFF'],
-    ],
-  },
-  {
-    title: 'Тёмное',
-    tokens: [
-      ['--ink', '#1D1E22'],
-      ['--ink-hover', '#393A3F'],
-    ],
-  },
-  {
-    title: 'Текст',
-    tokens: [
-      ['--text', '#717171'],
-      ['--text-2', '#888686'],
-      ['--text-3', '#A1A09F'],
-    ],
-  },
-  {
-    title: 'Тёплые серые',
-    tokens: [
-      ['--warm', '#B5B1A9'],
-      ['--warm-2', '#615D55'],
-    ],
-  },
-  {
-    title: 'Акцент',
-    tokens: [
-      ['--accent', '#F59958'],
-      ['--accent-2', '#FF8E5E'],
-    ],
-  },
+// служебная страница: живая копия эталона docs/mockups/foundation.html,
+// собранная только из классов и токенов проекта. В sitemap не входит
+
+const roles = [
+  { name: 'Display', spec: ['58 / 700 · мобилка 34', 'hero и заголовки всех секций'], cls: 'display', text: 'Услуги и решения' },
+  { name: 'H2', spec: ['36 / 600 · мобилка 24', 'подзаголовки, крупные фразы'], cls: 'h2', text: 'Товар хороший, а карточку пролистывают' },
+  { name: 'Card title', spec: ['28 / 600 · мобилка 22', 'названия в карточках'], cls: 'card-title', text: 'Инфографика для маркетплейсов' },
+  { name: 'H3', spec: ['22 / 500 · мобилка 18', 'пункты, вопросы FAQ, этапы'], cls: 'h3', text: 'Сколько правок входит в работу?' },
+  { name: 'Lead', spec: ['20 / 400 · мобилка 16', 'вводный абзац секции'], cls: 'lead', text: 'Собираю визуал, сайты и автоматизацию под одну задачу — чтобы товар продавался, а заявки доходили до вас.' },
+  { name: 'Body', spec: ['15 / 400 · мобилка 14', 'основной текст'], cls: 'body', text: 'Разбираю товар, аудиторию и конкурентов, собираю референсы. Фиксируем объём, стоимость и дату сдачи — до начала работы. На каждом этапе понятно, что происходит и что вы получите.' },
+  { name: 'Small', spec: ['13 / 400', 'описания в карточках, подписи'], cls: 'small', text: 'Карточки, которые объясняют товар за три секунды и выделяются в выдаче' },
+  { name: 'Caption', spec: ['12 / 400', 'метки, служебные подписи'], cls: 'caption', text: 'инфографика · Wildberries · этап 3 из 6' },
 ]
 
-const gapScale = [
-  ['--gap-xs', 6],
-  ['--gap-sm', 8],
-  ['--gap-md', 12],
-  ['--gap-lg', 24],
-  ['--gap-xl', 36],
-  ['--gap-2xl', 40],
-  ['--gap-3xl', 60],
+const spaceScale = [4, 8, 12, 16, 20, 24, 32, 40, 60, 80, 120]
+
+const rhythm = [
+  { title: 'Десктоп', rows: [['между секциями', 240], ['вводный абзац → контент', 80], ['pill → заголовок', 24], ['заголовок → lead', 20]] },
+  { title: 'Планшет ≤ 991', rows: [['между секциями', 160], ['вводный абзац → контент', 48], ['pill → заголовок', 20], ['заголовок → lead', 16]] },
+  { title: 'Мобилка ≤ 767', rows: [['между секциями', 100], ['вводный абзац → контент', 32], ['pill → заголовок', 16], ['заголовок → lead', 12]] },
 ]
 
 const steps = [
-  ['01', 'Бриф', 'Собираем задачу, референсы и ограничения перед началом работы.'],
-  ['02', 'Концепция', 'Предлагаю 1–2 направления визуала под задачу.'],
-  ['03', 'Правки', 'Дорабатываем выбранное направление до финала.'],
+  ['01', 'Заявка', 'Пишете в Telegram или через форму на сайте', 'созвон или переписка'],
+  ['02', 'Бриф', 'Разбираю товар, аудиторию и конкурентов', 'бриф-документ'],
+  ['03', 'Смета', 'Фиксируем объём, стоимость и срок', 'смета и дата сдачи'],
 ]
+
+// плашки «ширина · масштаб» и переключатель масштаба — только здесь
+const width = ref(0)
+const scale = ref('1.00')
+const scaleOff = ref(false)
+
+function update() {
+  width.value = window.innerWidth
+  scale.value = (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16).toFixed(2)
+}
+
+function setScaleOff(value) {
+  scaleOff.value = value
+  document.documentElement.classList.toggle('scale-off', value)
+  update()
+}
+
+onMounted(() => {
+  update()
+  window.addEventListener('resize', update)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', update)
+  document.documentElement.classList.remove('scale-off')
+})
 </script>
 
 <template>
   <main>
-    <section class="container">
-      <span class="caption">Служебная страница</span>
-      <h1>Стайлгайд</h1>
-      <p>Проверка токенов и базовых компонентов до вёрстки контента. На продакшен-сайте не публикуется.</p>
-    </section>
+    <HeroSection />
 
-    <section class="container">
-      <h2>Типографика</h2>
-      <div class="type-sample">
-        <div class="h1">Заголовок H1 — Aa Бб 52/−1.5</div>
-        <div class="h2">Заголовок H2 — Aa Бб 32/−0.64</div>
-        <div class="h3">Заголовок H3 — Aa Бб 18/−0.18</div>
-        <p>Body text 15/25 — карточки товаров и инфографика для маркетплейсов.</p>
-        <span class="ui">UI 13/20 — кнопки, меню</span>
-        <span class="caption">Caption 12/28 — подписи</span>
+    <section>
+      <div class="container">
+        <div class="sg-divider"><span>1 · Типографика — все роли текста на сайте</span></div>
+        <div class="sg-roles">
+          <div v-for="role in roles" :key="role.name" class="sg-role">
+            <div class="sg-role__meta">
+              <b>{{ role.name }}</b>
+              <span v-for="line in role.spec" :key="line">{{ line }}</span>
+            </div>
+            <div :class="role.cls">{{ role.text }}</div>
+          </div>
+
+          <div class="sg-role">
+            <div class="sg-role__meta">
+              <b>UI — кнопки</b>
+              <span>16 / 500 · мобилка 15</span>
+              <span>как в шапке: поля 8×16, скругление 15</span>
+              <span>стрелка-рикошет при наведении</span>
+            </div>
+            <div class="sg-buttons">
+              <div class="sg-row">
+                <BaseButton variant="primary" arrow>Обсудить задачу</BaseButton>
+                <BaseButton variant="secondary" arrow>Смотреть работы</BaseButton>
+                <BaseButton variant="primary">Смотреть работы</BaseButton>
+                <BaseButton variant="secondary">Все услуги</BaseButton>
+              </div>
+              <div class="sg-row sg-dark on-dark">
+                <BaseButton variant="primary" arrow>Написать в Telegram</BaseButton>
+                <BaseButton variant="secondary" arrow>VK</BaseButton>
+              </div>
+              <span class="caption">наведите на кнопку со стрелкой · слева основная, справа второстепенная · ниже — на тёмном фоне</span>
+            </div>
+          </div>
+
+          <div class="sg-role">
+            <div class="sg-role__meta">
+              <b>Number</b>
+              <span>80 / 500 · мобилка 56</span>
+              <span>номера этапов, цифры</span>
+            </div>
+            <div class="num">01 &nbsp;02 &nbsp;03</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="container">
-      <h2>Палитра</h2>
-      <div class="swatch-groups">
-        <div v-for="group in colorGroups" :key="group.title" class="swatch-group">
-          <span class="caption">{{ group.title }}</span>
-          <div class="swatch-row">
-            <div v-for="[token, hex] in group.tokens" :key="token" class="swatch">
-              <div class="swatch__color" :style="{ background: `var(${token})` }" />
-              <span class="swatch__label">{{ token }}</span>
-              <span class="swatch__hex">{{ hex }}</span>
+    <section>
+      <div class="container">
+        <div class="sg-divider"><span>2 · Отступы — одна шкала на всё</span></div>
+        <div class="sg-scale">
+          <div v-for="n in spaceScale" :key="n">
+            <i :style="{ width: `var(--s-${n})`, height: `var(--s-${n})` }"></i>
+            <span>{{ n }}</span>
+          </div>
+        </div>
+        <div class="sg-rhythm">
+          <div v-for="table in rhythm" :key="table.title" class="sg-rh">
+            <b>{{ table.title }}</b>
+            <div v-for="[label, value] in table.rows" :key="label">
+              <span>{{ label }}</span><span>{{ value }}</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="container">
-      <h2>Шкала отступов (gap)</h2>
-      <div class="gap-scale">
-        <div v-for="[token, px] in gapScale" :key="token" class="gap-row">
-          <span class="ui">{{ token }}</span>
-          <div class="gap-bar" :style="{ width: `${px}px` }" />
-          <span class="caption">{{ px }}px</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Кнопки</h2>
-      <div class="row">
-        <BaseButton variant="primary">Обсудить задачу</BaseButton>
-        <BaseButton variant="primary" size="lg">Обсудить задачу</BaseButton>
-        <BaseButton variant="secondary">Смотреть работы</BaseButton>
-        <BaseButton variant="secondary" size="lg">Смотреть работы</BaseButton>
-        <BaseButton variant="ghost">Подробнее</BaseButton>
-      </div>
-      <div class="row">
-        <BaseButton variant="primary" size="lg" arrow>Обсудить задачу</BaseButton>
-        <BaseButton variant="secondary" size="lg" arrow>Смотреть работы</BaseButton>
-        <BaseButton variant="primary" size="lg" roll>Обсудить задачу</BaseButton>
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Карточка</h2>
-      <div class="card" style="max-width: 320px;">
-        <span class="h3">Заголовок карточки</span>
-        <p>Белая карточка на бежевом фоне, без тени.</p>
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Пилюля / тег</h2>
-      <div class="row">
-        <span class="pill">Wildberries</span>
-        <span class="pill">Ozon</span>
-        <span class="pill">AI-визуал</span>
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Карточка работы</h2>
-      <div class="work-grid">
-        <WorkCard slug="demo-1" title="Название работы" category="Wildberries" />
-        <WorkCard slug="demo-2" title="Название работы" category="Ozon" />
-        <WorkCard slug="demo-3" title="Название работы" category="AI-визуал" />
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Problem → Solution</h2>
-      <div class="problem-solution">
-        <div>
-          <span class="problem-solution__label">Проблема</span>
-          <h3>Карточка не выделяется в поиске</h3>
-        </div>
-        <div>
-          <span class="problem-solution__label">Решение</span>
-          <h3>Инфографика с акцентом на выгоду</h3>
-        </div>
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Нумерованный список этапов</h2>
-      <div class="step-list">
-        <div v-for="[number, title, text] in steps" :key="number" class="step">
-          <span class="step__number">{{ number }}</span>
-          <div class="step__body">
-            <h3>{{ title }}</h3>
-            <p>{{ text }}</p>
+    <section>
+      <div class="container">
+        <div class="sg-divider"><span>3 · Так собирается любая секция</span></div>
+        <span class="pill sg-demo__pill">Процесс</span>
+        <h2 class="display sg-demo__title">Как работаем</h2>
+        <p class="lead sg-demo__lead">Шесть шагов от первого сообщения до готовых файлов. На каждом этапе вы знаете, что происходит.</p>
+        <div class="sg-steps">
+          <div v-for="[num, title, text, result] in steps" :key="num" class="sg-step">
+            <span class="num sg-step__num">{{ num }}</span>
+            <span class="display">{{ title }}</span>
+            <span>{{ text }}</span>
+            <span class="small sg-step__result">→ {{ result }}</span>
           </div>
         </div>
+        <p class="sg-note">pill → 24 → Display → 20 → lead · → 80 → карточки 350: поля 32 · номер 80 → 24 → название Display 58 → 12 → текст · результат прижат к низу · секция заканчивается отступом 240</p>
       </div>
     </section>
 
-    <section class="container">
-      <h2>FAQ / Аккордеон</h2>
-      <div>
-        <AccordionItem question="Какие сроки?">Зависит от объёма — обсуждаем на брифе.</AccordionItem>
-        <AccordionItem question="Какие правки входят?">Правки по согласованному брифу включены в стоимость.</AccordionItem>
-        <AccordionItem question="В каких форматах отдаёте файлы?">PNG, JPG, при необходимости — исходники.</AccordionItem>
-      </div>
-    </section>
-
-    <section class="container">
-      <h2>Поля формы</h2>
-      <div class="field-demo">
-        <input class="field" type="text" placeholder="Имя" />
-        <textarea class="field" placeholder="Задача" rows="3"></textarea>
-      </div>
-    </section>
-
-    <section class="dark-section">
-      <div class="container">
-        <h2>Тёмная секция</h2>
-        <p>Используется 1–2 раза на всю страницу — акцентный приём, не рядовой блок.</p>
-      </div>
-    </section>
+    <div class="sg-switch" role="group" aria-label="Режим масштаба">
+      <button type="button" :aria-pressed="!scaleOff" @click="setScaleOff(false)">с масштабом</button>
+      <button type="button" :aria-pressed="scaleOff" @click="setScaleOff(true)">без масштаба (как сейчас)</button>
+    </div>
+    <span class="sg-vw">ширина экрана {{ width }}px · масштаб {{ scale }}×</span>
   </main>
 </template>
 
 <style scoped>
-.type-sample {
+/* служебные пометки макета (разделители, плашки, подписи) — не часть
+   системы, поэтому их мелкие размеры заданы здесь, а не токенами */
+
+.sg-divider {
   display: flex;
-  flex-direction: column;
-  gap: var(--gap-md);
+  align-items: center;
+  gap: var(--s-16);
+  margin-bottom: var(--s-60);
 }
 
-.swatch-groups {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-lg);
+.sg-divider::after {
+  content: "";
+  flex: 1;
+  height: var(--hairline);
+  background: var(--border-soft);
 }
 
-.swatch-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-md);
-  margin-top: var(--gap-sm);
+.sg-divider span {
+  font: 500 var(--t-caption) var(--f-body);
+  color: var(--ink);
+  background: var(--white);
+  padding: var(--s-4) var(--s-12);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
 }
 
-.swatch {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-xs);
-  width: 120px;
+/* типографика — таблица ролей */
+.sg-roles {
+  border-top: var(--hairline) solid var(--border-soft);
 }
 
-.swatch__color {
-  height: 60px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border);
+.sg-role {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: var(--s-24);
+  align-items: baseline;
+  padding: var(--s-32) 0;
+  border-bottom: var(--hairline) solid var(--border-soft);
 }
 
-.swatch__label {
-  font: 400 12px var(--f-body);
-  color: var(--text);
+.sg-role__meta b {
+  display: block;
+  font: 500 var(--t-small) var(--f-body);
+  color: var(--ink);
+  margin-bottom: var(--s-4);
 }
 
-.swatch__hex {
-  font: 400 12px var(--f-body);
+.sg-role__meta span {
+  display: block;
+  font: 400 var(--t-caption)/1.5 var(--f-body);
   color: var(--text-3);
 }
 
-.gap-scale {
+.sg-buttons {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--s-16);
 }
 
-.gap-row {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-md);
-}
-
-.gap-row .ui {
-  width: 110px;
-  color: var(--text);
-}
-
-.gap-bar {
-  height: 12px;
-  background: var(--accent);
-  border-radius: var(--r-sm);
-}
-
-.row {
+.sg-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-md);
+  align-items: center;
+  gap: var(--s-12);
 }
 
-.field-demo {
+.sg-dark {
+  width: fit-content;
+  padding: var(--s-20);
+  background: var(--ink);
+  border-radius: var(--r-card);
+}
+
+/* отступы */
+.sg-scale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--s-24);
+}
+
+.sg-scale div {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  max-width: var(--measure-paragraph);
+  align-items: center;
+  gap: var(--s-8);
+}
+
+.sg-scale i {
+  display: block;
+  background: var(--accent);
+  opacity: .85;
+  border-radius: .125rem;
+}
+
+.sg-scale span {
+  font: 400 var(--t-caption) var(--f-body);
+  color: var(--text-3);
+}
+
+.sg-rhythm {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--s-24);
+  margin-top: var(--s-60);
+}
+
+.sg-rh {
+  background: var(--white);
+  border-radius: var(--r-card);
+  padding: var(--s-24);
+}
+
+.sg-rh b {
+  display: block;
+  font: 500 var(--t-small) var(--f-body);
+  color: var(--ink);
+  margin-bottom: var(--s-12);
+}
+
+.sg-rh div {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--s-8) 0;
+  border-top: var(--hairline) solid var(--border);
+  font-size: var(--t-small);
+}
+
+.sg-rh div span:last-child {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* пример секции */
+.sg-demo__pill {
+  margin-bottom: var(--sec-pill);
+}
+
+.sg-demo__title {
+  max-width: var(--measure-title);
+  margin-bottom: var(--sec-lead);
+}
+
+.sg-demo__lead {
+  margin-bottom: var(--sec-content);
+}
+
+.sg-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--s-24);
+}
+
+.sg-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-12);
+  min-height: var(--step-card-h);
+  padding: var(--s-32);
+  background: var(--white);
+  border-radius: var(--r-card);
+}
+
+/* номер → название: gap 12 + 12 = 24 */
+.sg-step__num {
+  color: var(--bg-4);
+  margin-bottom: var(--s-12);
+}
+
+.sg-step__result {
+  margin-top: auto;
+  padding-top: var(--s-16);
+  border-top: var(--hairline) solid var(--border);
+}
+
+.sg-note {
+  margin-top: var(--s-24);
+  max-width: none;
+  font: 500 .6875rem/1.4 ui-monospace, Menlo, monospace;
+  color: var(--accent);
+}
+
+/* плашки */
+.sg-vw {
+  position: fixed;
+  right: var(--s-12);
+  bottom: var(--s-12);
+  z-index: 99;
+  padding: var(--s-4) .625rem;
+  font: 500 .6875rem var(--f-body);
+  color: var(--white);
+  background: var(--ink);
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+
+.sg-switch {
+  position: fixed;
+  left: var(--s-12);
+  bottom: var(--s-12);
+  z-index: 99;
+  display: flex;
+  gap: .125rem;
+  padding: .1875rem;
+  font: 500 .6875rem var(--f-body);
+  background: var(--ink);
+  border-radius: var(--r-pill);
+}
+
+.sg-switch button {
+  border: 0;
+  padding: .3rem .7rem;
+  font: inherit;
+  color: var(--footer-link);
+  background: transparent;
+  border-radius: var(--r-pill);
+}
+
+.sg-switch button[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--white);
+}
+
+.sg-switch button:focus-visible {
+  outline: var(--focus-ring) solid var(--accent);
+  outline-offset: var(--focus-ring);
+}
+
+@media (max-width: 767px) {
+  .sg-role {
+    grid-template-columns: 1fr;
+    gap: var(--s-12);
+  }
+
+  .sg-rhythm,
+  .sg-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .sg-step {
+    min-height: 0;
+  }
+
+  /* на узком экране плашки не помещаются в одну строку */
+  .sg-vw {
+    bottom: var(--s-60);
+  }
 }
 </style>
