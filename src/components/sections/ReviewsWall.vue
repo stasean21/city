@@ -1,11 +1,12 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import reviews from '../../data/reviews.json'
 
-// цифры утверждены владельцем; пустое значение не выводим
-const stats = reviews.stats.filter((stat) => stat.value)
+// цифры утверждены владельцем; клиенты — первые пять из данных
+const summary = reviews.summary
+const clients = summary.clients.slice(0, 5)
+// фоны кругов с буквой идут по кругу
+const AVATAR_BG = ['var(--bg-3)', 'var(--bg-4)', 'var(--bg-2)']
 
 const items = reviews.items.map((item) => ({
   ...item,
@@ -31,6 +32,8 @@ const PARALLAX = 0.6
 const sectionEl = ref(null)
 const wallEl = ref(null)
 let mm = null
+let ScrollTrigger = null
+let unmounted = false
 let mqMobile = null
 let mqReduced = null
 let refreshQueued = false
@@ -47,7 +50,7 @@ function queueRefresh() {
   refreshQueued = true
   requestAnimationFrame(() => {
     refreshQueued = false
-    ScrollTrigger.refresh()
+    ScrollTrigger?.refresh()
   })
 }
 
@@ -55,9 +58,7 @@ function onImageLoad(event) {
   if (event.target.tagName === 'IMG') queueRefresh()
 }
 
-onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger)
-
+onMounted(async () => {
   mqMobile = window.matchMedia('(max-width: 767px)')
   mqReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
   syncMedia()
@@ -67,6 +68,12 @@ onMounted(() => {
   // load не всплывает — ловим на погружении
   wallEl.value.addEventListener('load', onImageLoad, true)
   window.addEventListener('load', queueRefresh)
+
+  // gsap — только в браузере: страница пререндерится
+  const [{ gsap }, st] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
+  if (unmounted) return
+  ScrollTrigger = st.ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger)
 
   // параллакс только на планшете и десктопе и без reduced motion;
   // matchMedia сам снимает твины, когда условие перестаёт выполняться
@@ -91,6 +98,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  unmounted = true
   // revert убивает и твины, и их ScrollTrigger'ы, возвращает transform
   mm?.revert()
   wallEl.value?.removeEventListener('load', onImageLoad, true)
@@ -151,12 +159,28 @@ onUnmounted(() => {
         <h2 class="display reviews__title">Что говорят клиенты</h2>
         <p class="lead">Лучшее подтверждение — слова тех, кто уже получил результат.</p>
 
-        <dl v-if="stats.length" class="reviews__stats">
-          <div v-for="stat in stats" :key="stat.label">
-            <dt class="caption reviews__stat-label">{{ stat.label }}</dt>
-            <dd class="h2">{{ stat.value }}</dd>
+        <div class="reviews__summary">
+          <!-- стопка аватаров — графика; смысл дублирует легенда -->
+          <div class="reviews__avatars" aria-hidden="true">
+            <span
+              v-for="(client, i) in clients"
+              :key="i"
+              class="reviews__avatar"
+              :class="{ 'is-repeat': client.repeat }"
+              :style="client.photo ? null : { background: AVATAR_BG[i % AVATAR_BG.length] }"
+            >
+              <img v-if="client.photo" :src="client.photo" alt="" width="48" height="48" loading="lazy" decoding="async" />
+              <span v-else class="h3">{{ client.initial }}</span>
+            </span>
+            <span class="h3 reviews__count">{{ summary.reviews }}</span>
           </div>
-        </dl>
+
+          <p class="visually-hidden">{{ summary.reviews }} отзывов, {{ summary.repeat }} повторных заказов</p>
+          <ul class="small reviews__legend">
+            <li><i class="reviews__mark"></i><b>{{ summary.reviews }}</b>&nbsp;отзывов</li>
+            <li><i class="reviews__mark is-ring"></i><b>{{ summary.repeat }}</b>&nbsp;повторных заказов</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -249,25 +273,102 @@ onUnmounted(() => {
   margin-bottom: var(--sec-lead);
 }
 
-.reviews__stats {
+/* блок цифр: стопка аватаров с отметками */
+.reviews__summary {
+  margin-top: var(--s-40);
+}
+
+.reviews__avatars {
+  display: flex;
+  align-items: center;
+}
+
+/* рамка цвета фона отделяет круг от соседа, на который он наложен */
+.reviews__avatar,
+.reviews__count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--avatar);
+  border: 3px solid var(--bg);
+  border-radius: var(--r-pill);
+}
+
+.reviews__avatar {
+  position: relative;
+  flex: none;
+  width: var(--avatar);
+}
+
+.reviews__avatar + .reviews__avatar,
+.reviews__count {
+  margin-left: var(--avatar-overlap);
+}
+
+/* кольцо «возвращался с новым заказом» — обводка, не тень. Отдельным
+   слоем поверх всех кругов: у соседей с кольцом (М и Д) outline на самом
+   круге ушёл бы под наложенного соседа. Круги z-index не получают, чтобы
+   не заводить свой контекст наложения — тогда кольцо над всеми */
+.reviews__avatar.is-repeat::after {
+  content: "";
+  position: absolute;
+  inset: -5px; /* снаружи рамки 3px, как outline с offset 0 */
+  z-index: 1;
+  border: 2px solid var(--accent);
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+
+.reviews__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--r-pill);
+}
+
+.reviews__avatar .h3 {
+  color: var(--ink);
+}
+
+.reviews__count {
+  position: relative;
+  padding: 0 var(--s-16);
+  color: var(--white);
+  font-weight: 600;
+  background: var(--ink);
+}
+
+.reviews__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-40);
-  margin: var(--s-40) 0 0;
+  gap: var(--s-24);
+  margin-top: var(--s-12);
 }
 
-.reviews__stats dd {
-  margin: 0;
-}
-
-/* подпись в разметке идёт первой (dt перед dd), а на экране — под числом */
-.reviews__stats div {
+.reviews__legend li {
   display: flex;
-  flex-direction: column-reverse;
+  align-items: center;
+  color: var(--text);
 }
 
-.reviews__stat-label {
-  color: var(--text-3);
+.reviews__legend b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.reviews__mark {
+  flex: none;
+  width: var(--s-12);
+  height: var(--s-12);
+  margin-right: var(--s-8);
+  background: var(--bg-3);
+  border-radius: var(--r-pill);
+}
+
+.reviews__mark.is-ring {
+  background: transparent;
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 /* reduced motion: ленты стоят, окно стены листается само по себе */

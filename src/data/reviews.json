@@ -1,14 +1,35 @@
 {
-  "stats": [
-    {
-      "value": "30+",
-      "label": "отзывов"
-    },
-    {
-      "value": "130",
-      "label": "повторных заказов"
-    }
-  ],
+  "summary": {
+    "reviews": "30+",
+    "repeat": "130+",
+    "clients": [
+      {
+        "initial": "А",
+        "photo": "",
+        "repeat": true
+      },
+      {
+        "initial": "И",
+        "photo": "",
+        "repeat": false
+      },
+      {
+        "initial": "М",
+        "photo": "",
+        "repeat": true
+      },
+      {
+        "initial": "Д",
+        "photo": "",
+        "repeat": true
+      },
+      {
+        "initial": "О",
+        "photo": "",
+        "repeat": false
+      }
+    ]
+  },
   "items": [
     {
       "image": "",
