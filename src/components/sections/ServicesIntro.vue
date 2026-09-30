@@ -8,11 +8,13 @@ import homeStack from '../../data/stack-home.json'
 
 <template>
   <section id="services" class="services">
-    <div class="container services__layout">
-      <div class="services__intro once-in">
-        <span class="pill">Что я делаю</span>
-        <h2 class="display services__title">Услуги и решения</h2>
-        <p class="services__lead">
+    <div class="container">
+      <div class="services__head once-in">
+        <div class="services__intro">
+          <span class="pill">Что я делаю</span>
+          <h2 class="display">Услуги и решения</h2>
+        </div>
+        <p class="lead">
           Собираю визуал, сайты и автоматизацию под одну задачу — чтобы товар продавался,
           а заявки доходили до вас.
         </p>
@@ -30,55 +32,35 @@ import homeStack from '../../data/stack-home.json'
       </ul>
     </div>
 
-    <!-- строка стека — вне сетки с липкой вводной: sticky ограничен
-         контейнером, и внутри сетки вводная наехала бы на строку -->
     <div class="container services__stack">
-      <p class="caption">инструменты</p>
       <StackMarquee :items="homeStack" />
     </div>
   </section>
 </template>
 
 <style scoped>
-.services__layout {
+/* шапка — как в ProcessColumns: слева pill и заголовок, справа лид по низу */
+.services__head {
   display: grid;
-  /* текст ~40%, карточки ~60% — иначе в мозаике не помещаются названия */
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--s-24);
+  align-items: end;
+  margin-bottom: var(--sec-content);
 }
 
-/* обычный CSS sticky: без align-self: start колонка растянется
-   на высоту сетки и прилипать будет нечему */
 .services__intro {
-  position: sticky;
-  top: calc(var(--header-top) + var(--header-h) + var(--s-24));
-  align-self: start;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: var(--sec-pill);
 }
 
-.services__intro .pill {
-  margin-bottom: var(--sec-pill);
-}
-
-.services__title {
-  max-width: var(--measure-heading);
-  margin-bottom: var(--sec-lead);
-}
-
-.services__lead {
-  color: var(--text);
-}
-
-/* мозаика крест-накрест: высокая карточка — 3 ряда, низкая — 2;
-   порядок в DOM 1…6 как в services.json, позиции заданы явно.
-   колонки заканчиваются на разной высоте — так задумано */
+/* три колонки, поток автоматический; первая и последняя карточки широкие */
 .services__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: var(--mosaic-row);
-  gap: var(--s-24);
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: minmax(var(--service-card-h), auto);
+  gap: var(--s-16);
 }
 
 .services__grid li {
@@ -86,12 +68,10 @@ import homeStack from '../../data/stack-home.json'
   min-width: 0;
 }
 
-.services__grid li:nth-child(1) { grid-column: 1; grid-row: 1 / span 3; }
-.services__grid li:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
-.services__grid li:nth-child(3) { grid-column: 1; grid-row: 4 / span 2; }
-.services__grid li:nth-child(4) { grid-column: 2; grid-row: 3 / span 3; }
-.services__grid li:nth-child(5) { grid-column: 1; grid-row: 6 / span 3; }
-.services__grid li:nth-child(6) { grid-column: 2; grid-row: 6 / span 2; }
+.services__grid li:nth-child(1),
+.services__grid li:nth-child(7) {
+  grid-column: span 2;
+}
 
 .service-card {
   display: flex;
@@ -117,8 +97,12 @@ import homeStack from '../../data/stack-home.json'
   transition: color var(--ease);
 }
 
+/* в широкой карточке текст не растягивается на всю ширину */
 .service-card__text {
+  max-width: var(--measure-card-head);
   margin-top: var(--s-12);
+  /* минимальный зазор до стрелки: длинный текст растит карточку, а не упирается */
+  margin-bottom: var(--s-16);
   color: var(--text);
   transition: color var(--ease);
 }
@@ -204,36 +188,31 @@ import homeStack from '../../data/stack-home.json'
   margin-top: var(--s-60);
 }
 
-.services__stack .caption {
-  margin-bottom: var(--s-8);
-}
-
-/* вводная уходит наверх, мозаика остаётся в две колонки */
+/* две колонки: широкая только первая, иначе последняя
+   осталась бы одна в ряду; шапка в один столбик */
 @media (max-width: 991px) {
-  .services__layout {
+  .services__head {
     grid-template-columns: 1fr;
+    gap: var(--sec-lead);
   }
 
-  .services__intro {
-    position: static;
-    margin-bottom: var(--s-60);
+  .services__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .services__grid li:nth-child(7) {
+    grid-column: auto;
   }
 }
 
-/* мозаика выключается: один столбик, естественный порядок 1…6 */
+/* один столбик, естественный порядок */
 @media (max-width: 767px) {
   .services__grid {
     grid-template-columns: 1fr;
-    grid-auto-rows: auto;
   }
 
   .services__grid li:nth-child(n) {
     grid-column: auto;
-    grid-row: auto;
-  }
-
-  .service-card {
-    min-height: var(--service-card-h-mobile);
   }
 }
 </style>

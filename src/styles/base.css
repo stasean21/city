@@ -147,6 +147,13 @@ h3 {
   color: var(--ink);
 }
 
+/* только переключаемые слова в «Обо мне» */
+.word {
+  font: 700 var(--t-word)/1.05 var(--f-head);
+  letter-spacing: var(--ls-word);
+  color: var(--ink);
+}
+
 p {
   max-width: var(--measure-paragraph);
 }
@@ -159,7 +166,8 @@ h3,
 .display,
 .h2,
 .card-title,
-.h3 {
+.h3,
+.word {
   overflow-wrap: normal;
   word-break: normal;
   hyphens: manual;

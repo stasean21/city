@@ -17,12 +17,27 @@ const roles = [
   { name: 'Caption', spec: ['12 / 400', 'метки, служебные подписи'], cls: 'caption', text: 'инфографика · Wildberries · этап 3 из 6' },
 ]
 
+// палитра — токены по ролям, значения берутся из tokens.css
+const palette = [
+  ['--bg', 'фон страницы'],
+  ['--bg-2', 'секции, вторичная кнопка'],
+  ['--bg-3', 'пилюли, разделители'],
+  ['--bg-4', 'вложенные блоки'],
+  ['--white', 'карточки'],
+  ['--ink', 'заголовки, тёмное'],
+  ['--text', 'основной текст'],
+  ['--text-2', 'вторичный'],
+  ['--text-3', 'подписи'],
+  ['--text-4', 'погашенный крупный текст'],
+  ['--accent', 'мелкие отметки'],
+]
+
 const spaceScale = [4, 8, 12, 16, 20, 24, 32, 40, 60, 80, 120]
 
 const rhythm = [
-  { title: 'Десктоп', rows: [['между секциями', 240], ['вводный абзац → контент', 80], ['pill → заголовок', 24], ['заголовок → lead', 20]] },
-  { title: 'Планшет ≤ 991', rows: [['между секциями', 160], ['вводный абзац → контент', 48], ['pill → заголовок', 20], ['заголовок → lead', 16]] },
-  { title: 'Мобилка ≤ 767', rows: [['между секциями', 100], ['вводный абзац → контент', 32], ['pill → заголовок', 16], ['заголовок → lead', 12]] },
+  { title: 'Десктоп', rows: [['между секциями', 120], ['вводный абзац → контент', 80], ['pill → заголовок', 24], ['заголовок → lead', 20]] },
+  { title: 'Планшет ≤ 991', rows: [['между секциями', 80], ['вводный абзац → контент', 48], ['pill → заголовок', 20], ['заголовок → lead', 16]] },
+  { title: 'Мобилка ≤ 767', rows: [['между секциями', 50], ['вводный абзац → контент', 32], ['pill → заголовок', 16], ['заголовок → lead', 12]] },
 ]
 
 const steps = [
@@ -116,6 +131,18 @@ onUnmounted(() => {
 
           <div class="sg-role">
             <div class="sg-role__meta">
+              <b>Word</b>
+              <span>88 / 700, −2.5 · ≤991 64 · мобилка 44</span>
+              <span>только переключаемые слова в «Обо мне»</span>
+            </div>
+            <div class="sg-words">
+              <span class="word">Дизайн</span>
+              <span class="word sg-word-off">Реклама</span>
+            </div>
+          </div>
+
+          <div class="sg-role">
+            <div class="sg-role__meta">
               <b>Number XL</b>
               <span>200 / 500 · ≤991 160</span>
               <span>только номер в раскрытой колонке процесса</span>
@@ -128,7 +155,20 @@ onUnmounted(() => {
 
     <section>
       <div class="container">
-        <div class="sg-divider"><span>2 · Отступы — одна шкала на всё</span></div>
+        <div class="sg-divider"><span>2 · Цвет — роли важнее значений</span></div>
+        <div class="sg-palette">
+          <div v-for="[token, role] in palette" :key="token" class="sg-swatch">
+            <i :style="{ background: `var(${token})` }"></i>
+            <b>{{ token }}</b>
+            <span>{{ role }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="sg-divider"><span>3 · Отступы — одна шкала на всё</span></div>
         <div class="sg-scale">
           <div v-for="n in spaceScale" :key="n">
             <i :style="{ width: `var(--s-${n})`, height: `var(--s-${n})` }"></i>
@@ -148,7 +188,7 @@ onUnmounted(() => {
 
     <section>
       <div class="container">
-        <div class="sg-divider"><span>3 · Так собирается любая секция</span></div>
+        <div class="sg-divider"><span>4 · Так собирается любая секция</span></div>
         <span class="pill sg-demo__pill">Процесс</span>
         <h2 class="display sg-demo__title">Как работаем</h2>
         <p class="lead sg-demo__lead">Шесть шагов от первого сообщения до готовых файлов. На каждом этапе вы знаете, что происходит.</p>
@@ -160,7 +200,7 @@ onUnmounted(() => {
             <span class="small sg-step__result">→ {{ result }}</span>
           </div>
         </div>
-        <p class="sg-note">pill → 24 → Display → 20 → lead · → 80 → карточки 350: поля 32 · номер 80 → 24 → название Display 58 → 12 → текст · результат прижат к низу · секция заканчивается отступом 240</p>
+        <p class="sg-note">pill → 24 → Display → 20 → lead · → 80 → карточки 350: поля 32 · номер 80 → 24 → название Display 58 → 12 → текст · результат прижат к низу · секция заканчивается отступом 120</p>
       </div>
     </section>
 
@@ -244,6 +284,43 @@ onUnmounted(() => {
   padding: var(--s-20);
   background: var(--ink);
   border-radius: var(--r-card);
+}
+
+.sg-words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.sg-word-off {
+  color: var(--text-4);
+}
+
+/* палитра */
+.sg-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--s-24);
+}
+
+.sg-swatch i {
+  display: block;
+  aspect-ratio: 3 / 2;
+  margin-bottom: var(--s-8);
+  border: var(--hairline) solid var(--border-soft);
+  border-radius: var(--r-lg);
+}
+
+.sg-swatch b {
+  display: block;
+  font: 500 var(--t-small) var(--f-body);
+  color: var(--ink);
+}
+
+.sg-swatch span {
+  display: block;
+  font: 400 var(--t-caption)/1.5 var(--f-body);
+  color: var(--text-3);
 }
 
 /* отступы */

@@ -28,6 +28,7 @@ html {
   --text:      #717171;
   --text-2:    #888686;
   --text-3:    #A1A09F;
+  --text-4:    #CFCCC7;   /* погашенный крупный текст — неактивные слова в «Обо мне» */
 
   /* тёплые серые */
   --warm:      #B5B1A9;
@@ -61,6 +62,7 @@ html {
   --t-num:     5rem;      /* 80 */
   --t-num-sm:  3rem;      /* 48 */
   --t-num-xl:  12.5rem;   /* 200 — только номер в раскрытой колонке процесса */
+  --t-word:    5.5rem;    /* 88 — переключаемые слова в «Обо мне» */
 
   /* трекинг ролей */
   --ls-display: -.094rem; /* −1.5 */
@@ -70,6 +72,7 @@ html {
   --ls-num:     -.19rem;  /* −3 */
   --ls-num-sm:  -.094rem; /* −1.5 */
   --ls-num-xl:  -.625rem; /* −10 */
+  --ls-word:    -.156rem; /* −2.5 */
 
   /* шкала отступов — других значений нет */
   --s-4:   .25rem;
@@ -85,7 +88,7 @@ html {
   --s-120: 7.5rem;
 
   /* ритм секции */
-  --section-gap: 15rem;   /* 240 — между секциями */
+  --section-gap: 7.5rem;  /* 120 — между секциями */
   --sec-pill:    var(--s-24);  /* pill → заголовок */
   --sec-lead:    var(--s-20);  /* заголовок → lead */
   --sec-content: var(--s-80);  /* lead → контент */
@@ -101,9 +104,12 @@ html {
   --r-lg:   .625rem;      /* 10 */
   --r-sm:   .375rem;      /* 6 */
   --r-pill: 999px;
+  --r-stage: 1.6875rem;   /* 27 — крупная фото-сцена в «Обо мне» */
+  --r-footer: 1.6875rem;  /* 27 — плавающая карточка футера */
 
   --shadow: 0 .4375rem 1.25rem rgba(68, 68, 68, .11);
   --ease:   .2s ease;
+  --ease-out: cubic-bezier(.22, 1, .36, 1); /* мягкое торможение — смены состояний */
 
   /* ширины текстовых колонок */
   --measure-paragraph: 38.75rem; /* 620 */
@@ -129,8 +135,7 @@ html {
 
   /* карточка услуги */
   --card-mark-w:           7rem;    /* 112 */
-  --mosaic-row:            7.5rem;  /* 120 */
-  --service-card-h-mobile: 12.5rem; /* 200 */
+  --service-card-h:        12.5rem; /* 200 — минимальная высота карточки услуги */
   --arrow-card:            1.75rem; /* 28 */
   --arrow-card-mobile:     1.25rem; /* 20 */
 
@@ -154,10 +159,28 @@ html {
   --avatar-overlap: -.75rem;  /* наложение соседних кругов */
   --reviews-card-w: 75vw;   /* карточка в горизонтальной ленте на мобилке — ~75% экрана */
 
+  /* блок «Обо мне» */
+  --avatar-sm: 1.75rem;     /* 28 — аватар в чипе с именем */
+
+  /* блок «Частые вопросы» — карточка-аккордеон */
+  --faq-toggle:   2rem;     /* 32 — круг с плюсом */
+  --faq-plus:     .75rem;   /* 12 — длина линии плюса */
+  --faq-plus-w:   .094rem;  /* 1.5 — толщина линии плюса */
+
+  /* блок «Обсудим задачу?» — строки мессенджеров */
+  --t-contact:     4.5rem;   /* 72 — название мессенджера */
+  --ls-contact:    -.125rem; /* −2 */
+  --contact-icon:  2.75rem;  /* 44 — логотип мессенджера */
+  --contact-arrow: 3.5rem;   /* 56 — стрелка-рикошет в строке */
+
   /* бегущая строка стека */
   --stack-icon:       1.125rem; /* 18 */
   --marquee-duration: 40s;
   --marquee-fade:     8%;
+
+  /* футер — кнопки мессенджеров */
+  --footer-icon-btn: 2.75rem; /* 44 — круг */
+  --footer-icon:     1.25rem; /* 20 — логотип в круге */
 
   /* header */
   --header-h:     4.375rem; /* 70 */
@@ -166,22 +189,17 @@ html {
   --nav-gap:      3rem;     /* 48 — от текста до текста пунктов меню */
   --nav-link-py:  .625rem;  /* 10 */
   --nav-link-px:  1.25rem;  /* 20 */
-
-  /* плавающий объект в hero */
-  --hero-object-w:      9.375rem; /* 150 */
-  --hero-object-w-sm:   6.875rem; /* 110 */
-  --hero-object-top:    1.25rem;  /* 20 */
-  --hero-object-top-sm: -1.875rem; /* −30 */
-  --hero-object-shift:  5.625rem; /* 90 — максимум выноса вправо */
 }
 
 /* брейкпоинты: 991 / 767 / 479, строго от большего к меньшему */
 @media (max-width: 991px) {
   :root {
-    --section-gap: 10rem;       /* 160 */
+    --section-gap: 5rem;        /* 80 */
     --process-h:   25rem;       /* 400 */
     --t-num-xl:    10rem;       /* 160 */
     --reviews-h:   50rem;       /* 800 */
+    --t-word:      4rem;        /* 64 — 88 не помещается в половину колонки */
+    --ls-word:     -.125rem;    /* −2 */
     --sec-pill:    var(--s-20);
     --sec-lead:    var(--s-16);
     --sec-content: 3rem;        /* 48 */
@@ -203,8 +221,14 @@ html {
     --avatar:         2.5rem;   /* 40 */
     --avatar-overlap: -.625rem;
     --ls-display: -.04rem;  /* −0.64 */
+    --t-word:     2.75rem;  /* 44 */
+    --ls-word:    -.094rem; /* −1.5 */
+    --t-contact:     2rem;     /* 32 */
+    --ls-contact:    -.063rem; /* −1 */
+    --contact-icon:  1.75rem;  /* 28 */
+    --contact-arrow: 2rem;     /* 32 */
 
-    --section-gap: 6.25rem; /* 100 */
+    --section-gap: 3.125rem; /* 50 */
     --sec-pill:    var(--s-16);
     --sec-lead:    var(--s-12);
     --sec-content: var(--s-32);

@@ -80,6 +80,26 @@
     ]
   },
   {
+    "slug": "reklamnye-bannery",
+    "title": "Рекламные баннеры",
+    "description": "Креативы для рекламы на маркетплейсах и в соцсетях",
+    "stack": ["figma", "photoshop", "nano-banana", "midjourney"],
+    "blocks": [
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      },
+      {
+        "title": "",
+        "description": ""
+      }
+    ]
+  },
+  {
     "slug": "lendingi-i-sayty",
     "title": "Лендинги и сайты",
     "description": "Сайты с понятной структурой и аналитикой, которые приводят заявки",

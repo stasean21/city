@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import BaseButton from '../ui/BaseButton.vue'
-import services from '../../data/services.json'
+import { messengers } from '../../utils/messengers.js'
 
 const year = computed(() => new Date().getFullYear())
 
@@ -9,94 +8,85 @@ const navLinks = [
   { label: 'Работы', to: '/works' },
   { label: 'Процесс', to: '/#process' },
   { label: 'Обо мне', to: '/about' },
+  { label: 'Вопросы', to: '/#faq' },
   { label: 'Контакты', to: '/contacts' },
 ]
+
+function toTop() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+}
 </script>
 
 <template>
   <footer class="site-footer on-dark">
     <div class="container">
-      <div class="site-footer__cta">
-        <p class="display site-footer__title">Есть задача? Обсудим</p>
-        <BaseButton href="[telegram]" variant="primary" arrow>Написать в Telegram</BaseButton>
-      </div>
+      <div class="site-footer__top">
+        <RouterLink to="/" class="site-footer__logo">
+          <img src="/logo/logo-dark.svg" alt="m/design" width="175" height="51" loading="lazy" />
+        </RouterLink>
 
-      <div class="site-footer__cols">
-        <div class="site-footer__col">
-          <RouterLink to="/" class="site-footer__logo">
-            <img src="/logo/logo-dark.svg" alt="m/design" width="175" height="51" loading="lazy" />
-          </RouterLink>
-          <p class="small site-footer__about">Дизайн, сайты и ИИ-автоматизация для малого и среднего бизнеса.</p>
-        </div>
-
-        <div class="site-footer__col">
-          <h4 class="caption site-footer__heading">Услуги</h4>
-          <RouterLink
-            v-for="service in services"
-            :key="service.slug"
-            :to="`/services/${service.slug}`"
-            class="site-footer__link"
-          >
-            {{ service.title }}
-          </RouterLink>
-        </div>
-
-        <div class="site-footer__col">
-          <h4 class="caption site-footer__heading">Навигация</h4>
-          <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to" class="site-footer__link">
+        <nav class="site-footer__nav" aria-label="Навигация в подвале">
+          <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to" class="small site-footer__link">
             {{ link.label }}
           </RouterLink>
-        </div>
+        </nav>
 
-        <div class="site-footer__col">
-          <h4 class="caption site-footer__heading">Связь</h4>
-          <a href="[telegram]" class="site-footer__link" target="_blank" rel="noopener">Telegram</a>
-          <a href="[vk]" class="site-footer__link" target="_blank" rel="noopener">VK</a>
-          <a href="mailto:[email]" class="site-footer__link">[email]</a>
-        </div>
+        <ul class="site-footer__messengers">
+          <li v-for="item in messengers" :key="item.id">
+            <a
+              :href="item.url"
+              class="site-footer__messenger"
+              target="_blank"
+              rel="noopener"
+              :aria-label="`Написать в ${item.name}`"
+            >
+              <span v-if="item.svg" class="site-footer__icon" v-html="item.svg"></span>
+            </a>
+          </li>
+        </ul>
       </div>
 
       <div class="caption site-footer__bottom">
-        <span>© {{ year }} m/design · [Город] · ИП [ФИО] · ИНН [—]</span>
-        <RouterLink to="/privacy" class="site-footer__legal">Политика конфиденциальности</RouterLink>
+        <span>© {{ year }} m/design · работаю по всей России · физлица и юрлица — по договору · ИП [ФИО] · ИНН [—]</span>
+        <div class="site-footer__meta">
+          <RouterLink to="/privacy" class="site-footer__link">Политика конфиденциальности</RouterLink>
+          <button type="button" class="site-footer__link site-footer__up" @click="toTop">Наверх ↑</button>
+        </div>
       </div>
     </div>
   </footer>
 </template>
 
 <style scoped>
+/* плавающая тёмная карточка с отступом от краёв экрана */
 .site-footer {
+  margin: 0 var(--s-16) var(--s-16);
+  padding: var(--s-32) var(--s-40) 0;
   background: var(--ink);
+  border-radius: var(--r-footer);
   color: var(--footer-text);
-  padding: var(--s-120) 0 var(--s-40);
 }
 
-.site-footer__cta {
+/* ширина содержимого — как у контента страницы: поля даёт сама карточка,
+   поэтому у контейнера внутри своих полей нет */
+.site-footer .container {
+  max-width: var(--container);
+  padding-inline: 0;
+}
+
+/* строка 1: логотип · меню · мессенджеры */
+.site-footer__top {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-end;
   gap: var(--s-24);
-  padding-bottom: var(--s-80);
-  margin-bottom: var(--s-60);
-  border-bottom: var(--hairline) solid var(--footer-border);
-}
-
-.site-footer__title {
-  color: var(--white);
-  max-width: var(--measure-title);
-}
-
-.site-footer__cols {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: var(--s-40);
+  padding-bottom: var(--s-32);
 }
 
 .site-footer__logo {
   display: block;
-  width: fit-content;
-  margin-bottom: var(--s-16);
 }
 
 .site-footer__logo img {
@@ -104,20 +94,13 @@ const navLinks = [
   width: auto;
 }
 
-.site-footer__about {
-  color: var(--footer-text);
-  max-width: var(--measure-note);
-}
-
-.site-footer__heading {
-  color: var(--footer-text);
-  margin-bottom: var(--s-16);
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-8) var(--s-32);
 }
 
 .site-footer__link {
-  display: block;
-  width: fit-content;
-  padding: var(--s-4) 0;
   color: var(--footer-link);
   transition: color var(--ease);
 }
@@ -126,47 +109,76 @@ const navLinks = [
   color: var(--white);
 }
 
+.site-footer__messengers {
+  display: flex;
+  gap: var(--s-8);
+}
+
+.site-footer__messenger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--footer-icon-btn);
+  height: var(--footer-icon-btn);
+  background: var(--ink-soft);
+  border-radius: var(--r-pill);
+  transition: background-color var(--ease);
+}
+
+.site-footer__messenger:hover {
+  background: var(--ink-hover);
+}
+
+.site-footer__icon {
+  width: var(--footer-icon);
+  height: var(--footer-icon);
+}
+
+.site-footer__icon :deep(svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* строка 2: юрданные · политика · наверх */
 .site-footer__bottom {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--s-16);
-  margin-top: var(--s-80);
-  padding-top: var(--s-24);
+  gap: var(--s-16) var(--s-24);
+  padding: var(--s-20) 0 var(--s-32);
   border-top: var(--hairline) solid var(--footer-border);
   color: var(--footer-text);
 }
 
-.site-footer__legal {
-  transition: color var(--ease);
+.site-footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-16) var(--s-24);
 }
 
-.site-footer__legal:hover {
-  color: var(--white);
+.site-footer__up {
+  padding: 0;
+  border: 0;
+  background: none;
 }
 
-.site-footer a:focus-visible {
+.site-footer a:focus-visible,
+.site-footer button:focus-visible {
   outline: var(--focus-ring) solid var(--white);
   outline-offset: var(--focus-ring);
 }
 
-@media (max-width: 991px) {
-  .site-footer__cols {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 @media (max-width: 767px) {
   .site-footer {
-    padding-top: var(--s-80);
+    margin: 0 var(--s-8) var(--s-8);
+    padding: var(--s-24) var(--s-20) 0;
   }
 
-  .site-footer__cols {
-    gap: var(--s-32);
-  }
-
-  .site-footer__cols > :first-child {
-    grid-column: 1 / -1;
+  .site-footer__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-24);
   }
 
   .site-footer__bottom {

@@ -1,0 +1,6 @@
+[
+  { "id": "max", "name": "Max", "url": "[max]" },
+  { "id": "whatsapp", "name": "WhatsApp", "url": "https://wa.me/[номер]" },
+  { "id": "telegram", "name": "Telegram", "url": "https://t.me/[ник]" },
+  { "id": "vk", "name": "Vk", "url": "https://vk.com/[адрес]" }
+]
