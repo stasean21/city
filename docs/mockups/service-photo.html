@@ -1,4 +1,4 @@
-<title>Баннеры — страница услуги</title>
+<title>Предметная съёмка — страница услуги</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
 <style>
@@ -245,170 +245,135 @@ dialog::backdrop { background: rgba(29,30,34,.86); }
   .fcard { padding: 28px 20px 0; margin: 0 8px 8px; } .row1 { flex-direction: column; align-items: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
-/* ---------- баннер-заглушка: сам перестраивается под пропорцию ---------- */
-.bn { container-type: size; position: relative; overflow: hidden; background: var(--tone, #E6DDCB); border-radius: 10px; width: 100%; height: 100%; }
-.bn .in { position: absolute; inset: 0; display: grid; grid-template: "t p" 1fr "c p" auto / 1fr 1fr; gap: 6cqmin; padding: 7cqmin; align-items: center; }
-.bn .t { grid-area: t; font: 700 13cqmin/1 var(--f-head); letter-spacing: -.03em; color: var(--ink); align-self: start; }
-.bn .t small { display: block; font: 500 6cqmin/1.2 var(--f-body); letter-spacing: 0; color: var(--warm-2); margin-top: 3cqmin; }
-.bn .p { grid-area: p; justify-self: center; width: 80%; aspect-ratio: 1; border-radius: 42% 42% 16% 16%; background: rgba(255,255,255,.6); max-height: 100%; }
-.bn .c { grid-area: c; justify-self: start; background: var(--ink); color: var(--white); border-radius: 999px; font: 600 6cqmin/1 var(--f-body); padding: 3cqmin 6cqmin; white-space: nowrap; }
-.bn .badge { position: absolute; right: 5cqmin; top: 5cqmin; width: 18cqmin; height: 18cqmin; border-radius: 50%; background: var(--accent); color: var(--white); display: grid; place-items: center; font: 700 6cqmin/1 var(--f-head); }
-@container (orientation: portrait) {
-  .bn .in { grid-template: "t" auto "p" 1fr "c" auto / 1fr; }
-  .bn .t { font-size: 11cqw; } .bn .t small { font-size: 5cqw; } .bn .c { font-size: 5cqw; padding: 2.5cqw 5cqw; justify-self: center; }
-  .bn .p { width: 70%; }
-}
-@container (min-aspect-ratio: 5/2) {
-  .bn .in { grid-template: "p t c" 1fr / auto 1fr auto; padding: 0 4cqw; gap: 3cqw; }
-  .bn .t { font-size: 34cqh; align-self: center; } .bn .t small { font-size: 15cqh; margin-top: 2cqh; }
-  .bn .p { height: 76cqh; width: auto; } .bn .c { font-size: 15cqh; padding: 7cqh 14cqh; }
-  .bn .badge { width: 40cqh; height: 40cqh; font-size: 12cqh; right: auto; left: 1.5cqw; top: 6cqh; }
-}
-@container (min-aspect-ratio: 6/1) { .bn .t small { display: none; } .bn .t { font-size: 44cqh; } }
 
-/* ---------- A — мозаика форматов ---------- */
-.mosaic { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 40px; gap: 12px; grid-auto-flow: dense; }
-.tile { position: relative; cursor: pointer; }
-.tile .bn { transition: transform .5s var(--out); }
-.tile:hover .bn { transform: scale(.98); }
-.tile .fm { position: absolute; left: 8px; bottom: 8px; z-index: 2; background: var(--white); color: var(--ink); font: 500 11px/16px var(--f-body); padding: 3px 8px; border-radius: 999px; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .4s var(--out); }
-.tile:hover .fm { opacity: 1; transform: none; }
-@media (hover: none) { .tile .fm { opacity: 1; transform: none; } }
-.f-sq { grid-column: span 3; grid-row: span 5; }
-.f-st { grid-column: span 3; grid-row: span 9; }
-.f-hd { grid-column: span 7; grid-row: span 3; }
-.f-lb { grid-column: span 12; grid-row: span 3; }
-.f-sk { grid-column: span 2; grid-row: span 6; }
-.f-mr { grid-column: span 3; grid-row: span 4; }
-.f-wd { grid-column: span 5; grid-row: span 5; }
-.legend { display: flex; gap: 8px 20px; flex-wrap: wrap; margin-top: 24px; font-size: 13px; color: var(--ink); }
-.legend span { display: flex; gap: 8px; align-items: center; }
-.legend i { display: inline-block; border: 1.5px solid var(--ink); border-radius: 2px; }
-
-/* ---------- B — одна рамка перетекает между форматами ---------- */
-.morph { display: grid; grid-template-columns: 1fr minmax(260px, 340px); gap: 60px; align-items: center; }
-.stage { height: 560px; display: grid; place-items: center; background: var(--white); border-radius: 27px; position: relative; overflow: hidden; }
-.frame { width: var(--fw); height: var(--fh); transition: width .9s var(--out), height .9s var(--out); }
-.frame .bn { border-radius: 12px; }
-.dims { position: absolute; left: 24px; bottom: 20px; font: 500 13px/20px var(--f-body); color: var(--text-3); font-variant-numeric: tabular-nums; }
-.dims b { color: var(--ink); font-weight: 500; }
-.camp { display: flex; gap: 8px; flex-wrap: wrap; position: absolute; left: 24px; top: 20px; }
-.camp button { all: unset; cursor: pointer; font: 500 13px/20px var(--f-body); color: var(--warm-2); padding: 4px 12px; border-radius: 999px; background: var(--bg-3); }
-.camp button.on { background: var(--ink); color: var(--white); }
-.fmts { list-style: none; display: flex; flex-direction: column; }
-.fmts button { all: unset; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; width: 100%; padding: 14px 0; border-bottom: 1px solid var(--border); }
-.fmts li:first-child button { border-top: 1px solid var(--border); }
-.fmts b { font: 600 22px/1.3 var(--f-head); letter-spacing: -.3px; color: var(--text-4); transition: color .3s; }
-.fmts em { font-style: normal; font-size: 13px; color: var(--text-4); font-variant-numeric: tabular-nums; transition: color .3s; }
-.fmts button.on b { color: var(--ink); } .fmts button.on em { color: var(--accent); }
-
-
-/* мобилка: блоки баннеров */
-@media (max-width: 767px) {
-  .morph { grid-template-columns: 1fr; gap: 16px; }
-  .stage { height: 380px; border-radius: 20px; }
-  .camp { left: 12px; right: 12px; top: 12px; flex-wrap: nowrap; overflow-x: auto; }
-  .camp button { flex: none; }
-  .dims { left: 16px; bottom: 12px; }
-  .fmts { flex-direction: row; overflow-x: auto; gap: 8px; scrollbar-width: none; padding-bottom: 4px; }
-  .fmts li { flex: none; }
-  .fmts button, .fmts li:first-child button { border: 0; background: var(--bg-3); border-radius: 999px; padding: 8px 14px; gap: 8px; width: auto; }
-  .fmts b { font: 500 14px/20px var(--f-body); letter-spacing: 0; color: var(--warm-2); }
-  .fmts em { font-size: 12px; color: var(--text-3); }
-  .fmts button.on { background: var(--ink); } .fmts button.on b { color: var(--white); } .fmts button.on em { color: var(--accent); }
-  .mosaic { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 28px; gap: 8px; }
-  .f-sq { grid-column: span 3; grid-row: span 5; } .f-st { grid-column: span 3; grid-row: span 9; }
-  .f-hd, .f-lb { grid-column: span 6; grid-row: span 2; } .f-wd { grid-column: span 6; grid-row: span 6; }
-  .f-sk { grid-column: span 3; grid-row: span 8; } .f-mr { grid-column: span 3; grid-row: span 4; }
-  .bfan { height: 340px; }
-  .note { display: none; }
-}
-
-/* баннеры: hero-веер разных форматов */
-.bfan { position: relative; height: 460px; }
-.bfan > div { position: absolute; border: 6px solid var(--white); border-radius: 18px; overflow: hidden; transition: transform .8s var(--out); background: var(--white); }
-.bfan .b1 { width: 38%; aspect-ratio: 9/16; left: 6%; top: 4%; transform: rotate(-6deg); }
-.bfan .b2 { width: 46%; aspect-ratio: 1; left: 34%; top: 12%; z-index: 2; }
-.bfan .b3 { width: 70%; aspect-ratio: 4/1; left: 24%; top: 76%; transform: rotate(3deg); z-index: 3; }
-.bfan .bn { border-radius: 12px; }
-.bfan:hover .b1 { transform: rotate(-9deg) translate(-6%, -2%); } .bfan:hover .b3 { transform: rotate(5deg) translate(4%, 4%); } .bfan:hover .b2 { transform: translateY(-3%); }
-.blk-gap { height: 120px; }
-/* лайтбокс: набор размеров кампании */
-.lb-track .sl.set { flex: 0 0 auto; height: min(420px, 60vh); }
-.lb-track .sl.set .box { height: calc(100% - 34px); }
-/* сторис: этапы для баннеров */
-.screen .bn { position: absolute; inset: 0; border-radius: 0; transition: opacity .5s, transform .6s var(--out); }
-.screen[data-s="0"] .bn, .screen[data-s="1"] .bn { opacity: 0; transform: translateY(8px); }
-.screen .adapt { position: absolute; inset: 14px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 8px; align-content: center; opacity: 0; transition: opacity .4s; background: var(--bg-3); border-radius: 12px; padding: 10px; }
-.screen .adapt > div:nth-child(1) { aspect-ratio: 1; } .screen .adapt > div:nth-child(2) { aspect-ratio: 9/16; grid-row: span 2; } .screen .adapt > div:nth-child(3) { aspect-ratio: 16/9; }
-.screen .adapt > div:nth-child(4) { grid-column: span 2; aspect-ratio: 6/1; }
-.screen[data-s="3"] .adapt { opacity: 1; }
+/* фото-заглушка: товар на фоне */
+.ph { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; background: var(--tone, #E6DDCB); transition: filter .5s; }
+.ph::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: rgba(255,255,255,.28); }
+.ph i { position: absolute; left: 50%; bottom: 22%; transform: translateX(-50%); background: rgba(29,30,34,.78); }
+.ph.k0 i { width: 22%; height: 52%; border-radius: 30% 30% 10% 10%; }
+.ph.k1 i { width: 40%; height: 30%; border-radius: 8%; background: rgba(255,255,255,.9); }
+.ph.k2 i { width: 34%; aspect-ratio: 1; border-radius: 50%; background: rgba(97,93,85,.85); }
+.ph.k3 i { width: 16%; height: 62%; border-radius: 40% 40% 12% 12%; background: rgba(245,153,88,.85); }
+.ph.raw { filter: grayscale(.6) brightness(.82) contrast(.85); }
+/* hero */
+.pfan { position: relative; height: 460px; }
+.pfan > span { position: absolute; width: 44%; aspect-ratio: 4/5; border: 6px solid var(--white); border-radius: 20px; overflow: hidden; transition: transform .8s var(--out); }
+.pfan .a { left: 4%; top: 10%; transform: rotate(-7deg); } .pfan .b { left: 28%; top: 2%; z-index: 2; } .pfan .c { left: 52%; top: 12%; transform: rotate(7deg); }
+.pfan:hover .a { transform: rotate(-10deg) translateX(-8%); } .pfan:hover .c { transform: rotate(10deg) translateX(8%); } .pfan:hover .b { transform: translateY(-3%); }
+/* A — контактный лист */
+.sheetwrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: start; }
+.big { position: sticky; top: 40px; }
+.big .frame { aspect-ratio: 4/5; border-radius: 27px; overflow: hidden; background: var(--white); }
+.big .cap { display: flex; justify-content: space-between; margin-top: 12px; font-size: 13px; } .big .cap b { color: var(--ink); font-weight: 500; }
+.sheet { background: var(--white); border-radius: 20px; padding: 24px; }
+.sheet-h { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; }
+.sheet-h b { font: 600 22px/1.3 var(--f-head); letter-spacing: -.3px; color: var(--ink); display: block; }
+.sheet-h span { font-size: 13px; }
+.sheet-nav { display: flex; gap: 8px; } .sheet-nav button { all: unset; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-3); display: grid; place-items: center; color: var(--ink); }
+.frames { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 8px; }
+.fr { all: unset; cursor: pointer; display: block; width: 100%; position: relative; }
+.fr .box { display: block; aspect-ratio: 4/5; border-radius: 6px; overflow: hidden; transition: transform .4s var(--out); }
+.fr:hover .box { transform: scale(.96); }
+.fr .n { display: block; font: 500 10px/16px var(--f-body); color: var(--text-3); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.fr.pick::after { content: ""; position: absolute; inset: -6px -6px 12px; border: 2px solid var(--accent); border-radius: 48% 52% 46% 54% / 52% 46% 54% 48%; transform: rotate(-3deg); pointer-events: none; }
+.fr.cur .box { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sheet-f { display: flex; gap: 8px; align-items: center; margin-top: 18px; font-size: 13px; color: var(--ink); }
+.sheet-f::before { content: ""; width: 14px; height: 10px; border: 2px solid var(--accent); border-radius: 50%; }
+/* B — исходник / результат */
+.rawgrid { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.rawgrid button { all: unset; cursor: pointer; display: block; width: 100%; position: relative; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.rawgrid .box { display: block; aspect-ratio: 4/5; border-radius: 20px; overflow: hidden; }
+.rawgrid .tag { position: absolute; left: 12px; top: 12px; background: var(--white); color: var(--ink); font: 500 12px/18px var(--f-body); padding: 3px 10px; border-radius: 999px; transition: background-color .3s, color .3s; }
+.rawgrid button.hold .tag { background: var(--ink); color: var(--white); }
+.rawgrid .t { display: block; margin-top: 10px; font: 600 16px/22px var(--f-head); color: var(--ink); }
+.rawgrid .s { font-size: 12px; color: var(--text-3); }
+.hint { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink); margin-bottom: 24px; background: var(--white); padding: 6px 12px; border-radius: 999px; }
+/* сторис: экран съёмки */
+.screen .ph { position: absolute; inset: 0; transition: opacity .5s, filter .6s; }
+.screen[data-s="0"] .ph, .screen[data-s="1"] .ph { opacity: 0; }
+.screen[data-s="2"] .ph { filter: brightness(.55) grayscale(.5); }
+.screen[data-s="3"] .ph { filter: grayscale(.45) contrast(.9); }
 .screen .done { position: absolute; right: 14px; bottom: 14px; background: var(--ink); color: var(--white); font: 500 12px/18px var(--f-body); padding: 4px 10px; border-radius: 999px; opacity: 0; transition: opacity .4s; }
-.screen[data-s="4"] .done { opacity: 1; }
+.screen[data-s="5"] .done { opacity: 1; }
+.screen .flash { position: absolute; inset: 0; background: var(--white); opacity: 0; pointer-events: none; }
+.screen[data-s="3"] .flash { animation: flash 1.6s ease-out infinite; }
+@keyframes flash { 0%, 70% { opacity: 0; } 75% { opacity: .9; } 100% { opacity: 0; } }
+.vlabel { display: inline-block; font: 500 12px/18px var(--f-body); color: var(--ink); background: var(--white); border-radius: 999px; padding: 4px 10px; margin-bottom: 16px; }
+@media (max-width: 767px) {
+  .sheetwrap { grid-template-columns: 1fr; gap: 16px; } .big { position: static; }
+  .frames { grid-template-columns: repeat(4, 1fr); gap: 8px 6px; } .sheet { padding: 16px; }
+  .rawgrid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pfan { height: 340px; } .note { display: none; }
+}
+
+/* J — две ленты кадров при прокрутке */
+.jrows { display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+.row { display: flex; gap: 16px; will-change: transform; }
+.row .jph { flex: 0 0 auto; height: 360px; border-radius: 20px; overflow: hidden; position: relative; }
+.row .jph.p { aspect-ratio: 4/5; } .row .jph.l { aspect-ratio: 5/4; } .row .jph.s { aspect-ratio: 1; }
+.row .jph canvas { display: block; width: 100%; height: 100%; }
+.row .jph span { position: absolute; left: 12px; bottom: 12px; background: rgba(255,255,255,.88); color: var(--ink); font: 500 12px/18px var(--f-body); padding: 3px 10px; border-radius: 999px; }
+@media (max-width: 767px) { .row .jph { height: 240px; } }
 .rel { color: var(--text); }
 </style>
 
-<p class="note">Макет страницы «Рекламные баннеры». Баннеры, цены и сроки — заглушки. Наведите на размеры в первом блоке примеров, кликните на любой баннер в мозаике.</p>
+<p class="note">Макет страницы «Предметная съёмка». Фото, цены и сроки — заглушки.</p>
 
 <div class="container"><header class="site-h"><img src="logo-light.svg" alt="m/design" width="110" height="32"><nav><a>Работы</a><a>Обо мне</a><a>Контакты</a><span class="btn">Обсудить задачу ↗</span></nav></header></div>
 
 <main><div class="container">
 
 <div class="hero">
-  <div><p class="crumbs"><a href="#">Главная</a> / <a href="#">Услуги</a> / <b>Рекламные баннеры</b></p>
-    <h1 class="display">Рекламные баннеры</h1>
-    <p class="lead">Креативы для рекламы на маркетплейсах, в соцсетях и Яндекс Директе — одна идея во всех нужных размерах.</p>
+  <div><p class="crumbs"><a href="#">Главная</a> / <a href="#">Услуги</a> / <b>Предметная съёмка</b></p>
+    <h1 class="display">Предметная съёмка</h1>
+    <p class="lead">Чистые кадры товара для карточек и рекламы: свет, фон, ракурсы и ретушь — под требования маркетплейсов.</p>
     <div class="acts"><a class="btn" href="#contact">Обсудим задачу? ↗</a><a class="btn sec" href="#works">Смотреть примеры</a></div></div>
-  <div class="bfan" aria-hidden="true"><div class="b1" data-bn="0"></div><div class="b2" data-bn="1"></div><div class="b3" data-bn="2"></div></div>
+  <div class="pfan" aria-hidden="true"><span class="a"><span class="ph k1" style="--tone:#D9DEE0"><i></i></span></span><span class="b"><span class="ph k0" style="--tone:#E6DDCB"><i></i></span></span><span class="c"><span class="ph k3" style="--tone:#E2DAD9"><i></i></span></span></div>
 </div>
 
-<section id="works">
-  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">Одна идея — все площадки</h2></div><p class="lead">Выберите кампанию и размер — баннер перестроится.</p></div>
-  <div class="morph">
-    <div class="stage"><div class="camp" id="camp"></div><div class="frame" id="frame"></div><p class="dims" id="dims"></p></div>
-    <ul class="fmts" id="fmts"></ul>
-  </div>
-  <div class="blk-gap"></div>
-  <div class="head"><div><h2 class="display">Любой размер</h2></div><p class="lead">Квадраты для ленты, сторис, шапки и форматы Яндекс Директа. Нажмите на баннер — откроются все размеры кампании.</p></div>
-  <div class="mosaic" id="mosaic"></div>
+<section id="works" style="padding-bottom:var(--gap)">
+  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">Работы</h2></div><p class="lead">Косметика, продукты, товары для дома — на белом фоне и в цвет бренда.</p></div>
+</div>
+  <div class="jrows" id="rows"><div class="row" id="r1"></div><div class="row" id="r2"></div></div>
+<div class="container">
   <div class="more"><a class="btn" href="#">Смотреть все работы ↗</a></div>
 </section>
 
 <section>
-  <div class="head"><div><span class="pill">Что входит</span><h2 class="display">Что входит в работу</h2></div><p class="lead">От идеи до файлов, которые можно сразу загрузить в рекламный кабинет.</p></div>
-  <ol class="prow" id="prow"><li class="pcol on" tabindex="0" aria-expanded="true"><span class="pxl" aria-hidden="true">01</span><span class="pnum" aria-hidden="true">01</span><span class="plab" aria-hidden="true">Идея и оффер</span><div class="pcont"><b>Идея и оффер</b><p>Одна понятная мысль и выгода, ради которой кликают</p><span class="res">есть за что кликнуть</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">02</span><span class="pnum" aria-hidden="true">02</span><span class="plab" aria-hidden="true">Ключевой визуал</span><div class="pcont"><b>Ключевой визуал</b><p>Главный баннер, от которого строятся все размеры</p><span class="res">узнаваемо везде</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">03</span><span class="pnum" aria-hidden="true">03</span><span class="plab" aria-hidden="true">Адаптации</span><div class="pcont"><b>Адаптации</b><p>Квадрат, сторис, шапки, форматы Директа — без потери смысла</p><span class="res">все площадки сразу</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">04</span><span class="pnum" aria-hidden="true">04</span><span class="plab" aria-hidden="true">Требования площадок</span><div class="pcont"><b>Требования площадок</b><p>Размеры, вес файлов, доля текста и запреты модерации</p><span class="res">проходит модерацию</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">05</span><span class="pnum" aria-hidden="true">05</span><span class="plab" aria-hidden="true">Варианты для тестов</span><div class="pcont"><b>Варианты для тестов</b><p>Несколько заголовков и визуалов, чтобы сравнить в рекламе</p><span class="res">видно, что работает</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">06</span><span class="pnum" aria-hidden="true">06</span><span class="plab" aria-hidden="true">Файлы</span><div class="pcont"><b>Файлы</b><p>Готовые файлы, названные по размерам и площадкам</p><span class="res">можно сразу загружать</span></div></li></ol>
+  <div class="head"><div><span class="pill">Что входит</span><h2 class="display">Что входит в съёмку</h2></div><p class="lead">От подготовки товара до файлов под каждую площадку.</p></div>
+  <ol class="prow" id="prow"><li class="pcol on" tabindex="0" aria-expanded="true"><span class="pxl" aria-hidden="true">01</span><span class="pnum" aria-hidden="true">01</span><span class="plab" aria-hidden="true">Подготовка товара</span><div class="pcont"><b>Подготовка товара</b><p>Чищу, отпариваю, собираю комплект — до первого кадра</p><span class="res">без пыли и складок</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">02</span><span class="pnum" aria-hidden="true">02</span><span class="plab" aria-hidden="true">Свет и фон</span><div class="pcont"><b>Свет и фон</b><p>Белый фон под маркетплейс или цветной под стиль бренда</p><span class="res">чистая картинка</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">03</span><span class="pnum" aria-hidden="true">03</span><span class="plab" aria-hidden="true">Ракурсы</span><div class="pcont"><b>Ракурсы</b><p>Спереди, сбоку, сзади, в руке, в масштабе — по списку</p><span class="res">видно со всех сторон</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">04</span><span class="pnum" aria-hidden="true">04</span><span class="plab" aria-hidden="true">Детали и макро</span><div class="pcont"><b>Детали и макро</b><p>Фактура, швы, кнопки, состав на упаковке</p><span class="res">видно качество</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">05</span><span class="pnum" aria-hidden="true">05</span><span class="plab" aria-hidden="true">Ретушь</span><div class="pcont"><b>Ретушь</b><p>Цвет как в жизни, без бликов и дефектов</p><span class="res">меньше возвратов</span></div></li><li class="pcol" tabindex="0" aria-expanded="false"><span class="pxl" aria-hidden="true">06</span><span class="pnum" aria-hidden="true">06</span><span class="plab" aria-hidden="true">Файлы</span><div class="pcont"><b>Файлы</b><p>Размеры под Ozon и Wildberries и исходники в высоком разрешении</p><span class="res">можно сразу загружать</span></div></li></ol>
 </section>
 
 <section>
-  <div class="head"><div><span class="pill">Процесс</span><h2 class="display">Как я делаю баннеры</h2></div><p class="lead">Сначала согласуем один ключевой визуал, потом — все размеры в его стиле.</p></div>
+  <div class="head"><div><span class="pill">Процесс</span><h2 class="display">Как проходит съёмка</h2></div><p class="lead">Сначала составляем список кадров, потом — свет, съёмка и ретушь.</p></div>
   <div class="stories">
-    <div class="phone" aria-hidden="true"><div class="bars" id="bars"><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span></div>
-      <div class="screen" id="screen" data-s="0"><div data-bn="0" style="position:absolute;inset:0"></div><span class="brief"><i></i><i></i><i></i><i></i></span><span class="comp"><span></span><span></span><span></span><span></span></span><div class="adapt"><div data-bn="0"></div><div data-bn="0"></div><div data-bn="0"></div><div data-bn="0"></div></div><span class="done">готово ✓</span></div>
+    <div class="phone" aria-hidden="true"><div class="bars" id="bars"><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span><span class="bar"><i></i></span></div>
+      <div class="screen" id="screen" data-s="0"><span class="ph k0" style="--tone:#E6DDCB"><i></i></span><span class="flash"></span><span class="brief"><i></i><i></i><i></i><i></i></span><span class="comp"><span></span><span></span><span></span><span></span></span><span class="done">готово ✓</span></div>
       <p class="stage-cap" id="cap">Бриф</p></div>
-    <ol class="stl" id="stl"><li data-i="0"><span class="num">01</span><span><b>Бриф</b><em>Товар, площадки, бюджет и цель рекламы</em></span></li><li data-i="1"><span class="num">02</span><span><b>Референсы</b><em>Смотрю рекламу конкурентов и что уже крутится</em></span></li><li data-i="2"><span class="num">03</span><span><b>Ключевой визуал</b><em>Один главный баннер — согласуем его первым</em></span></li><li data-i="3"><span class="num">04</span><span><b>Адаптации</b><em>Все размеры по списку площадок</em></span></li><li data-i="4"><span class="num">05</span><span><b>Сдача</b><em>Файлы по размерам и варианты для тестов</em></span></li></ol>
+    <ol class="stl" id="stl"><li data-i="0"><span class="num">01</span><span><b>Бриф</b><em>Товар, площадки, стиль и список ракурсов</em></span></li><li data-i="1"><span class="num">02</span><span><b>Подготовка</b><em>Товар приезжает ко мне — [уточнить: доставка и возврат]</em></span></li><li data-i="2"><span class="num">03</span><span><b>Свет и фон</b><em>Ставлю свет под фактуру товара</em></span></li><li data-i="3"><span class="num">04</span><span><b>Съёмка</b><em>Все ракурсы и детали по списку</em></span></li><li data-i="4"><span class="num">05</span><span><b>Ретушь</b><em>Цвет, чистка, вырезка фона</em></span></li><li data-i="5"><span class="num">06</span><span><b>Сдача</b><em>Файлы под Ozon, WB и исходники</em></span></li></ol>
   </div>
-  <div class="stack" style="margin-top:60px"><span class="st">Figma</span><span class="st">Photoshop</span><span class="st">Illustrator</span><span class="st">Nano Banana</span><span class="st">Midjourney</span><span class="st">ChatGPT</span></div>
+  <div class="stack" style="margin-top:60px"><span class="st">Lightroom</span><span class="st">Photoshop</span><span class="st">Capture One [уточнить]</span><span class="st">Nano Banana</span></div>
 </section>
 
 <section>
   <div class="head"><div><span class="pill">Стоимость</span><h2 class="display">Три формата</h2></div><p class="lead">Точную сумму фиксирую в смете после брифа — в процессе она не меняется.</p></div>
-  <ul class="pks"><li class="pk"><p class="pk-n">Один креатив</p><p class="pk-s">Чтобы проверить идею</p>
-  <p class="pk-p">от [—] ₽</p><p class="pk-d">срок от [—] дней</p><ul><li>Идея и оффер</li><li>Ключевой визуал</li><li>До [—] размеров</li></ul>
-  <button class="btn sec">Обсудить ↗</button></li><li class="pk dark"><p class="pk-n">Набор под площадки</p><p class="pk-s">Самый частый заказ</p>
-  <p class="pk-p">от [—] ₽</p><p class="pk-d">срок от [—] дней</p><ul><li>Всё из «Одного креатива»</li><li>Квадрат, сторис, шапки, Директ</li><li>До [—] размеров</li><li>Требования модерации учтены</li></ul>
-  <button class="btn inv">Обсудить ↗</button></li><li class="pk"><p class="pk-n">Кампания с тестами</p><p class="pk-s">Для регулярной рекламы</p>
-  <p class="pk-p">от [—] ₽</p><p class="pk-d">срок от [—] дней</p><ul><li>Всё из «Набора под площадки»</li><li>[—] вариантов заголовков и визуалов</li><li>Обновление креативов по итогам теста</li></ul>
+  <ul class="pks"><li class="pk"><p class="pk-n">Несколько кадров</p><p class="pk-s">Для одного товара</p>
+  <p class="pk-p">от [—] ₽</p><p class="pk-d">срок от [—] дней</p><ul><li>До [—] кадров</li><li>Белый фон</li><li>Базовая ретушь</li></ul>
+  <button class="btn sec">Обсудить ↗</button></li><li class="pk dark"><p class="pk-n">Набор для карточки</p><p class="pk-s">Самый частый заказ</p>
+  <p class="pk-p">от [—] ₽</p><p class="pk-d">срок от [—] дней</p><ul><li>До [—] кадров на товар</li><li>Ракурсы, детали, масштаб</li><li>Ретушь и цветокоррекция</li><li>Размеры под Ozon и WB</li></ul>
+  <button class="btn inv">Обсудить ↗</button></li><li class="pk"><p class="pk-n">Каталог</p><p class="pk-s">Для линейки или магазина</p>
+  <p class="pk-p">от [—] ₽</p><p class="pk-d">срок от [—] дней</p><ul><li>От [—] товаров</li><li>Единый свет и стиль серии</li><li>Сетка ракурсов для всех товаров</li></ul>
   <button class="btn sec">Обсудить ↗</button></li></ul>
 </section>
 
 <section>
-  <div class="head"><div><span class="pill">Вместе с этим</span><h2 class="display">С этим часто берут</h2></div><p class="lead">Реклама ведёт на карточку — пусть она тоже продаёт.</p></div>
-  <div class="rels"><a class="rel" href="#"><span class="mark"></span><span class="h3c">Инфографика для маркетплейсов</span><span class="rt">Карточки, которые объясняют товар за три секунды и выделяются в выдаче</span><svg class="sa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg></a><a class="rel" href="#"><span class="mark"></span><span class="h3c">Видеообложки</span><span class="rt">Короткие ролики для карточки, которые удерживают внимание покупателя</span><svg class="sa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg></a></div>
+  <div class="head"><div><span class="pill">Вместе с этим</span><h2 class="display">С этим часто берут</h2></div><p class="lead">Из чистых кадров получается и карточка, и любой интерьер.</p></div>
+  <div class="rels"><a class="rel" href="#"><span class="mark"></span><span class="h3c">Инфографика для маркетплейсов</span><span class="rt">Карточки, которые объясняют товар за три секунды и выделяются в выдаче</span><svg class="sa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg></a><a class="rel" href="#"><span class="mark"></span><span class="h3c">AI-фотосессии</span><span class="rt">Товар в нужном интерьере — без студии</span><svg class="sa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12L12 4M12 4H5.5M12 4v6.5"/></svg></a></div>
 </section>
 
 
 <section>
-  <div class="faq"><div class="side"><span class="pill">Вопросы</span><h2 class="display">Про баннеры</h2><p class="lead">Общие вопросы про оплату и сроки — на главной.</p></div><div class="acc" id="acc"><div class="item open"><button class="q" aria-expanded="true"><span class="h3">Какие размеры нужны для моей рекламы?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">Скажите, где планируете крутить рекламу, — составлю список размеров под эти площадки. Лишних делать не буду.</p></div></div></div><div class="item"><button class="q" aria-expanded="false"><span class="h3">Пройдут ли баннеры модерацию?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">Требования площадок к тексту, размерам и весу файлов учитываю с первого макета.</p></div></div></div><div class="item"><button class="q" aria-expanded="false"><span class="h3">Можно сделать несколько вариантов для теста?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">Да. Это отдельный пакет: разные заголовки и визуалы, чтобы в рекламе было видно, что работает лучше.</p></div></div></div><div class="item"><button class="q" aria-expanded="false"><span class="h3">Нужны ли мои фото товара?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">Желательно. Если подходящих нет — соберу визуал через AI-фото или предметную съёмку.</p></div></div></div></div></div>
+  <div class="faq"><div class="side"><span class="pill">Вопросы</span><h2 class="display">Про съёмку</h2><p class="lead">Общие вопросы про оплату и сроки — на главной.</p></div><div class="acc" id="acc"><div class="item open"><button class="q" aria-expanded="true"><span class="h3">Нужно ли привозить товар?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">[уточнить: где проходит съёмка, как передать товар и как он возвращается]</p></div></div></div><div class="item"><button class="q" aria-expanded="false"><span class="h3">На каком фоне снимаете?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">Белый — под требования маркетплейсов. Цветной или с реквизитом — под стиль бренда, обсуждаем на брифе.</p></div></div></div><div class="item"><button class="q" aria-expanded="false"><span class="h3">Сколько кадров я получу?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">Количество фиксируем в смете заранее — по списку ракурсов, который составим на брифе.</p></div></div></div><div class="item"><button class="q" aria-expanded="false"><span class="h3">Отдаёте исходники?</span><span class="plus" aria-hidden="true"></span></button><div class="acc-body"><div><p class="a">[уточнить]</p></div></div></div></div></div>
 </section>
 
 
@@ -422,64 +387,114 @@ dialog::backdrop { background: rgba(29,30,34,.86); }
 <footer class="fcard"><div class="container" style="padding:0"><div class="row1"><img src="logo-dark.svg" alt="m/design" width="110" height="32"><nav><a>Работы</a><a>Процесс</a><a>Обо мне</a><a>Вопросы</a><a>Контакты</a></nav><div class="icons"><a href="#" class="ri" aria-label="Max"><span class="i"><span class="phi"></span></span></a><a href="#" class="ri" aria-label="WhatsApp"><span class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#25D366" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span></a><a href="#" class="ri" aria-label="Telegram"><span class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path fill="#26A5E4" d="M128 0C94.06 0 61.48 13.494 37.5 37.49A128.04 128.04 0 0 0 0 128c0 33.934 13.5 66.514 37.5 90.51C61.48 242.506 94.06 256 128 256s66.52-13.494 90.5-37.49c24-23.996 37.5-56.576 37.5-90.51s-13.5-66.514-37.5-90.51C194.52 13.494 161.94 0 128 0"/><path fill="#fff" d="M57.94 126.648q55.98-24.384 74.64-32.152c35.56-14.786 42.94-17.354 47.76-17.441c1.06-.017 3.42.245 4.96 1.49c1.28 1.05 1.64 2.47 1.82 3.467c.16.996.38 3.266.2 5.038c-1.92 20.24-10.26 69.356-14.5 92.026c-1.78 9.592-5.32 12.808-8.74 13.122c-7.44.684-13.08-4.912-20.28-9.63c-11.26-7.386-17.62-11.982-28.56-19.188c-12.64-8.328-4.44-12.906 2.76-20.386c1.88-1.958 34.64-31.748 35.26-34.45c.08-.338.16-1.598-.6-2.262c-.74-.666-1.84-.438-2.64-.258c-1.14.256-19.12 12.152-54 35.686c-5.1 3.508-9.72 5.218-13.88 5.128c-4.56-.098-13.36-2.584-19.9-4.708c-8-2.606-14.38-3.984-13.82-8.41c.28-2.304 3.46-4.662 9.52-7.072"/></svg></span></a><a href="#" class="ri" aria-label="Vk"><span class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#0077FF" d="m9.489.004.729-.003h3.564l.73.003.914.01.433.007.418.011.403.014.388.016.374.021.36.025.345.03.333.033c1.74.196 2.933.616 3.833 1.516.9.9 1.32 2.092 1.516 3.833l.034.333.029.346.025.36.02.373.025.588.012.41.013.644.009.915.004.98-.001 3.313-.003.73-.01.914-.007.433-.011.418-.014.403-.016.388-.021.374-.025.36-.03.345-.033.333c-.196 1.74-.616 2.933-1.516 3.833-.9.9-2.092 1.32-3.833 1.516l-.333.034-.346.029-.36.025-.373.02-.588.025-.41.012-.644.013-.915.009-.98.004-3.313-.001-.73-.003-.914-.01-.433-.007-.418-.011-.403-.014-.388-.016-.374-.021-.36-.025-.345-.03-.333-.033c-1.74-.196-2.933-.616-3.833-1.516-.9-.9-1.32-2.092-1.516-3.833l-.034-.333-.029-.346-.025-.36-.02-.373-.025-.588-.012-.41-.013-.644-.009-.915-.004-.98.001-3.313.003-.73.01-.914.007-.433.011-.418.014-.403.016-.388.021-.374.025-.36.03-.345.033-.333c.196-1.74.616-2.933 1.516-3.833.9-.9 2.092-1.32 3.833-1.516l.333-.034.346-.029.36-.025.373-.02.588-.025.41-.012.644-.013.915-.009ZM6.79 7.3H4.05c.13 6.24 3.25 9.99 8.72 9.99h.31v-3.57c2.01.2 3.53 1.67 4.14 3.57h2.84c-.78-2.84-2.83-4.41-4.11-5.01 1.28-.74 3.08-2.54 3.51-4.98h-2.58c-.56 1.98-2.22 3.78-3.8 3.95V7.3H10.5v6.92c-1.6-.4-3.62-2.34-3.71-6.92Z"/></svg></span></a></div></div>
   <div class="bottom"><span>© 2026 m/design · работаю по всей России · физлица и юрлица — по договору</span><span>Политика конфиденциальности · Наверх ↑</span></div></div></footer>
 
-<dialog id="lb" aria-label="Все размеры кампании"><div class="lb">
-  <div class="lb-top"><span><b id="lbT"></b><span id="lbN"></span></span><button class="lb-x" id="lbX" aria-label="Закрыть">×</button></div>
-  <div class="lb-track" id="lbTrack"></div>
-  <div class="lb-nav"><button id="lbP" aria-label="Назад">←</button><button id="lbF" aria-label="Вперёд">→</button></div>
-</div></dialog>
+
 
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('a[href="#"]').forEach(a => a.addEventListener('click', e => e.preventDefault()));
 
-  const C = [
-    { name: 'Кроссовки', t: 'Бег без усталости', s: 'Новая коллекция', c: 'Купить', tone: '#E2DAD9', b: '−20%' },
-    { name: 'Чай', t: 'Чай к осени', s: '12 вкусов в наборе', c: 'Выбрать', tone: '#E6DDCB', b: 'new' },
-    { name: 'Компрессор', t: 'Накачает за 3 минуты', s: 'Доставка завтра', c: 'Заказать', tone: '#D9DEE0', b: 'хит' },
-    { name: 'Кресло', t: 'Спина скажет спасибо', s: 'Тест-драйв 14 дней', c: 'Подробнее', tone: '#E5DED5', b: '−15%' },
-  ];
-  const bn = (k, badge = true) => { const x = C[k]; return `<div class="bn" style="--tone:${x.tone}"><div class="in"><p class="t">${x.t}<small>${x.s}</small></p><span class="p"></span><span class="c">${x.c}</span></div>${badge ? `<span class="badge">${x.b}</span>` : ''}</div>`; };
+  const reduce2 = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DPR = Math.min(2, devicePixelRatio || 1);
+  const sizeCanvas = c => { const r = c.getBoundingClientRect(); c.width = r.width * DPR; c.height = r.height * DPR; return [c.width, c.height]; };
 
-  // мозаика
-  const M = [['f-hd', 0, '1920 × 480 · шапка'], ['f-st', 1, '1080 × 1920 · сторис'], ['f-sq', 2, '1080 × 1080 · квадрат'], ['f-sk', 3, '240 × 400 · Директ'],
-    ['f-wd', 3, '1080 × 607 · Директ'], ['f-sq', 0, '1080 × 1080 · квадрат'], ['f-st', 2, '1080 × 1920 · сторис'], ['f-mr', 1, '300 × 250 · Директ'],
-    ['f-lb', 2, '728 × 90 · Директ'], ['f-sq', 3, '1080 × 1080 · квадрат'], ['f-hd', 1, '1590 × 530 · шапка VK'], ['f-st', 0, '1080 × 1920 · сторис'], ['f-mr', 2, '300 × 250 · Директ'], ['f-sq', 1, '1080 × 1080 · квадрат']];
-  document.getElementById('mosaic').innerHTML = M.map(([f, k, l]) => `<div class="tile ${f}" tabindex="0" role="button" data-k="${k}" aria-label="${C[k].name}: все размеры">${bn(k)}<span class="fm">${l}</span></div>`).join('');
-
-  // одна идея — все размеры
-  const F = [['Квадрат', 1080, 1080, 'лента VK, Telegram'], ['Сторис', 1080, 1920, 'сторис и клипы'], ['Шапка', 1920, 480, 'сайт, сообщество'], ['Директ', 240, 400, 'РСЯ, сайдбар'], ['Директ', 728, 90, 'растяжка'], ['Широкий', 1080, 607, 'Директ, лента']];
-  const frame = document.getElementById('frame'), stage = frame.parentElement, dims = document.getElementById('dims');
-  const fl = document.getElementById('fmts'), cp = document.getElementById('camp');
-  fl.innerHTML = F.map(([n, w, h, d], i) => `<li><button data-i="${i}"><b>${n}</b><em>${w} × ${h}</em></button></li>`).join('');
-  cp.innerHTML = C.map((x, i) => `<button data-i="${i}">${x.name}</button>`).join('');
-  let fi = 0, ci = 0, user = false;
-  const fit = () => { const [n, w, h, d] = F[fi]; const W = stage.clientWidth - 64, H = stage.clientHeight - 120; const s = Math.min(W / w, H / h);
-    frame.style.setProperty('--fw', w * s + 'px'); frame.style.setProperty('--fh', h * s + 'px');
-    dims.innerHTML = `<b>${w} × ${h}</b> · ${d}`; };
-  const render = () => { frame.innerHTML = bn(ci); fl.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === fi)); cp.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === ci)); fit(); };
-  fl.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; user = true; fi = +b.dataset.i; render(); });
-  fl.addEventListener('pointerover', e => { if (e.pointerType !== 'mouse') return; const b = e.target.closest('button'); if (!b) return; user = true; fi = +b.dataset.i; render(); });
-  cp.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; ci = +b.dataset.i; render(); });
-  addEventListener('resize', fit); render();
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => { if (!user) { fi = (fi + 1) % F.length; if (fi === 0) ci = (ci + 1) % C.length; render(); } }, 2200);
-
-  // лайтбокс: все размеры кампании
-  const lb = document.getElementById('lb'), tr = document.getElementById('lbTrack');
-  const openSet = k => {
-    document.getElementById('lbT').textContent = C[k].name; document.getElementById('lbN').textContent = F.length + ' размеров';
-    tr.innerHTML = F.map(([n, w, h]) => `<div class="sl set" style="aspect-ratio:auto"><div class="box" style="aspect-ratio:${w}/${h}">${bn(k)}</div><span class="sl-l">${n} · ${w} × ${h}</span></div>`).join('');
-    lb.showModal(); tr.scrollLeft = 0;
+  // общая «студия»: фон, пол, мягкая тень
+  const studio = (x, w, h, bg) => {
+    x.fillStyle = bg; x.fillRect(0, 0, w, h);
+    const g = x.createLinearGradient(0, h * .55, 0, h); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,255,255,.35)');
+    x.fillStyle = g; x.fillRect(0, h * .55, w, h * .45);
   };
-  document.getElementById('mosaic').addEventListener('click', e => { const x = e.target.closest('.tile'); if (x) openSet(+x.dataset.k); });
-  document.getElementById('mosaic').addEventListener('keydown', e => { const x = e.target.closest('.tile'); if (x && e.key === 'Enter') openSet(+x.dataset.k); });
-  const step = d => tr.scrollBy({ left: d * 380, behavior: reduce ? 'auto' : 'smooth' });
-  document.getElementById('lbP').onclick = () => step(-1); document.getElementById('lbF').onclick = () => step(1);
-  document.getElementById('lbX').onclick = () => lb.close();
-  lb.addEventListener('click', e => { if (e.target.classList.contains('lb')) lb.close(); });
-  lb.addEventListener('keydown', e => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
-  document.querySelectorAll('[data-bn]').forEach(el => el.innerHTML = bn(+el.dataset.bn));
-  document.querySelectorAll('.bfan [data-bn]').forEach((el, i) => el.innerHTML = bn(i));
+  const shadow = (x, cx, cy, rw, rh) => {
+    const g = x.createRadialGradient(cx, cy, 0, cx, cy, rw); g.addColorStop(0, 'rgba(29,30,34,.28)'); g.addColorStop(1, 'rgba(29,30,34,0)');
+    x.save(); x.translate(cx, cy); x.scale(1, rh / rw); x.translate(-cx, -cy); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, rw, 0, 7); x.fill(); x.restore();
+  };
+  const shade = (hex, k) => { const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = n >> 8 & 255, b = n & 255; r = Math.min(255, r * k) | 0; g = Math.min(255, g * k) | 0; b = Math.min(255, b * k) | 0; return `rgb(${r},${g},${b})`; };
+
+  // коробка, повёрнутая на угол a
+  const box = (x, w, h, a, col, label) => {
+    const W = w * .3, D = w * .2, H = h * .42, cx = w / 2, by = h * .78;
+    shadow(x, cx, by, W * .9, W * .18);
+    const c = Math.cos(a), s = Math.sin(a);
+    const faces = [{ w: W * Math.abs(c), front: c > 0, k: .95 + .1 * c, lab: true, dir: c }, { w: D * Math.abs(s), front: s > 0, k: .78 + .1 * s, lab: false }];
+    const fw = faces[0].w, sw = faces[1].w, left = cx - (fw + sw) / 2;
+    const order = s > 0 ? [[0, left], [1, left + fw]] : [[1, left], [0, left + sw]];
+    order.forEach(([i, x0]) => {
+      const f = faces[i]; x.fillStyle = shade(col, f.k); x.fillRect(x0, by - H, f.w, H);
+      if (f.lab && f.w > 8) {
+        x.save(); x.beginPath(); x.rect(x0, by - H, f.w, H); x.clip();
+        const back = c < 0; x.fillStyle = back ? 'rgba(29,30,34,.25)' : '#1D1E22';
+        x.font = `700 ${W * .16}px Gilroy, Inter, sans-serif`; x.textAlign = 'center';
+        x.save(); x.translate(x0 + f.w / 2, by - H * .6); x.scale(Math.max(.05, f.w / W), 1); x.fillText(back ? 'состав' : label, 0, 0);
+        x.font = `500 ${W * .06}px Inter, sans-serif`; x.fillText(back ? '— — — — —' : 'hand cream · 75 ml', 0, W * .12); x.restore();
+        x.fillStyle = '#F59958'; x.save(); x.translate(x0 + f.w / 2, by - H * .25); x.scale(Math.max(.05, f.w / W), 1); x.fillRect(-W * .25, 0, W * .5, H * .04); x.restore();
+        x.restore();
+      }
+    });
+    // крышка-верх
+    x.fillStyle = shade(col, 1.08); x.beginPath(); x.moveTo(left, by - H); x.lineTo(left + fw + sw, by - H); x.lineTo(left + fw + sw - 4, by - H - D * .25); x.lineTo(left + 4, by - H - D * .25); x.fill();
+  };
+  // флакон-цилиндр, повёрнутый на угол a
+  const bottle = (x, w, h, a, col, label, detail) => {
+    const R = w * .13, H = h * .44, cx = w / 2, by = h * .8;
+    shadow(x, cx, by, R * 1.6, R * .35);
+    // корпус
+    x.fillStyle = col; x.fillRect(cx - R, by - H, R * 2, H);
+    x.beginPath(); x.ellipse(cx, by, R, R * .18, 0, 0, Math.PI); x.fill();
+    // объём: тёмные края, блик, который смещается при повороте
+    const g = x.createLinearGradient(cx - R, 0, cx + R, 0); g.addColorStop(0, 'rgba(29,30,34,.28)'); g.addColorStop(.5, 'rgba(29,30,34,0)'); g.addColorStop(1, 'rgba(29,30,34,.32)');
+    x.fillStyle = g; x.fillRect(cx - R, by - H, R * 2, H);
+    const hx = cx + Math.sin(a * 2) * R * .45; x.fillStyle = 'rgba(255,255,255,.45)'; x.fillRect(hx - R * .08, by - H + 8, R * .12, H - 16);
+    // этикетка: смещается по кругу, сзади скрыта
+    const p = Math.sin(a), vis = Math.cos(a);
+    if (vis > -.2) { x.save(); x.beginPath(); x.rect(cx - R, by - H, R * 2, H); x.clip();
+      const lw = R * 1.5 * Math.max(.1, vis), lx = cx + p * R * .55 - lw / 2;
+      x.fillStyle = '#FFFFFF'; x.fillRect(lx, by - H * .7, lw, H * .42);
+      x.fillStyle = '#1D1E22'; x.font = `700 ${R * .34}px Gilroy, Inter, sans-serif`; x.textAlign = 'center';
+      x.save(); x.translate(lx + lw / 2, by - H * .52); x.scale(Math.max(.05, lw / (R * 1.5)), 1); x.fillText(label, 0, 0);
+      if (detail) { x.font = `400 ${R * .075}px Inter, sans-serif`; x.fillStyle = '#717171';
+        ['Aqua, Glycerin, Cetearyl Alcohol,', 'Shea Butter, Aloe Vera Extract,', 'Tocopherol, Parfum. 50 ml / 1.7 fl oz'].forEach((l, i) => x.fillText(l, 0, R * .2 + i * R * .11)); }
+      x.restore(); x.restore(); }
+    // крышка с рёбрами
+    const cw = R * 1.1, ch = H * .2; x.fillStyle = '#2C2D32'; x.fillRect(cx - cw / 2, by - H - ch, cw, ch);
+    x.strokeStyle = 'rgba(255,255,255,.18)'; x.lineWidth = Math.max(1, R * .012);
+    for (let i = 1; i < 18; i++) { const xx = cx - cw / 2 + cw * i / 18; x.beginPath(); x.moveTo(xx, by - H - ch); x.lineTo(xx, by - H); x.stroke(); }
+  };
+
+  const PRODUCTS0 = [
+    { name: 'Крем для рук', kind: 'box', col: '#EFD9CC', bg: '#F1ECE6', label: 'AURA' },
+    { name: 'Флакон сыворотки', kind: 'bottle', col: '#CFD8D6', bg: '#ECEFEE', label: 'SERUM' },
+    { name: 'Коробка чая', kind: 'box', col: '#D8CFB6', bg: '#EFEBE1', label: 'TEA' },
+  ];
+  const draw = (c, p, a, detail) => { const x = c.getContext('2d'); const w = c.width, h = c.height; studio(x, w, h, p.bg); (p.kind === 'box' ? box : bottle)(x, w, h, a, p.col, p.label, detail); };
+
+
+  const PRODUCTS = [
+    { name: 'Крем', kind: 'box', col: '#EFD9CC', bg: '#F3E6DE', label: 'AURA', hue: 'пудровый' },
+    { name: 'Сыворотка', kind: 'bottle', col: '#CFD8D6', bg: '#E3EAE8', label: 'SERUM', hue: 'мятный' },
+    { name: 'Чай', kind: 'box', col: '#D8CFB6', bg: '#ECE6D6', label: 'TEA', hue: 'песочный' },
+    { name: 'Масло', kind: 'bottle', col: '#E8C27A', bg: '#F2E3C6', label: 'OIL', hue: 'медовый' },
+    { name: 'Тоник', kind: 'bottle', col: '#C9C3DA', bg: '#E4E0EC', label: 'TONIC', hue: 'лавандовый' },
+    { name: 'Мыло', kind: 'box', col: '#BFD3BE', bg: '#DFE8DD', label: 'SOAP', hue: 'шалфей' },
+    { name: 'Шампунь', kind: 'bottle', col: '#2C2D32', bg: '#D8D6D2', label: 'HAIR', hue: 'графит' },
+    { name: 'Свеча', kind: 'box', col: '#E9B7A6', bg: '#F1DCD3', label: 'CANDLE', hue: 'терракота' },
+    { name: 'Гель', kind: 'bottle', col: '#B7CDE0', bg: '#DFE7EF', label: 'GEL', hue: 'голубой' },
+  ];
+
+  // J
+  const tags = ['белый фон', 'в цвет бренда', 'деталь', '3/4', 'серия', 'с реквизитом'];
+  const shapes = ['p', 'l', 's', 'p', 'l', 'p', 's', 'l', 'p'];
+  const mk = (i, k) => `<div class="jph ${shapes[(i + k) % 9]}" data-p="${(i + k) % 9}" data-a="${((i * 1.7 + k) % 6.2).toFixed(2)}"><canvas></canvas><span>${PRODUCTS[(i + k) % 9].name} · ${tags[(i + k) % 6]}</span></div>`;
+  document.getElementById('r1').innerHTML = Array.from({ length: 9 }, (_, i) => mk(i, 0)).join('');
+  document.getElementById('r2').innerHTML = Array.from({ length: 9 }, (_, i) => mk(i, 4)).join('');
+  const drawAll = sel => document.querySelectorAll(sel).forEach(el => { const c = el.querySelector('canvas'); sizeCanvas(c); draw(c, PRODUCTS[+el.dataset.p], +el.dataset.a); });
+  const rows = document.getElementById('rows'), r1 = document.getElementById('r1'), r2 = document.getElementById('r2');
+  const jMove = () => { const r = rows.getBoundingClientRect(); const p = (innerHeight - r.top) / (innerHeight + r.height); const span = r1.scrollWidth - rows.clientWidth;
+    r1.style.transform = `translateX(${-p * span * .6}px)`; r2.style.transform = `translateX(${-(1 - p) * span * .6}px)`; };
+  if (!reduce2) addEventListener('scroll', jMove, { passive: true });
+
+  const jAll = () => { drawAll('#r1 .jph'); drawAll('#r2 .jph'); if (!reduce2) jMove(); };
+  let jrt; addEventListener('resize', () => { clearTimeout(jrt); jrt = setTimeout(jAll, 150); });
+  jAll(); document.fonts && document.fonts.ready.then(jAll);
 
   // состав: колонки
   const pc = [...document.querySelectorAll('#prow .pcol')]; let pa = 0, ph = false;
