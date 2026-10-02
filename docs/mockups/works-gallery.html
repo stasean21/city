@@ -1,0 +1,201 @@
+<title>Бесконечная галерея работ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Semibold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+/* бесконечная галерея m/design: беж, белые карточки, без теней, размытий и капса */
+:root {
+  color-scheme: light;
+  --f-head: 'Gilroy', 'Inter', system-ui, sans-serif;
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --bg: #F6F4F2; --bg-3: #EAE8E4; --white: #FFFFFF; --ink: #1D1E22; --ink-soft: #2C2D32; --ink-hover: #393A3F;
+  --text: #717171; --text-3: #A1A09F; --dark-text: #A9A7A3; --accent: #F59958; --border: #E4E4E4;
+  --out: cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font: 400 15px/25px var(--f-body); color: var(--text); }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* страница-подложка: кнопка, которая открывает галерею */
+.demo { max-width: 1096px; margin: 0 auto; padding: 120px 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.demo h1 { font: 700 clamp(34px, 4.1vw, 58px)/1.1 var(--f-head); letter-spacing: -1.5px; color: var(--ink); }
+.demo p { max-width: 520px; }
+.btn { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; border-radius: 15px; padding: 8px 16px; font: 500 16px/22px var(--f-body); background: var(--ink); color: var(--white); transition: background-color .2s; }
+.btn:hover { background: var(--ink-hover); }
+
+/* обложка-заглушка 3:4 */
+.cv { position: relative; display: block; width: 100%; height: 100%; background: var(--tone); overflow: hidden; }
+.cv-h { position: absolute; left: 8%; top: 7%; right: 8%; font: 700 clamp(14px, 1.4vw, 20px)/1.05 var(--f-head); letter-spacing: -.4px; color: var(--ink); }
+.cv-b { position: absolute; left: 8%; top: 20%; width: 40%; height: 4%; border-radius: 999px; background: rgba(29,30,34,.14); }
+.cv-p { position: absolute; left: 22%; right: 10%; top: 32%; bottom: 20%; border-radius: 45% 45% 18% 18%; background: rgba(255,255,255,.55); }
+.cv-t { position: absolute; left: 8%; bottom: 7%; display: flex; flex-direction: column; gap: 5px; width: 42%; }
+.cv-t i { height: 11px; border-radius: 6px; background: var(--white); } .cv-t i:nth-child(2) { width: 80%; } .cv-t i:nth-child(3) { width: 60%; background: var(--ink); }
+
+/* ---------- галерея ---------- */
+.ig { position: fixed; inset: 0; z-index: 100; background: var(--bg); overflow: hidden; user-select: none; touch-action: none; opacity: 0; }
+.ig[hidden] { display: none; }
+.ig-wrap { position: absolute; inset: 0; cursor: grab; }
+.ig-wrap.drag { cursor: grabbing; }
+.ig-canvas { position: absolute; left: 0; top: 0; will-change: transform; }
+.ig-card { all: unset; position: absolute; border-radius: 20px; overflow: hidden; cursor: pointer; background: var(--white); }
+.ig-card .in { position: absolute; inset: 0; transition: transform .5s var(--out); }
+.ig-card:hover .in { transform: scale(1.03); }
+.ig-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.ig-tag { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 6px; align-items: center; background: var(--white); color: var(--ink); font: 500 12px/18px var(--f-body); padding: 4px 10px; border-radius: 999px; }
+.ig-tag span { color: var(--text-3); font-weight: 400; }
+
+.ig-top { position: absolute; left: 24px; right: 24px; top: 24px; z-index: 5; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+.ig-title { pointer-events: auto; display: flex; gap: 10px; align-items: center; background: var(--white); border-radius: 999px; padding: 8px 16px; font: 500 14px/20px var(--f-body); color: var(--ink); }
+.ig-title span { color: var(--text-3); font-weight: 400; }
+.ig-close { all: unset; pointer-events: auto; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: var(--white); display: grid; place-items: center; transition: background-color .2s; }
+.ig-close:hover { background: var(--ink-hover); }
+.ig-close svg, .ig-arr svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.ig-close:focus-visible, .ig-arr:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ig-hint { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 5; background: var(--white); color: var(--ink); font: 500 13px/20px var(--f-body); padding: 6px 14px; border-radius: 999px; white-space: nowrap; pointer-events: none; }
+.ig-hint i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+
+/* просмотр одной работы */
+.lb { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; pointer-events: none; opacity: 0; }
+.lb.on { pointer-events: auto; }
+.lb-back { position: absolute; inset: 0; background: rgba(29,30,34,.92); }
+.lb-card { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.lb-img { width: min(480px, 78vw, calc((100vh - 220px) * .75)); aspect-ratio: 3/4; border-radius: 20px; overflow: hidden; background: var(--white); }
+.lb-cap { display: flex; gap: 12px; align-items: baseline; color: var(--white); font: 600 20px/1.3 var(--f-head); letter-spacing: -.3px; }
+.lb-cap span { font: 400 14px/20px var(--f-body); letter-spacing: 0; color: var(--dark-text); }
+.lb-arr { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; }
+.ig-arr { all: unset; cursor: pointer; width: 56px; height: 56px; border-radius: 50%; background: var(--ink-soft); color: var(--white); display: grid; place-items: center; transition: background-color .2s; }
+.ig-arr:hover { background: var(--ink-hover); }
+.lb-prev { left: 32px; } .lb-next { right: 32px; }
+.lb-x { position: absolute; top: 24px; right: 24px; z-index: 3; }
+.lb-x .ig-close { background: var(--ink-soft); }
+.lb-count { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 3; color: var(--dark-text); font: 500 13px/20px var(--f-body); font-variant-numeric: tabular-nums; }
+.lb-esc { position: absolute; left: 32px; top: 36px; z-index: 3; color: var(--dark-text); font: 400 13px/20px var(--f-body); }
+
+@media (max-width: 767px) {
+  .lb-prev { left: 12px; } .lb-next { right: 12px; } .ig-arr { width: 44px; height: 44px; }
+  .lb-esc { display: none; }
+  .ig-title span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ig-card .in { transition: none; } }
+</style>
+
+<div class="demo">
+  <h1>Инфографика для маркетплейсов</h1>
+  <p>Демо: кнопка «Смотреть все работы» со страницы услуги открывает бесконечную галерею. Тяните мышью или пальцем в любую сторону, крутите колёсиком, кликните по карточке.</p>
+  <button class="btn" id="open">Смотреть все работы ↗</button>
+</div>
+
+<div class="ig" id="ig" hidden role="dialog" aria-modal="true" aria-label="Все работы: инфографика">
+  <div class="ig-wrap" id="wrap"><div class="ig-canvas" id="canvas"></div></div>
+  <div class="ig-top"><p class="ig-title">Инфографика<span id="igCount">· 24 работы</span></p>
+    <button class="ig-close" id="close" aria-label="Закрыть галерею"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button></div>
+  <p class="ig-hint" id="hint"><i></i>тяните в любую сторону</p>
+  <div class="lb" id="lb" aria-hidden="true">
+    <div class="lb-back" id="lbBack"></div>
+    <span class="lb-esc">esc — закрыть</span>
+    <div class="lb-x"><button class="ig-close" id="lbClose" aria-label="Закрыть работу"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button></div>
+    <div class="lb-arr lb-prev"><button class="ig-arr" id="lbPrev" aria-label="Предыдущая работа"><svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg></button></div>
+    <div class="lb-card" id="lbCard"><div class="lb-img" id="lbImg"></div><p class="lb-cap" id="lbCap"></p></div>
+    <div class="lb-arr lb-next"><button class="ig-arr" id="lbNext" aria-label="Следующая работа"><svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5"/></svg></button></div>
+    <p class="lb-count" id="lbCount" aria-live="polite"></p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const NAMES = [['Компрессор', 'Автотовары'], ['Помада', 'Косметика'], ['Наушники', 'Электроника'], ['Кастрюля', 'Дом'], ['Гантель', 'Спорт'], ['Конструктор', 'Игрушки'],
+    ['Поводок', 'Зоотовары'], ['Футболка', 'Одежда'], ['Кроссовки', 'Обувь'], ['Кресло', 'Мебель'], ['Шуруповёрт', 'Инструменты'], ['Чай', 'Продукты']];
+  const TONES = ['#E3DCD2', '#E9D9D3', '#D9DEE0', '#E4E0D6', '#DCD9E2', '#E6DDCB', '#D8E0D8', '#E2DAD9', '#DAD7D2', '#E5DED5', '#D6DBDF', '#E1E2D2'];
+  const ITEMS = Array.from({ length: 24 }, (_, i) => ({ title: NAMES[i % 12][0] + (i >= 12 ? ' · серия 2' : ''), niche: NAMES[i % 12][1], tone: TONES[(i * 5) % 12] }));
+  const cover = it => `<span class="cv" style="--tone:${it.tone}"><span class="cv-h">${it.title.split(' · ')[0]}</span><span class="cv-b"></span><span class="cv-p"></span><span class="cv-t"><i></i><i></i><i></i></span></span>`;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const ig = document.getElementById('ig'), wrap = document.getElementById('wrap'), canvas = document.getElementById('canvas');
+  const lb = document.getElementById('lb'), lbCard = document.getElementById('lbCard');
+  let cleanup = null, opener = null;
+
+  function mount() {
+    const mobile = innerWidth <= 767;
+    const TW = mobile ? 180 : 240, TH = TW * 4 / 3, GAP = mobile ? 16 : 24;
+    const N = ITEMS.length, COLS = Math.ceil(Math.sqrt(N * 1.5)), ROWS = Math.ceil(N / COLS);
+    const CW = TW + GAP, CH = TH + GAP, GW = COLS * CW, GH = ROWS * CH;
+    const REP = 2, TC = COLS * (REP * 2 + 1), TR = ROWS * (REP * 2 + 1);
+    const ox = innerWidth / 2 - (TC * CW) / 2, oy = innerHeight / 2 - (TR * CH) / 2;
+    canvas.innerHTML = '';
+    const cards = [];
+    for (let r = 0; r < TR; r++) for (let c = 0; c < TC; c++) {
+      const idx = ((r % ROWS) * COLS + (c % COLS)) % N, it = ITEMS[idx];
+      const centerCopy = Math.floor(r / ROWS) === REP && Math.floor(c / COLS) === REP;
+      const el = document.createElement('button');
+      el.className = 'ig-card'; el.dataset.i = idx;
+      el.style.cssText = `left:${c * CW}px;top:${r * CH}px;width:${TW}px;height:${TH}px`;
+      el.tabIndex = centerCopy ? 0 : -1; if (!centerCopy) el.setAttribute('aria-hidden', 'true');
+      el.setAttribute('aria-label', `${it.title}, ${it.niche}`);
+      el.innerHTML = `<span class="in">${cover(it)}</span><span class="ig-tag">${it.title.split(' · ')[0]}<span>${it.niche}</span></span>`;
+      canvas.append(el); cards.push({ el, r, c });
+    }
+    let vx = 0, vy = 0, scale = 1, dragging = false, moved = false, sx = 0, sy = 0, svx = 0, svy = 0, lbOpen = false, cur = 0;
+    const apply = () => {
+      const rx = ((vx % GW) + GW) % GW, ry = ((vy % GH) + GH) % GH;
+      canvas.style.transformOrigin = `${innerWidth / 2 - (ox + rx - GW)}px ${innerHeight / 2 - (oy + ry - GH)}px`;
+      canvas.style.transform = `translate(${ox + rx - GW}px, ${oy + ry - GH}px) scale(${scale})`;
+    };
+    apply();
+    const zoom = to => { if (reduce) { scale = to; apply(); return; } gsap.to({ s: scale }, { s: to, duration: .45, ease: to < 1 ? 'power3.out' : 'power3.inOut', onUpdate() { scale = this.targets()[0].s; apply(); } }); };
+    const hint = document.getElementById('hint');
+    const down = e => { if (lbOpen || (e.pointerType === 'mouse' && e.button !== 0)) return; dragging = true; moved = false; sx = e.clientX; sy = e.clientY; svx = vx; svy = vy; wrap.classList.add('drag'); };
+    const move = e => { if (!dragging) return; const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!moved && Math.hypot(dx, dy) > 5) { moved = true; zoom(.86); hint.style.opacity = 0; }
+      if (moved) { vx = svx + dx; vy = svy + dy; apply(); } };
+    const up = () => { if (!dragging) return; dragging = false; wrap.classList.remove('drag'); if (scale < 1) zoom(1); };
+    const wheel = e => { if (lbOpen) return; e.preventDefault(); vx -= e.deltaX; vy -= e.deltaY; apply(); hint.style.opacity = 0; };
+    wrap.addEventListener('pointerdown', down); addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+    wrap.addEventListener('wheel', wheel, { passive: false });
+
+    const img = document.getElementById('lbImg'), cap = document.getElementById('lbCap'), cnt = document.getElementById('lbCount');
+    const fill = i => { const it = ITEMS[i]; img.innerHTML = cover(it); cap.innerHTML = `${it.title}<span>${it.niche}</span>`; cnt.textContent = `${i + 1} / ${N}`; };
+    let lastCard = null;
+    const openLb = (i, from) => { lbOpen = true; cur = i; lastCard = from; fill(i); lb.classList.add('on'); lb.setAttribute('aria-hidden', 'false');
+      if (reduce) { lb.style.opacity = 1; } else { gsap.fromTo(lb, { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power2.out' }); gsap.fromTo(lbCard, { scale: .85, y: 24, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: .45, ease: 'power3.out' }); }
+      document.getElementById('lbNext').focus(); };
+    const closeLb = () => { if (!lbOpen) return; lbOpen = false; lb.setAttribute('aria-hidden', 'true');
+      const done = () => { lb.classList.remove('on'); lastCard && lastCard.focus(); };
+      if (reduce) { lb.style.opacity = 0; done(); } else gsap.to(lb, { opacity: 0, duration: .28, ease: 'power2.in', onComplete: done }); };
+    const nav = d => { cur = ((cur + d) % N + N) % N;
+      if (reduce) return fill(cur);
+      gsap.to(lbCard, { x: -d * 60, opacity: 0, duration: .16, ease: 'power2.in', onComplete: () => { fill(cur); gsap.fromTo(lbCard, { x: d * 60, opacity: 0 }, { x: 0, opacity: 1, duration: .24, ease: 'power2.out' }); } }); };
+    const click = e => { if (moved) return; const c = e.target.closest('.ig-card'); if (c) openLb(+c.dataset.i, c); };
+    canvas.addEventListener('click', click);
+    const lbPrev = () => nav(-1), lbNext = () => nav(1);
+    document.getElementById('lbPrev').onclick = lbPrev; document.getElementById('lbNext').onclick = lbNext;
+    document.getElementById('lbClose').onclick = closeLb; document.getElementById('lbBack').onclick = closeLb;
+
+    const keys = {};
+    const kd = e => { keys[e.key] = true;
+      if (e.key === 'Escape') { lbOpen ? closeLb() : close(); }
+      if (lbOpen && e.key === 'ArrowRight') nav(1); if (lbOpen && e.key === 'ArrowLeft') nav(-1);
+      if (e.key === 'Tab') { const f = [...ig.querySelectorAll(lbOpen ? '.lb button' : '.ig-close, .ig-card[tabindex="0"]')]; const i = f.indexOf(document.activeElement);
+        e.preventDefault(); f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus(); } };
+    const ku = e => { keys[e.key] = false; };
+    addEventListener('keydown', kd); addEventListener('keyup', ku);
+    const tick = () => { if (lbOpen || dragging) return; let m = false, S = 14;
+      if (keys.ArrowLeft) { vx += S; m = true; } if (keys.ArrowRight) { vx -= S; m = true; } if (keys.ArrowUp) { vy += S; m = true; } if (keys.ArrowDown) { vy -= S; m = true; } if (m) apply(); };
+    gsap.ticker.add(tick);
+    const center = cards.filter(c => Math.abs(c.c - TC / 2) < 4 && Math.abs(c.r - TR / 2) < 3).map(c => c.el);
+    if (!reduce) gsap.from(center, { opacity: 0, scale: .85, duration: .6, stagger: { amount: .5, from: 'center' }, ease: 'power3.out', delay: .15 });
+
+    return () => { wrap.removeEventListener('pointerdown', down); removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      wrap.removeEventListener('wheel', wheel); canvas.removeEventListener('click', click); removeEventListener('keydown', kd); removeEventListener('keyup', ku); gsap.ticker.remove(tick); canvas.innerHTML = ''; };
+  }
+
+  function open(e) { opener = e.currentTarget; ig.hidden = false; document.documentElement.style.overflow = 'hidden'; cleanup = mount();
+    if (reduce) ig.style.opacity = 1; else gsap.fromTo(ig, { opacity: 0 }, { opacity: 1, duration: .35, ease: 'power2.out' });
+    document.getElementById('close').focus(); }
+  function close() { const done = () => { ig.hidden = true; cleanup && cleanup(); cleanup = null; document.documentElement.style.overflow = ''; opener && opener.focus(); };
+    if (reduce) done(); else gsap.to(ig, { opacity: 0, duration: .3, ease: 'power2.in', onComplete: done }); }
+  document.getElementById('open').addEventListener('click', open);
+  document.getElementById('close').addEventListener('click', close);
+})();
+</script>
