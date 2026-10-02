@@ -1,9 +1,16 @@
 <script setup>
-import { h, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 import AccordionItem from '../ui/AccordionItem.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import faq from '../../data/faq.json'
 import contacts from '../../data/contacts.json'
+
+// по умолчанию — блок главной; страница услуги передаёт свои вопросы
+const props = defineProps({
+  title: { type: String, default: 'Частые вопросы' },
+  lead: { type: String, default: 'Не нашли ответ — напишите, отвечу лично.' },
+  items: { type: Array, default: () => faq },
+})
 
 // адрес — из общего списка мессенджеров, заполняется там
 const TELEGRAM = contacts.find((c) => c.id === 'telegram').url
@@ -19,18 +26,18 @@ function toggle(i) {
 // через @unhead 2, а в проекте @unhead/vue 3 — теги из useHead в пререндер
 // не попадают. JSON-LD валиден и в body, поэтому выводим его в секции.
 // «<» экранируем, чтобы текст не мог закрыть тег script
-const faqJsonLd = JSON.stringify({
+const faqJsonLd = computed(() => JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faq.map((item) => ({
+  mainEntity: props.items.map((item) => ({
     '@type': 'Question',
     name: item.question,
     acceptedAnswer: { '@type': 'Answer', text: item.answer },
   })),
-}).replace(/</g, '\\u003c')
+}).replace(/</g, '\\u003c'))
 
 // <script> в шаблоне Vue запрещён — отдаём его render-функцией
-const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJsonLd })
+const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJsonLd.value })
 </script>
 
 <template>
@@ -41,8 +48,8 @@ const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJs
            колонка растянется на высоту сетки и прилипать будет нечему -->
       <div class="faq__intro">
         <span class="pill faq__pill">Вопросы</span>
-        <h2 class="display faq__title">Частые вопросы</h2>
-        <p class="lead">Не нашли ответ — напишите, отвечу лично.</p>
+        <h2 class="display faq__title">{{ title }}</h2>
+        <p class="lead">{{ lead }}</p>
         <div class="faq__cta">
           <BaseButton :href="TELEGRAM" target="_blank" rel="noopener" variant="primary" arrow>
             Написать в Telegram
@@ -52,7 +59,7 @@ const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJs
 
       <div class="faq__list">
         <AccordionItem
-          v-for="(item, i) in faq"
+          v-for="(item, i) in items"
           :key="item.question"
           :question="item.question"
           :open="openIndex === i"

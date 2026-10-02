@@ -1,0 +1,354 @@
+<!doctype html>
+<!-- Макет-референс блока «Как рождается карточка» для страницы /services/infographics.
+     Не часть сайта: значения здесь захардкожены, в компоненте всё переводится на токены.
+     Открыть: npm run dev → http://localhost:5173/docs/mockups/card-stories.html -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Как рождается карточка</title>
+<link rel="stylesheet" href="/src/styles/tokens.css">
+<link rel="stylesheet" href="/src/styles/base.css">
+<style>
+body { background: var(--bg); padding: 80px 0; }
+.wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.pill { margin-bottom: 24px; }
+.lead { color: var(--text); margin-bottom: 40px; }
+
+/* ---------- список этапов ---------- */
+.steps { border-top: 1px solid var(--border-soft); }
+.st { border-bottom: 1px solid var(--border-soft); padding: 18px 0; cursor: pointer; }
+.st .row { display: grid; grid-template-columns: 40px 1fr; align-items: baseline; }
+.st .n { font: 400 12px var(--f-body); color: var(--text-3); transition: color .2s ease; }
+.st h3 { font: 500 18px/1.33 var(--f-head); color: var(--text-3); margin: 0; transition: color .2s ease; }
+.st:hover h3 { color: var(--ink); }
+.st .body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.22,1,.36,1); padding-left: 40px; }
+.st .body > div { overflow: hidden; }
+.st p { color: var(--text); font-size: 14px; line-height: 22px; padding-top: 8px; }
+.st .bar { height: 2px; background: var(--bg-3); margin-top: 14px; border-radius: 2px; overflow: hidden; }
+.st .bar i { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(0); }
+.st.on .n { color: var(--accent); }
+.st.on h3 { color: var(--ink); }
+.st.on .body { grid-template-rows: 1fr; }
+
+/* ---------- кадр ---------- */
+.frame { position: relative; aspect-ratio: 3/4; border-radius: 20px; background: var(--white); overflow: hidden; }
+.stage { position: absolute; inset: 0; visibility: hidden; }
+.stage.on { visibility: visible; }
+.cap { position: absolute; left: 16px; bottom: 16px; font: 500 12px var(--f-body); color: var(--text-3); background: var(--white); padding: 4px 10px; border-radius: 999px; z-index: 20; }
+.center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+/* флакон — общий «товар» */
+.bottle { position: relative; width: 108px; height: 250px; border-radius: 18px 18px 12px 12px; background: #ebe7e2; }
+.bottle .cap-top { position: absolute; top: -26px; left: 50%; width: 44px; height: 28px; margin-left: -22px; border-radius: 6px 6px 0 0; background: #9d968c; }
+.bottle .lbl { position: absolute; top: 38%; left: 0; right: 0; text-align: center; font: 600 12px var(--f-head); letter-spacing: 1px; color: #9d968c; }
+.bottle .lines { position: absolute; top: 34%; left: 18%; right: 18%; display: flex; flex-direction: column; gap: 6px; opacity: 0; }
+.bottle .lines i { height: 4px; border-radius: 2px; background: #b9b2a8; }
+
+/* 1 бриф */
+.s1 { background: var(--bg-2); }
+.doc { width: 70%; background: var(--white); border-radius: 16px; padding: 24px; }
+.doc b { display: block; font: 600 20px var(--f-head); color: var(--ink); margin-bottom: 16px; }
+.chk { display: flex; gap: 12px; align-items: center; padding: 8px 0; font-size: 14px; color: var(--ink); }
+.box { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--bg-4); position: relative; flex: none; }
+.box .fill { position: absolute; inset: -1.5px; border-radius: 6px; background: var(--ink); transform: scale(0); }
+.box svg { position: absolute; inset: 3px; }
+.box path { stroke: #fff; stroke-width: 2.4; fill: none; stroke-dasharray: 20; stroke-dashoffset: 20; stroke-linecap: round; stroke-linejoin: round; }
+.refs { display: flex; gap: 8px; padding: 6px 0 0 32px; }
+.refs span { width: 44px; height: 58px; border-radius: 6px; background: var(--bg-3); }
+.refs span:nth-child(2) { background: #e3d6c6; } .refs span:nth-child(3) { background: #d9d4cd; }
+
+/* 2 анализ */
+.s2 { background: var(--bg-2); }
+.feed { position: absolute; left: 10%; right: 10%; top: 12%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.feed .c { aspect-ratio: 3/4; border-radius: 8px; background: #e6e3de; position: relative; display: flex; align-items: center; justify-content: center; }
+.feed .c::before { content: ""; width: 24%; height: 50%; border-radius: 4px; background: #fff; }
+.feed .c .x { position: absolute; inset: -3px; border: 2px solid var(--accent); border-radius: 10px; opacity: 0; }
+.lens { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--ink); background: rgba(255,255,255,.25); top: 20%; left: 12%; z-index: 5; }
+.lens::after { content: ""; position: absolute; width: 26px; height: 3px; background: var(--ink); right: -20px; bottom: -6px; transform: rotate(45deg); border-radius: 2px; }
+.notes { position: absolute; left: 10%; right: 10%; bottom: 13%; display: flex; flex-wrap: wrap; gap: 6px; }
+.notes span { font: 500 12px var(--f-body); padding: 6px 10px; border-radius: 10px; background: var(--white); color: var(--ink); opacity: 0; }
+.notes span.idea { background: var(--ink); color: #fff; }
+
+/* 3 съёмка */
+.s3 { background: #cfcac3; }
+.s3 .table { position: absolute; left: 0; right: 0; bottom: 0; height: 28%; background: #b9b2a8; }
+.s3 .center { bottom: 16%; }
+.corner { position: absolute; width: 24px; height: 24px; border: 2px solid #fff; z-index: 3; }
+.c1 { top: 16px; left: 16px; border-right: 0; border-bottom: 0; } .c2 { top: 16px; right: 16px; border-left: 0; border-bottom: 0; }
+.c3 { bottom: 16px; left: 16px; border-right: 0; border-top: 0; } .c4 { bottom: 16px; right: 16px; border-left: 0; border-top: 0; }
+.rec { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font: 500 12px var(--f-body); color: #fff; display: flex; gap: 6px; align-items: center; z-index: 3; white-space: nowrap; }
+.rec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 4; }
+.strip { position: absolute; left: 50%; transform: translateX(-50%); bottom: 50px; display: flex; gap: 6px; z-index: 3; }
+.strip span { width: 34px; height: 44px; border-radius: 5px; background: #ebe7e2; border: 2px solid #fff; opacity: 0; display: flex; align-items: center; justify-content: center; }
+.strip span i { display: block; width: 30%; height: 60%; background: #b9b2a8; border-radius: 2px; }
+
+/* 4 обработка */
+.s4 .raw { position: absolute; inset: 0; background: #cfcac3; }
+.s4 .raw .table { position: absolute; left: 0; right: 0; bottom: 0; height: 28%; background: #b9b2a8; }
+.s4 .clean { position: absolute; inset: 0; background: #efe7dd; clip-path: inset(0 100% 0 0); }
+.disc { position: absolute; width: 64%; aspect-ratio: 1; border-radius: 50%; background: #e3d6c6; left: 18%; top: 22%; }
+.s4 .center, .s5 .center { top: 12%; }
+.wipe { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink); left: 0; opacity: 0; z-index: 6; }
+.wipe::after { content: "удаление фона"; position: absolute; top: 20px; left: 8px; font: 500 11px var(--f-body); background: var(--ink); color: #fff; padding: 3px 8px; border-radius: 8px; white-space: nowrap; }
+.ttl { position: absolute; top: 7%; left: 8%; right: 8%; font: 600 26px/1.1 var(--f-head); letter-spacing: -.6px; color: var(--ink); z-index: 6; min-height: 58px; }
+.ttl .caret { display: inline-block; width: 2px; height: 24px; background: var(--ink); vertical-align: -3px; margin-left: 2px; }
+.s4 .bottle, .s5 .bottle { background: #fff; }
+.s4 .bottle .cap-top, .s5 .bottle .cap-top { background: var(--ink); }
+.s4 .bottle .lbl, .s5 .bottle .lbl { color: var(--ink); }
+
+/* 5 инфографика */
+.s5 { background: #efe7dd; }
+.s5 .ttl { top: 7%; }
+.bdg { position: absolute; display: flex; gap: 8px; align-items: center; background: var(--white); border-radius: 12px; padding: 8px 12px; font: 500 12px/16px var(--f-body); color: var(--ink); z-index: 7; opacity: 0; white-space: nowrap; }
+.bdg i { width: 22px; height: 22px; border-radius: 7px; background: var(--accent); flex: none; }
+.bd1 { right: 6%; top: 36%; } .bd2 { right: 6%; top: 52%; } .bd3 { left: 7%; top: 44%; } .bd4 { left: 8%; bottom: 12%; }
+.dots { position: absolute; top: 18px; right: 18px; display: flex; gap: 4px; z-index: 8; }
+.dots i { width: 16px; height: 3px; border-radius: 2px; background: rgba(29,30,34,.2); } .dots i:first-child { background: var(--ink); }
+
+/* 6 выдача */
+.s6 { background: var(--bg-2); }
+.grid6 { position: absolute; left: 8%; right: 8%; top: 14%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid6 > div { aspect-ratio: 3/4; border-radius: 8px; background: #e6e3de; position: relative; display: flex; align-items: center; justify-content: center; opacity: 0; }
+.grid6 > div::before { content: ""; width: 24%; height: 50%; border-radius: 4px; background: #fff; }
+.grid6 > div::after { content: ""; position: absolute; left: 6px; right: 20%; bottom: -12px; height: 5px; border-radius: 3px; background: var(--bg-3); }
+.grid6 .slot { background: transparent; opacity: 1; } .grid6 .slot::before, .grid6 .slot::after { display: none; }
+.hero-card { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #efe7dd; z-index: 9; overflow: hidden; transform-origin: 0 0; }
+.hero-card .disc { width: 64%; left: 18%; top: 22%; }
+.hero-card .center { top: 12%; }
+.hero-card .bottle { background: #fff; } .hero-card .bottle .cap-top { background: var(--ink); } .hero-card .bottle .lbl { color: var(--ink); }
+.hero-card .ttl { font-size: 26px; }
+.hero-card .bdg { opacity: 1; }
+.win { position: absolute; left: 50%; bottom: 12%; transform: translateX(-50%); background: var(--accent); color: var(--ink); font: 500 12px var(--f-body); padding: 6px 12px; border-radius: 10px; z-index: 10; opacity: 0; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="wrap" id="blk">
+  <div>
+    <span class="pill">Как я работаю</span>
+    <h2 class="h1">Как рождается карточка</h2>
+    <p class="lead">Шесть шагов от брифа до карточки в выдаче. Нажмите на этап, чтобы посмотреть.</p>
+    <div class="steps">
+      <div class="st"><div class="row"><span class="n">01</span><h3>Бриф</h3></div><div class="body"><div><p>Узнаю о товаре, аудитории и площадке. Собираю пожелания и референсы.</p><div class="bar"><i></i></div></div></div></div>
+      <div class="st"><div class="row"><span class="n">02</span><h3>Анализ конкурентов</h3></div><div class="body"><div><p>Разбираю выдачу: что делают другие и чем можно выделиться.</p><div class="bar"><i></i></div></div></div></div>
+      <div class="st"><div class="row"><span class="n">03</span><h3>Предметная съёмка</h3></div><div class="body"><div><p>Снимаю товар со всех сторон — ракурсы под каждый слайд.</p><div class="bar"><i></i></div></div></div></div>
+      <div class="st"><div class="row"><span class="n">04</span><h3>Обработка</h3></div><div class="body"><div><p>Убираю фон, ставлю товар в новую сцену, добавляю заголовок.</p><div class="bar"><i></i></div></div></div></div>
+      <div class="st"><div class="row"><span class="n">05</span><h3>Инфографика</h3></div><div class="body"><div><p>Выношу главные преимущества на слайды — чтобы их считывали за секунды.</p><div class="bar"><i></i></div></div></div></div>
+      <div class="st"><div class="row"><span class="n">06</span><h3>Карточка в выдаче</h3></div><div class="body"><div><p>Проверяю, как карточка смотрится среди конкурентов, и отдаю файлы.</p><div class="bar"><i></i></div></div></div></div>
+    </div>
+  </div>
+
+  <div class="frame" id="frame">
+    <!-- 1 бриф -->
+    <div class="stage s1"><div class="center"><div class="doc">
+      <b>Бриф</b>
+      <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Сыворотка с витамином C</div>
+      <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Женщины 25–40</div>
+      <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Wildberries, 5 слайдов</div>
+      <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Акцент — сияние кожи</div>
+      <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Референсы</div>
+      <div class="refs"><span></span><span></span><span></span></div>
+    </div></div></div>
+
+    <!-- 2 анализ -->
+    <div class="stage s2">
+      <div class="feed"><div class="c"><span class="x"></span></div><div class="c"><span class="x"></span></div><div class="c"><span class="x"></span></div><div class="c"><span class="x"></span></div><div class="c"><span class="x"></span></div><div class="c"><span class="x"></span></div></div>
+      <div class="lens"></div>
+      <div class="notes"><span>белый фон у всех</span><span>мелкий текст</span><span>нет преимуществ</span><span class="idea">идея: тёплый фон + крупные плашки</span></div>
+    </div>
+
+    <!-- 3 съёмка -->
+    <div class="stage s3">
+      <div class="table"></div>
+      <div class="center"><div class="bottle"><span class="cap-top"></span><span class="lbl">SERUM</span><span class="lines"><i></i><i></i><i></i><i></i></span></div></div>
+      <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
+      <span class="rec">ракурс <b class="ang">спереди</b> · кадр <b class="num">1</b> / 5</span>
+      <div class="strip"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
+      <div class="flash"></div>
+    </div>
+
+    <!-- 4 обработка -->
+    <div class="stage s4">
+      <div class="raw"><div class="table"></div></div>
+      <div class="clean"><div class="disc"></div></div>
+      <div class="center"><div class="bottle"><span class="cap-top"></span><span class="lbl">SERUM</span></div></div>
+      <div class="wipe"></div>
+      <div class="ttl"><span class="tx"></span><span class="caret"></span></div>
+    </div>
+
+    <!-- 5 инфографика -->
+    <div class="stage s5">
+      <div class="disc"></div>
+      <div class="center"><div class="bottle"><span class="cap-top"></span><span class="lbl">SERUM</span></div></div>
+      <div class="ttl">Сыворотка для сияния кожи</div>
+      <div class="bdg bd1"><i></i>Витамин C 15%</div>
+      <div class="bdg bd2"><i></i>Без отдушек</div>
+      <div class="bdg bd3"><i></i>30 мл</div>
+      <div class="bdg bd4"><i></i>Результат за 14 дней</div>
+      <div class="dots"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- 6 выдача -->
+    <div class="stage s6">
+      <div class="grid6"><div></div><div></div><div></div><div></div><div class="slot"></div><div></div><div></div><div></div><div></div></div>
+      <div class="hero-card">
+        <div class="disc"></div>
+        <div class="center"><div class="bottle"><span class="cap-top"></span><span class="lbl">SERUM</span></div></div>
+        <div class="ttl">Сыворотка для сияния кожи</div>
+        <div class="bdg bd1"><i></i>Витамин C 15%</div><div class="bdg bd2"><i></i>Без отдушек</div><div class="bdg bd4"><i></i>Результат за 14 дней</div>
+      </div>
+      <div class="win">выделяется в выдаче</div>
+    </div>
+
+    <span class="cap" id="cap">этап 1 из 6</span>
+  </div>
+</div>
+</div>
+
+<script type="module">
+import { gsap } from 'gsap'
+
+const DUR = 10
+const blk = document.getElementById('blk')
+const frame = document.getElementById('frame')
+const steps = [...blk.querySelectorAll('.st')]
+const stages = [...frame.querySelectorAll('.stage')]
+const cap = document.getElementById('cap')
+let cur = 0, tl = null
+
+// у каждого этапа своя сцена длиной ~DUR секунд
+const scenes = [
+  // 1 бриф: галочки по одной, потом референсы
+  s => {
+    const t = gsap.timeline()
+    t.from(s.querySelector('.doc'), { y: 24, opacity: 0, duration: .6, ease: 'power2.out' })
+    s.querySelectorAll('.chk').forEach((c, i) => {
+      t.to(c.querySelector('.fill'), { scale: 1, duration: .25, ease: 'back.out(2)' }, 1 + i * 1.3)
+       .to(c.querySelector('path'), { strokeDashoffset: 0, duration: .3 }, '-=0.1')
+    })
+    t.from(s.querySelectorAll('.refs span'), { scale: 0, opacity: 0, stagger: .15, duration: .4, ease: 'back.out(2)' }, 7.6)
+    return t
+  },
+  // 2 анализ: выдача появляется, лупа ходит, отмечает слабые, выводы
+  s => {
+    const t = gsap.timeline()
+    const cards = s.querySelectorAll('.feed .c')
+    t.from(cards, { opacity: 0, y: 16, stagger: .08, duration: .4, ease: 'power2.out' })
+    const lens = s.querySelector('.lens')
+    const r = s.getBoundingClientRect()
+    const pos = [0, 2, 4, 3].map(i => { const b = cards[i].getBoundingClientRect(); return { x: b.left - r.left + b.width / 2 - 35, y: b.top - r.top + b.height / 2 - 35 } })
+    t.set(lens, { left: 0, top: 0, x: pos[0].x, y: pos[0].y, opacity: 0 }, 0)
+    t.to(lens, { opacity: 1, duration: .3 }, 1)
+    const notes = s.querySelectorAll('.notes span')
+    pos.forEach((p, i) => {
+      t.to(lens, { x: p.x, y: p.y, duration: .9, ease: 'power2.inOut' }, 1.2 + i * 1.6)
+      t.to(cards[[0, 2, 4, 3][i]].querySelector('.x'), { opacity: 1, duration: .2 }, 2.1 + i * 1.6)
+      if (notes[i] && i < 3) t.to(notes[i], { opacity: 1, y: 0, duration: .3 }, 2.2 + i * 1.6)
+    })
+    t.to(lens, { opacity: 0, duration: .3 }, 7.6)
+    t.fromTo(notes[3], { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .4, ease: 'back.out(2)' }, 7.8)
+    return t
+  },
+  // 3 съёмка: ракурсы с разных сторон, вспышка, лента кадров
+  s => {
+    const t = gsap.timeline()
+    const b = s.querySelector('.bottle'), lbl = b.querySelector('.lbl'), lines = b.querySelector('.lines'), capTop = b.querySelector('.cap-top')
+    const ang = s.querySelector('.ang'), num = s.querySelector('.num'), flash = s.querySelector('.flash')
+    const shots = s.querySelectorAll('.strip span')
+    const views = [
+      { name: 'спереди', w: 108, h: 250, rot: 0, lbl: 1, lines: 0 },
+      { name: 'сбоку', w: 46, h: 250, rot: 0, lbl: 0, lines: 0 },
+      { name: 'сзади', w: 108, h: 250, rot: 0, lbl: 0, lines: 1 },
+      { name: '3/4', w: 84, h: 250, rot: -8, lbl: 1, lines: 0 },
+      { name: 'сверху', w: 120, h: 120, rot: 0, lbl: 0, lines: 0, round: 1 },
+    ]
+    views.forEach((v, i) => {
+      const at = .4 + i * 1.8
+      t.to(b, { width: v.w, height: v.h, rotate: v.rot, borderRadius: v.round ? '50%' : '18px 18px 12px 12px', duration: .6, ease: 'power2.inOut' }, at)
+       .to(lbl, { opacity: v.lbl, duration: .3 }, at)
+       .to(lines, { opacity: v.lines, duration: .3 }, at)
+       .to(capTop, { opacity: v.round ? 0 : 1, duration: .3 }, at)
+       .call(() => { ang.textContent = v.name; num.textContent = i + 1 }, null, at + .3)
+       .fromTo(flash, { opacity: .85 }, { opacity: 0, duration: .35 }, at + 1)
+       .to(shots[i], { opacity: 1, y: 0, duration: .3 }, at + 1.1)
+    })
+    t.set({}, {}, DUR - .2)
+    return t
+  },
+  // 4 обработка: фон уходит «шторкой», появляется сцена, печатается заголовок
+  s => {
+    const t = gsap.timeline()
+    const clean = s.querySelector('.clean'), wipe = s.querySelector('.wipe'), raw = s.querySelector('.raw')
+    const b = s.querySelector('.bottle'), tx = s.querySelector('.tx')
+    const W = s.getBoundingClientRect().width
+    t.set(b, { background: '#ebe7e2', rotate: -3 })
+    t.to(wipe, { opacity: 1, duration: .2 }, 1)
+     .fromTo(wipe, { x: 0 }, { x: W, duration: 2.4, ease: 'power1.inOut' }, 1)
+     .fromTo(clean, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 2.4, ease: 'power1.inOut' }, 1)
+     .to(wipe, { opacity: 0, duration: .2 }, 3.4)
+     .set(raw, { opacity: 0 }, 3.4)
+     .to(b, { background: '#ffffff', rotate: 0, duration: .8, ease: 'power2.out' }, 3.6)
+     .from(s.querySelector('.disc'), { scale: .6, opacity: 0, duration: .8, ease: 'power2.out' }, 3.6)
+    const text = 'Сыворотка для сияния кожи'
+    const o = { n: 0 }
+    t.to(o, { n: text.length, duration: 2.6, ease: 'none', onUpdate: () => { tx.textContent = text.slice(0, Math.round(o.n)) } }, 5)
+    t.set({}, {}, DUR - .2)
+    return t
+  },
+  // 5 инфографика: плашки прилетают на готовое фото
+  s => {
+    const t = gsap.timeline()
+    t.from(s.querySelector('.ttl'), { opacity: 0, y: 12, duration: .5 }, .3)
+    const from = [{ x: 60 }, { x: 60 }, { x: -60 }, { y: 40 }]
+    s.querySelectorAll('.bdg').forEach((el, i) => {
+      t.fromTo(el, { opacity: 0, scale: .8, ...from[i] }, { opacity: 1, scale: 1, x: 0, y: 0, duration: .6, ease: 'back.out(1.8)' }, 1.2 + i * 1.6)
+    })
+    t.fromTo(s.querySelector('.bottle'), { scale: 1 }, { scale: 1.04, duration: 2, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 6.5)
+    t.set({}, {}, DUR - .2)
+    return t
+  },
+  // 6 выдача: крупная карточка уменьшается и встаёт в сетку конкурентов
+  s => {
+    const t = gsap.timeline()
+    const card = s.querySelector('.hero-card'), slot = s.querySelector('.slot'), win = s.querySelector('.win')
+    const others = s.querySelectorAll('.grid6 > div:not(.slot)')
+    const fr = s.getBoundingClientRect(), sl = slot.getBoundingClientRect()
+    t.set(card, { x: 0, y: 0, scale: 1, borderRadius: 0 })
+    t.to(card, { x: sl.left - fr.left, y: sl.top - fr.top, scale: sl.width / fr.width, borderRadius: 40, duration: 1.6, ease: 'power3.inOut' }, 2.2)
+    t.to(others, { opacity: .55, duration: .5, stagger: .06 }, 3.2)
+    t.to(card, { outline: '6px solid #1D1E22', duration: .01 }, 4.2)
+    t.fromTo(win, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .4, ease: 'back.out(2)' }, 4.6)
+    t.set({}, {}, DUR - .2)
+    return t
+  },
+]
+
+function reset(s) { gsap.set(s.querySelectorAll('*'), { clearProps: 'all' }) }
+
+function go(i) {
+  if (tl) tl.kill()
+  const prev = stages[cur]
+  cur = i
+  steps.forEach((s, k) => s.classList.toggle('on', k === i))
+  stages.forEach((s, k) => s.classList.toggle('on', k === i))
+  reset(prev); reset(stages[i])
+  stages[i].querySelector('.tx') && (stages[i].querySelector('.tx').textContent = '')
+  cap.textContent = 'этап ' + (i + 1) + ' из 6'
+  const bars = blk.querySelectorAll('.bar i'); gsap.set(bars, { scaleX: 0 })
+  tl = gsap.timeline({ onComplete: () => go((cur + 1) % stages.length) })
+  tl.add(scenes[i](stages[i]), 0)
+  tl.to(steps[i].querySelector('.bar i'), { scaleX: 1, duration: DUR, ease: 'none' }, 0)
+  if (blk.matches(':hover')) tl.pause()
+}
+
+steps.forEach((s, k) => s.addEventListener('click', () => go(k)))
+blk.addEventListener('mouseenter', () => tl && tl.pause())
+blk.addEventListener('mouseleave', () => tl && tl.resume())
+window.go = go
+window.seek = t => { tl.pause(); tl.seek(t, false) }
+go(0)
+</script>
+</body>
+</html>

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
-    "@unhead/vue": "^3.3.1",
+    "@unhead/vue": "^2.1.17",
     "gsap": "^3.15.0",
     "vite-ssg": "^28.3.0",
     "vue": "^3.5.40",

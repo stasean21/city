@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "krossovki", "title": "Кроссовки", "order": 1,
+    "sizes": [
+      {"format": "square", "label": "Квадрат", "w": 1080, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/krossovki/1080x1080.webp"},
+      {"format": "vertical", "label": "Вертикальный", "w": 1080, "h": 1440, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/krossovki/1080x1440.webp"},
+      {"format": "horizontal", "label": "Горизонтальный", "w": 1440, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/krossovki/1440x1080.webp"},
+      {"format": "wide", "label": "Широкий", "w": 1440, "h": 810, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/krossovki/1440x810.webp"},
+      {"format": "wide-narrow", "label": "Широкий узкий", "w": 1440, "h": 405, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/krossovki/1440x405.webp"}
+    ]
+  },
+  {
+    "slug": "chay", "title": "Чай", "order": 2,
+    "sizes": [
+      {"format": "square", "label": "Квадрат", "w": 1080, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/chay/1080x1080.webp"},
+      {"format": "vertical", "label": "Вертикальный", "w": 1080, "h": 1440, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/chay/1080x1440.webp"},
+      {"format": "horizontal", "label": "Горизонтальный", "w": 1440, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/chay/1440x1080.webp"},
+      {"format": "wide", "label": "Широкий", "w": 1440, "h": 810, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/chay/1440x810.webp"},
+      {"format": "wide-narrow", "label": "Широкий узкий", "w": 1440, "h": 405, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/chay/1440x405.webp"}
+    ]
+  },
+  {
+    "slug": "kompressor", "title": "Компрессор", "order": 3,
+    "sizes": [
+      {"format": "square", "label": "Квадрат", "w": 1080, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kompressor/1080x1080.webp"},
+      {"format": "vertical", "label": "Вертикальный", "w": 1080, "h": 1440, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kompressor/1080x1440.webp"},
+      {"format": "horizontal", "label": "Горизонтальный", "w": 1440, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kompressor/1440x1080.webp"},
+      {"format": "wide", "label": "Широкий", "w": 1440, "h": 810, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kompressor/1440x810.webp"},
+      {"format": "wide-narrow", "label": "Широкий узкий", "w": 1440, "h": 405, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kompressor/1440x405.webp"}
+    ]
+  },
+  {
+    "slug": "kreslo", "title": "Кресло", "order": 4,
+    "sizes": [
+      {"format": "square", "label": "Квадрат", "w": 1080, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kreslo/1080x1080.webp"},
+      {"format": "vertical", "label": "Вертикальный", "w": 1080, "h": 1440, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kreslo/1080x1440.webp"},
+      {"format": "horizontal", "label": "Горизонтальный", "w": 1440, "h": 1080, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kreslo/1440x1080.webp"},
+      {"format": "wide", "label": "Широкий", "w": 1440, "h": 810, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kreslo/1440x810.webp"},
+      {"format": "wide-narrow", "label": "Широкий узкий", "w": 1440, "h": 405, "where": "", "src": "https://storage.yandexcloud.net/landing-main/banners/kreslo/1440x405.webp"}
+    ]
+  }
+]

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import reviews from '../../data/reviews.json'
 
 // цифры утверждены владельцем; клиенты — первые пять из данных
@@ -79,10 +79,13 @@ onMounted(async () => {
   // matchMedia сам снимает твины, когда условие перестаёт выполняться
   mm = gsap.matchMedia()
   mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-    const [left, right] = wallEl.value.querySelectorAll('.reviews__lane')
+    // элемент — в замыкании: revert при уходе со страницы пересчитывает
+    // функциональные значения, когда ссылка шаблона может быть уже пустой
+    const wall = wallEl.value
+    const [left, right] = wall.querySelectorAll('.reviews__lane')
     if (!left || !right) return
 
-    const travel = (lane) => -Math.max(0, lane.offsetHeight - wallEl.value.clientHeight) * PARALLAX
+    const travel = (lane) => -Math.max(0, lane.offsetHeight - wall.clientHeight) * PARALLAX
     const scrollTrigger = () => ({
       trigger: sectionEl.value,
       start: 'top bottom',
@@ -97,7 +100,8 @@ onMounted(async () => {
   })
 })
 
-onUnmounted(() => {
+// до размонтирования: ссылки шаблона ещё живы, снятие слушателей срабатывает
+onBeforeUnmount(() => {
   unmounted = true
   // revert убивает и твины, и их ScrollTrigger'ы, возвращает transform
   mm?.revert()

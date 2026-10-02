@@ -171,6 +171,32 @@ section { padding: 0 0 var(--section-gap) }
 
 **Аккордеон** — `src/components/ui/AccordionItem.vue`, управляемый: пропсы `question`, `open`, событие `toggle`, ответ — слот. Карточка `--white`, `--r-card`; вопрос `.h3` в `<h3>` с кнопкой (`aria-expanded`, `aria-controls`), тело `role="region"`. Справа круг `--faq-toggle` (32) с плюсом из псевдоэлементов (`--faq-plus` × `--faq-plus-w`), при открытии поворот 45°. Открытая — «горящая», как карточка услуги: фон `--ink`, вопрос `--white`, круг `--ink-soft`, плюс `--accent`, ответ `--dark-section-text`. Раскрытие `grid-template-rows 0fr → 1fr` .45s `--ease-out`, цвета .35s; закрытый ответ в DOM, но `visibility: hidden` (после сворачивания). Кольцо фокуса — на карточке через `:has()`. ≤767 поля `--s-20`.
 
+**Страница услуги** — `ServiceDetailView.vue`, шаблон для всех услуг: каждый блок выводится, только если у услуги есть для него данные (`services.json` → поле `page`). Порядок: `ServiceHero` → `WorksWall` (работы из `works.json`, у которых в `services` есть slug услуги, по `order`) → `PartsColumns` (`page.parts`) → `CardStories` + стек (`page.process`; без него стек — отдельной секцией) → `PricePackages` (`page.packages`) → `RelatedServices` (`page.related`) → `ServiceFaq` (`page.faq`) → `ContactCta`. Компоненты — в `src/components/service/`, шапки блоков — `ui/SectionHead.vue` (как в `ProcessColumns`). Title и description — `useHead`.
+- `ServiceHero`: крошки, h1, lead, кнопки на `#contact` и `#works`; веер из трёх первых обложек (`--fan-*`, рамка `--fan-border`), при наведении шире; без lazy.
+- `WorksWall`: механика `ReviewsWall` — окно `--works-wall-h`, маска `--reviews-fade`, 4 колонки (чётные вверх, нечётные вниз, скорости разные), в колонке минимум 3 работы и второй набор `aria-hidden`; каждая работа с клавиатуры доступна один раз. ≤767 — сетка 2 колонки, первые 6. Клик — `SlidesLightbox` (нативный `<dialog>`, фон `--lightbox-backdrop`, лента `--slide-w`, ← → листают, Esc и клик по фону закрывают, фокус возвращается). Кнопка «Смотреть все работы» пока без действия (TODO).
+- `CardStories`: утверждённый макет `docs/mockups/card-stories.html`, шесть сцен на GSAP по 10 с. Внутренности сцен — иллюстрация: координаты в пикселях макета при ширине кадра 494 через `--u` (`100cqw / 494`), как единицы внутри SVG; цвета — токены `--story-*`. Автоплей только в экране, пауза при наведении и скрытой вкладке; reduced motion — финальный кадр без автоплея.
+- `PricePackages`: 3 колонки (≤991 — 2, ≤767 — 1), `featured` — тёмная с `.on-dark` (кнопка светлая).
+- `CardStories`: этапы — `page.process.steps`, сцены — набор по имени `page.process.scenes` (`cards` — инфографика, `stories/CardScenes.vue`; `banners` — `stories/BannerScenes.vue`). Набор отдаёт через `defineExpose` `{ scenes, duration, reset? }`, сцен столько же, сколько этапов.
+- Свой блок примеров вместо `WorksWall`: `page.examples` (`banners`, `photo`). Тогда же `ServiceHero` получает веер через слот `#fan`.
+- Набор сцен `photo` — `stories/PhotoScenes.vue` (страница съёмки): кадр товара схемой, вспышка в «Съёмке» раз в 1.6 с.
+
+**Страница баннеров** (`reklamnye-bannery`, макет `docs/mockups/service-banners.html`). Данные — `src/data/banners.json` (кампании `{ slug, title, order, sizes: [{ format, label, w, h, where, src }] }`), хелперы — `src/utils/banners.js`.
+- Пять форматов баннеров: Квадрат 1080×1080 (`square`, 1:1), Вертикальный 1080×1440 (`vertical`, 3:4), Горизонтальный 1440×1080 (`horizontal`, 4:3), Широкий 1440×810 (`wide`, 16:9), Широкий узкий 1440×405 (`wide-narrow`, 32:9). `where` пока пустой — подпись выводится без него.
+- `BannerFan` — веер первого экрана: вертикальный, квадрат, широкий узкий первой кампании (`--bfan-*`).
+- `BannerExamples` — секция `#works`: `BannerAdapt` и `BannerMosaic`, между ними `--s-120`, pill только у первого.
+- `BannerAdapt` «Одна идея — все площадки»: сетка `1fr --adapt-list-w`, сцена `--adapt-stage-h`; рамка вписывается в `.adapt__fit` (JS только замеряет, ResizeObserver), width/height .9s, кроссфейд картинок. Автолистание 2.2 с только в экране, выключается насовсем после любого действия; подпись `aria-live` молчит, пока листает автоплей. ≤767 — размеры рядом пилюль с прокруткой.
+- `BannerMosaic` «Любой размер»: выровненные ряды — у плитки `aspect-ratio` своего формата, `flex-grow` пропорционален ему, поэтому в ряду все плитки одной высоты и дыр нет; `--mosaic-h` — желаемая высота ряда (≤767 — 5rem, широкий узкий встаёт отдельным рядом). Плитки — все размеры кампаний по `order`, до 10 (две кампании целиком; 14 выводят страницу за 8000px). Подпись плитки — container query: на узкой только размер, на совсем узкой скрыта. Клик — `SlidesLightbox` в режиме «набор» (`open(кампания)`: все размеры одной высоты `--set-h`, не шире `--set-max-w`).
+
+**Страница съёмки** (`predmetnaya-syomka`, макет `docs/mockups/service-photo.html`). Кадры — работы из `works.json` с `services: ["predmetnaya-syomka"]` и полями `shape` (`portrait` 4/5 · `landscape` 5/4 · `square`) и `caption`; заголовок блока — `page.works`.
+- `PhotoFan` — веер из трёх первых кадров 4:5 (`--pfan-*`).
+- `PhotoRows` — `#works`: шапка в контейнере, два ряда кадров на всю ширину экрана (высота `--photo-row-h`, подпись на `--photo-tag-bg`). Работы по рядам поочерёдно, короткий ряд добит повторами до 9 (`aria-hidden`). Сдвиг от скролла — ScrollTrigger `scrub`, без pin, на всех ширинах: верхний влево, нижний вправо, до 60% лишней ширины. Reduced motion — ряды стоят и листаются пальцем со `scroll-snap`, повторы скрыты.
+
+**Раскрывающиеся колонки** — `ui/ExpandColumns.vue` (props `items` `[{ title, text, result, svg? }]`, `ariaLabel`): вся механика и вид, вынесенные из `ProcessColumns`. `ProcessColumns` и `PartsColumns` — только шапка + `ExpandColumns`.
+
+**Карточка услуги** — `ui/ServiceCard.vue` (prop `service`): мозаика на главной и «С этим часто берут».
+
+**Обложка** — `ui/CoverImage.vue`: картинка из Object Storage с подложкой `--bg-3`, пока файла нет.
+
 **Прокрутка букв** — `src/components/ui/RollingText.vue`, задержка 25 мс на букву. Используется на пунктах меню. На кнопках — только `arrow`, без `roll`: один элемент, один приём.
 
 **Стрелка-рикошет** — `src/components/ui/RicochetArrow.vue`, проп `size` (по умолчанию 1rem, в карточках услуг `var(--arrow-card)`). Сама наведение не слушает: владелец ставит на себе `--ricochet-p: 1` (hover, `:active`, `:focus-visible`), цвет — `currentColor`, второй стрелке можно задать `--ricochet-second`. Механика: контейнер 16×16 с `overflow: hidden`, две одинаковые SVG, вторая на `left: -16px; top: 16px`. При наведении обе на `translate(16px, -16px)`, `transition: .38s cubic-bezier(.22,1,.36,1)`. Диагональ совпадает с направлением стрелки.
@@ -218,7 +244,7 @@ GSAP, инициализация в `onMounted`, **обязательная оч
 
 ## Данные
 
-Работы — `src/data/works.json`, услуги — `src/data/services.json`. Поле `slug` обязательно, по нему строятся страницы.
+Работы — `src/data/works.json`: `{ slug, title, niche, services: [slug услуг], order, cover, slides: [] }`, обложки и слайды — WebP из Object Storage (`…/works/<slug>/cover.webp`, `01.webp`…). Услуги — `src/data/services.json`, содержимое страницы — поле `page`. Поле `slug` обязательно, по нему строятся страницы.
 
 Названия и логотипы клиентов, с которыми работы не было, ставить нельзя. Названия товаров, ниши и формулировки услуг — можно свободно.
 
@@ -228,7 +254,7 @@ GSAP, инициализация в `onMounted`, **обязательная оч
 
 `vite-ssg build` → `dist`. Каждый маршрут должен стать отдельным HTML-файлом с текстом в исходном коде, а не подгружаемым скриптом. Чистый SPA без пререндера не сдавать.
 
-`useHead` в пререндер **не попадает**: vite-ssg 28 рендерит head через `@unhead` 2, а в `package.json` стоит `@unhead/vue` 3 — теги молча теряются. Title берётся из `index.html`. Структурированные данные выводим `<script type="application/ld+json">` в теле секции (render-функцией, как в `FaqSection`).
+`useHead` из `@unhead/vue` работает и попадает в пререндер (title, meta страниц услуг). Версия `@unhead/vue` должна совпадать с той, что тянет vite-ssg (сейчас ^2.1): при двух копиях пакета head у vite-ssg и у компонентов разный, и теги молча теряются. JSON-LD FAQPage по-прежнему выводится `<script>` в теле `FaqSection` — так тоже валидно.
 
 GitHub → Timeweb Cloud App Platform, тип «фронтенд», команда `npm run build`, директория `dist`.
 
@@ -242,6 +268,6 @@ GitHub → Timeweb Cloud App Platform, тип «фронтенд», команд
 
 `HeroSection.vue` соответствует системе: `.display`, `.lead`, строки с цифрами нет (реальных цифр пока нет).
 
-`ServicesIntro.vue` приведён к системе. Шапка как в `ProcessColumns`: слева `.pill` и `<h2 class="display">`, справа `.lead`, выравнивание по низу, до сетки `--sec-content`; ≤991 — в один столбик. Ниже сетка из семи карточек-ссылок из `services.json` (поле `description`): `1fr 1fr 1fr`, gap `--s-16`, `grid-auto-rows: minmax(var(--service-card-h), auto)`, поток автоматический, широкие (`span 2`) — 1-я и 7-я, три ряда без дыр; текст в карточке не шире `--measure-card-head`. ≤991 — две колонки, широкая только 1-я; ≤767 — один столбик. Внизу секции — бегущая строка стека, отступ `--s-60`.
+`ServicesIntro.vue` приведён к системе. Шапка как в `ProcessColumns`: слева `.pill` и `<h2 class="display">`, справа `.lead`, выравнивание по низу, до сетки `--sec-content`; ≤991 — в один столбик. Ниже сетка из шести карточек-ссылок из `services.json` (поле `description`): `1fr 1fr 1fr`, gap `--s-16`, `grid-auto-rows: minmax(var(--service-card-h), auto)`, поток автоматический, зигзаг — широкие (`span 2`) 1-я, 4-я и 5-я, три ряда без дыр; текст в карточке не шире `--measure-card-head`. ≤991 — две колонки, широкие 1-я и 6-я, остальные парами; ≤767 — один столбик. «AI-фотосессии» объединены с предметной съёмкой: старый адрес — редирект в `src/router/redirects.js` (общий с `vite.config.js`, редиректы не пререндерятся). Внизу секции — бегущая строка стека, отступ `--s-60`.
 
 При работе над новым модулем сверяйся с этим файлом до того, как писать стили.

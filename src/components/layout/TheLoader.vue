@@ -52,9 +52,12 @@ function getRouteLabel(to) {
 }
 
 let masterTl = null
+let enterTween = null
 let lastVisibleIndex = null
 let navToken = 0
-let screenChoreographyDone = Promise.resolve()
+// момент, когда шторка начинает уезжать вверх: с него стартует выезд контента,
+// как на первой загрузке, — иначе экран уже открыт, а контент ещё сдвинут
+let screenRevealStart = Promise.resolve()
 
 function isMobile() {
   return window.innerWidth <= 540
@@ -221,7 +224,7 @@ async function leaveTransition(to) {
   if (document.hidden || prefersReducedMotion()) {
     masterTl?.kill()
     gsap.set(loaderEl, { top: '0%' })
-    screenChoreographyDone = Promise.resolve()
+    screenRevealStart = Promise.resolve()
     return true
   }
 
@@ -237,7 +240,8 @@ async function leaveTransition(to) {
 
   let allowNav
   const navAllowed = new Promise((resolve) => { allowNav = resolve })
-  screenChoreographyDone = tlPromise(tl)
+  let revealStarted
+  screenRevealStart = new Promise((resolve) => { revealStarted = resolve })
 
   tl.to(loaderEl, { top: '0%', duration: 0.5, ease: 'Power4.easeIn' }, 0)
     .to(topCurtainEl, { height: '10vh', duration: 0.4, ease: 'Power4.easeIn' }, '-=0.5')
@@ -245,7 +249,9 @@ async function leaveTransition(to) {
     .to(pageLabelEl, { opacity: 1, y: -50, duration: 0.8, ease: 'Power4.easeOut' }, 0.55)
     .to(topCurtainEl, { height: '0vh', duration: 0.4, ease: 'Power4.easeIn' }, 0.55)
 
-  tl.to(loaderEl, { top: '-100%', duration: 0.8, ease: 'Power3.easeInOut' }, '-=0.2')
+  tl.addLabel('reveal', '-=0.2')
+    .call(() => revealStarted(), null, 'reveal')
+    .to(loaderEl, { top: '-100%', duration: 0.8, ease: 'Power3.easeInOut' }, 'reveal')
     .to(pageLabelEl, { opacity: 0, duration: 0.6, ease: 'linear' }, '-=0.8')
     .to(bottomCurtainEl, { height: '0vh', duration: 0.85, ease: 'Power3.easeInOut' }, '-=0.6')
     .call(() => { setCursorAuto(); startScroll() })
@@ -274,21 +280,21 @@ async function enterTransition() {
   setOnceInHidden(onceInTargets, explicit, '20vh', '50vh')
   startScroll()
 
-  const readyPromise = useAssetsReady()
-  await Promise.all([readyPromise, screenChoreographyDone])
+  // минимальную паузу здесь даёт сама шторка — отдельный minTime не нужен
+  const readyPromise = useAssetsReady({ minTime: 0 })
+  await Promise.all([readyPromise, screenRevealStart])
   if (token !== navToken) return
 
-  masterTl?.kill()
-  const tl = gsap.timeline()
-  masterTl = tl
-  tl.to(onceInTargets, {
+  // шторка в masterTl ещё уезжает — выезд контента идёт своим твином параллельно
+  enterTween?.kill()
+  enterTween = gsap.to(onceInTargets, {
     y: 0,
     ...(explicit ? { opacity: 1 } : {}),
     duration: 1,
     stagger: explicit ? 0.07 : 0.05,
     ease: 'Expo.easeOut',
     clearProps: explicit ? 'y,opacity' : 'y',
-  }, 0.8)
+  })
 }
 
 let removeBeforeGuard = null
@@ -321,6 +327,7 @@ onUnmounted(() => {
   removeBeforeGuard?.()
   removeAfterGuard?.()
   masterTl?.kill()
+  enterTween?.kill()
 })
 </script>
 

@@ -1,0 +1,446 @@
+<script setup>
+import { computed, onMounted, onUnmounted, ref, useId } from 'vue'
+
+// раскрывающиеся колонки: раскрытая шире и тёмная, с огромным номером;
+// на мобилке — аккордеон. Используются в «Как работаем» на главной
+// и в «Из чего состоит карточка» на странице услуги
+const props = defineProps({
+  // [{ title, text, result, svg? }] — svg строкой (?raw), без него иконки нет
+  items: { type: Array, required: true },
+  ariaLabel: { type: String, default: null },
+})
+
+const uid = useId()
+
+const items = computed(() => props.items.map((item, i) => ({
+  ...item,
+  num: String(i + 1).padStart(2, '0'),
+})))
+
+const AUTOPLAY_MS = 3000
+const CLICK_PAUSE_MS = 8000
+
+const active = ref(0)
+const rowEl = ref(null)
+
+// автоплей идёт, только когда ничто ему не мешает: блок в экране,
+// вкладка видна, не наведено, не в фокусе, не пауза после клика,
+// не мобилка и не reduced motion
+const state = { inView: false, hovering: false, focused: false, clickPaused: false }
+let interval = null
+let clickTimer = null
+let observer = null
+let mqMobile = null
+let mqReduced = null
+
+function canPlay() {
+  return state.inView
+    && !document.hidden
+    && !state.hovering
+    && !state.focused
+    && !state.clickPaused
+    && !mqMobile?.matches
+    && !mqReduced?.matches
+}
+
+function sync() {
+  if (canPlay()) {
+    if (!interval) {
+      interval = setInterval(() => {
+        active.value = (active.value + 1) % items.value.length
+      }, AUTOPLAY_MS)
+    }
+  } else if (interval) {
+    clearInterval(interval)
+    interval = null
+  }
+}
+
+// тач-устройства тоже шлют pointerenter при тапе — ховером считаем только мышь
+function onEnter(i, event) {
+  if (event.pointerType !== 'mouse') return
+  state.hovering = true
+  active.value = i
+  sync()
+}
+
+function onRowLeave(event) {
+  if (event.pointerType !== 'mouse') return
+  state.hovering = false
+  sync()
+}
+
+function onFocus(i) {
+  state.focused = true
+  active.value = i
+  sync()
+}
+
+function onBlur() {
+  state.focused = false
+  sync()
+}
+
+function onClick(i) {
+  active.value = i
+  state.clickPaused = true
+  clearTimeout(clickTimer)
+  clickTimer = setTimeout(() => {
+    state.clickPaused = false
+    sync()
+  }, CLICK_PAUSE_MS)
+  sync()
+}
+
+onMounted(() => {
+  mqMobile = window.matchMedia('(max-width: 767px)')
+  mqReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+  mqMobile.addEventListener('change', sync)
+  mqReduced.addEventListener('change', sync)
+  document.addEventListener('visibilitychange', sync)
+
+  observer = new IntersectionObserver(([entry]) => {
+    state.inView = entry.isIntersecting
+    sync()
+  }, { threshold: 0.4 })
+  observer.observe(rowEl.value)
+})
+
+onUnmounted(() => {
+  clearInterval(interval)
+  clearTimeout(clickTimer)
+  observer?.disconnect()
+  document.removeEventListener('visibilitychange', sync)
+  mqMobile?.removeEventListener('change', sync)
+  mqReduced?.removeEventListener('change', sync)
+})
+</script>
+
+<template>
+  <ol ref="rowEl" class="expand__row" :aria-label="ariaLabel" @pointerleave="onRowLeave">
+    <li
+      v-for="(item, i) in items"
+      :key="item.num"
+      class="expand__col"
+      :class="{ 'is-active': active === i }"
+      @pointerenter="onEnter(i, $event)"
+    >
+      <!-- огромный номер раскрытой колонки — фон под текстом;
+           для скринридера номер уже есть в подписи кнопки -->
+      <span class="num-xl expand__num-xl" aria-hidden="true">{{ item.num }}</span>
+
+      <!-- кнопка накрывает колонку целиком; содержимое — соседний блок,
+           а не потомок: заголовок и абзац внутри <button> недопустимы -->
+      <button
+        type="button"
+        class="expand__trigger"
+        :aria-expanded="active === i"
+        :aria-controls="`${uid}-step-${i}`"
+        :aria-label="`${item.num}. ${item.title}`"
+        @focus="onFocus(i)"
+        @blur="onBlur"
+        @click="onClick(i)"
+      >
+        <span class="num-sm expand__num" aria-hidden="true">{{ item.num }}</span>
+        <span class="h3 expand__label" aria-hidden="true">{{ item.title }}</span>
+        <span v-if="item.svg" class="expand__icon" aria-hidden="true" v-html="item.svg"></span>
+      </button>
+
+      <div :id="`${uid}-step-${i}`" class="expand__content">
+        <div class="expand__content-inner">
+          <h3 class="card-title expand__title">{{ item.title }}</h3>
+          <p class="expand__text">{{ item.text }}</p>
+          <span class="caption expand__result">{{ item.result }}</span>
+        </div>
+      </div>
+    </li>
+  </ol>
+</template>
+
+<style scoped>
+/* ряд колонок */
+.expand__row {
+  display: flex;
+  gap: var(--s-12);
+  height: var(--process-h);
+}
+
+.expand__col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: var(--s-24);
+  overflow: hidden;
+  background: var(--white);
+  border-radius: var(--r-card);
+  transition:
+    flex-grow .6s cubic-bezier(.22, 1, .36, 1),
+    background-color var(--ease);
+}
+
+.expand__col.is-active {
+  flex-grow: var(--process-grow);
+  background: var(--ink);
+}
+
+/* слои: огромный номер (0) → содержимое (1) → кнопка (2), чтобы
+   клик по тексту всё равно попадал в кнопку */
+.expand__trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* flex, а не block: браузер центрирует содержимое <button> по вертикали,
+     номер должен стоять сверху */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--s-24);
+  text-align: left;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-card);
+}
+
+.expand__trigger:focus-visible {
+  outline: var(--focus-ring) solid var(--ink);
+  outline-offset: var(--focus-ring);
+}
+
+.is-active .expand__trigger:focus-visible {
+  outline-color: var(--accent);
+}
+
+.expand__num {
+  display: block;
+  color: var(--bg-4);
+  transition: color var(--ease), opacity .2s ease;
+}
+
+.is-active .expand__num {
+  opacity: 0;
+}
+
+/* огромный номер: только opacity и transform, кегль не анимируем.
+   left — компенсация внутреннего отступа глифа */
+.expand__num-xl {
+  position: absolute;
+  top: var(--s-24);
+  left: calc(var(--s-24) - var(--s-8));
+  z-index: 0;
+  opacity: 0;
+  transform: translateY(var(--s-24));
+  transition:
+    opacity .5s cubic-bezier(.22, 1, .36, 1),
+    transform .5s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+}
+
+.is-active .expand__num-xl {
+  opacity: 1;
+  transform: none;
+  transition-delay: .15s;
+}
+
+/* вертикальное название у левого нижнего края */
+.expand__label {
+  position: absolute;
+  left: var(--s-24);
+  bottom: var(--s-24);
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--ink);
+  transition: opacity var(--ease);
+}
+
+.is-active .expand__label {
+  opacity: 0;
+}
+
+.expand__icon {
+  position: absolute;
+  top: var(--s-24);
+  right: var(--s-24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--process-icon-box);
+  height: var(--process-icon-box);
+  color: var(--accent);
+  background: var(--ink-soft);
+  border-radius: var(--process-icon-r);
+  opacity: 0;
+  transition: opacity var(--ease);
+}
+
+.is-active .expand__icon {
+  opacity: 1;
+  transition-delay: .3s;
+}
+
+.expand__icon :deep(svg) {
+  display: block;
+  width: var(--process-icon);
+  height: var(--process-icon);
+}
+
+/* содержимое прижато к низу; скрыто прозрачностью, но в html и
+   доступно скринридеру. min-width — чтобы во время раскрытия текст
+   не переносился посимвольно */
+.expand__content {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  width: 100%;
+  min-width: var(--process-content-min);
+  opacity: 0;
+  transform: translateY(var(--s-16));
+  transition:
+    opacity var(--ease),
+    transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+.is-active .expand__content {
+  opacity: 1;
+  transform: none;
+  transition-delay: .25s;
+}
+
+.expand__title {
+  color: var(--white);
+  margin-bottom: var(--s-12);
+}
+
+.expand__text {
+  color: var(--dark-section-text);
+  margin-bottom: var(--s-20);
+}
+
+.expand__result {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-8);
+  padding: var(--s-4) var(--s-12);
+  color: var(--white);
+  background: var(--ink-soft);
+  border-radius: var(--r-pill);
+}
+
+.expand__result::before {
+  content: "";
+  flex: none;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* мобилка — вертикальный аккордеон */
+@media (max-width: 767px) {
+  .expand__row {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .expand__col {
+    flex: none;
+    padding: 0;
+  }
+
+  .expand__col.is-active {
+    flex-grow: 0;
+  }
+
+  .expand__trigger {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--s-16);
+    width: 100%;
+    min-height: var(--process-row-h);
+    padding: var(--s-12) var(--s-24);
+  }
+
+  .expand__label {
+    position: static;
+    writing-mode: horizontal-tb;
+    transform: none;
+    white-space: normal;
+  }
+
+  .is-active .expand__label {
+    opacity: 1;
+    color: var(--white);
+  }
+
+  /* в аккордеоне огромного номера нет — остаётся обычный, акцентный */
+  .expand__num-xl {
+    display: none;
+  }
+
+  .is-active .expand__num {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .expand__icon {
+    position: static;
+    margin-left: auto;
+  }
+
+  .expand__icon :deep(svg) {
+    width: var(--s-20);
+    height: var(--s-20);
+  }
+
+  /* раскрытие по высоте: 0fr → 1fr */
+  .expand__content {
+    position: static;
+    display: grid;
+    grid-template-rows: 0fr;
+    min-width: 0;
+    margin-top: 0;
+    transform: none;
+    transition:
+      grid-template-rows .5s cubic-bezier(.22, 1, .36, 1),
+      opacity var(--ease);
+  }
+
+  .is-active .expand__content {
+    grid-template-rows: 1fr;
+    transition-delay: 0s;
+  }
+
+  /* паддинг по вертикали здесь не ставим — он не схлопнулся бы в 0fr;
+     нижний отступ даёт margin плашки, его обрезает overflow */
+  .expand__content-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 var(--s-24);
+  }
+
+  .expand__result {
+    margin-bottom: var(--s-24);
+  }
+
+  /* название уже есть в строке-заголовке */
+  .expand__title {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expand__col,
+  .expand__num,
+  .expand__num-xl,
+  .expand__label,
+  .expand__icon,
+  .expand__content {
+    transition: none;
+  }
+}
+</style>

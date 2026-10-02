@@ -1,5 +1,5 @@
 const MIN_TIME = 1500
-const MAX_TIME = 6000
+const MAX_TIME = 3000
 
 function imagePromise(img) {
   if (img.complete && img.naturalWidth > 0) {
@@ -15,12 +15,15 @@ function imagePromise(img) {
 }
 
 /**
- * Ждёт реальной загрузки медиа первого экрана (картинки внутри main + шрифты),
+ * Ждёт реальной загрузки медиа первого экрана (картинки внутри main без lazy + шрифты),
  * но не дольше MAX_TIME и не быстрее MIN_TIME — чтобы заставка не мигала
  * на быстром соединении и не зависала на медленном.
  */
 export function useAssetsReady({ root = document, minTime = MIN_TIME, maxTime = MAX_TIME } = {}) {
-  const images = Array.from(root.querySelectorAll('main img'))
+  // ленивые картинки ниже первого экрана не начнут грузиться, пока их не
+  // прокрутят, а скролл под заставкой заблокирован — ждать их значит всегда
+  // упираться в таймаут. Ждём только то, что грузится сразу
+  const images = Array.from(root.querySelectorAll('main img')).filter((img) => img.loading !== 'lazy')
   const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve()
 
   const allReady = Promise.all([...images.map(imagePromise), fontsReady])
