@@ -46,11 +46,16 @@ git checkout origin/claude/site-overview-setup-iskpz2 -- docs/mockups/works-gall
 - prefers-reduced-motion: без масштабирования при драге, без stagger, без анимаций просмотра — мгновенные смены.
 - :focus-visible — на светлом var(--ink), на тёмных кнопках var(--accent).
 
-## 5. Подключение
-- Компонент WorksGallery принимает props: items (работы услуги из works.json, по order), title (название услуги); emit('close').
+## 5. Подключение (под текущий код в main)
+- WorksGallery.vue — в src/components/service/. Props: items (массив { title, niche, cover, slides?, fit? }), title (название услуги); emit('close').
 - Монтировать через <Teleport to="body"> и v-if — только когда открыт (не в пререндере, не грузит картинки заранее).
-- Кнопки «Смотреть все работы» на страницах услуг (инфографика, баннеры, съёмка) — заменить TODO: открывают WorksGallery с работами этой услуги.
-- Опционально: открытие по хэшу #gallery (чтобы ссылкой можно было поделиться) и закрытие по кнопке «назад» браузера (history.pushState при открытии, popstate — закрыть).
+- Кнопки «Смотреть все работы» сейчас — BaseButton type="button" с комментарием TODO в трёх местах. Заменить TODO на открытие галереи:
+  • WorksWall.vue (инфографика) — items = props.works (cover + slides из works.json); в просмотре листаются слайды работы.
+  • PhotoRows.vue (предметная съёмка) — items = props.works; если у работы нет slides — листать между работами.
+  • BannerMosaic.vue (баннеры) — items = по одной плитке на кампанию из props.campaigns: cover = первый размер кампании, slides = все размеры кампании, fit: 'contain' (баннеры разных пропорций — на белом фоне плитки и слайда, без обрезки). Подпись в просмотре: «{кампания}» + «{формат} · {w} × {h}».
+  title — название услуги из services.json (прокинь из ServiceDetailView, если в компоненте его нет).
+- SlidesLightbox.vue оставить как есть — он нужен для клика по работе на самой странице. Внутри галереи свой просмотр (см. п. 3), чтобы не было двух модалок друг над другом.
+- Опционально: history.pushState({ gallery: true }) при открытии и закрытие по popstate — чтобы кнопка «назад» на телефоне закрывала галерею, а не уводила со страницы.
 - Очистка: все слушатели window, gsap.ticker, твины — в onUnmounted.
 
 ## 6. Проверка
