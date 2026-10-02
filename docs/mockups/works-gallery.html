@@ -47,9 +47,10 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .ig-tag span { color: var(--text-3); font-weight: 400; }
 
 .ig-top { position: absolute; left: 24px; right: 24px; top: 24px; z-index: 5; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
-.ig-title { pointer-events: auto; display: flex; gap: 10px; align-items: center; background: var(--white); border-radius: 999px; padding: 8px 16px; font: 500 14px/20px var(--f-body); color: var(--ink); }
+.ig-top .ig-close, .ig-title { pointer-events: auto; }
+.ig-title { display: flex; gap: 10px; align-items: center; background: var(--white); border-radius: 999px; padding: 8px 16px; font: 500 14px/20px var(--f-body); color: var(--ink); }
 .ig-title span { color: var(--text-3); font-weight: 400; }
-.ig-close { all: unset; pointer-events: auto; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: var(--white); display: grid; place-items: center; transition: background-color .2s; }
+.ig-close { all: unset; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: var(--white); display: grid; place-items: center; transition: background-color .2s; }
 .ig-close:hover { background: var(--ink-hover); }
 .ig-close svg, .ig-arr svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
 .ig-close:focus-visible, .ig-arr:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -57,8 +58,9 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .ig-hint i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
 
 /* просмотр одной работы */
-.lb { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; pointer-events: none; opacity: 0; }
-.lb.on { pointer-events: auto; }
+/* скрытый просмотр не должен перехватывать клики: его × лежит ровно над главным × */
+.lb { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; pointer-events: none; opacity: 0; visibility: hidden; }
+.lb.on { pointer-events: auto; visibility: visible; }
 .lb-back { position: absolute; inset: 0; background: rgba(29,30,34,.92); }
 .lb-card { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 14px; align-items: center; }
 .lb-img { width: min(480px, 78vw, calc((100vh - 220px) * .75)); aspect-ratio: 3/4; border-radius: 20px; overflow: hidden; background: var(--white); }
@@ -193,7 +195,8 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
   function open(e) { opener = e.currentTarget; ig.hidden = false; document.documentElement.style.overflow = 'hidden'; cleanup = mount();
     if (reduce) ig.style.opacity = 1; else gsap.fromTo(ig, { opacity: 0 }, { opacity: 1, duration: .35, ease: 'power2.out' });
     document.getElementById('close').focus(); }
-  function close() { const done = () => { ig.hidden = true; cleanup && cleanup(); cleanup = null; document.documentElement.style.overflow = ''; opener && opener.focus(); };
+  let closing = false;
+  function close() { if (closing || ig.hidden) return; closing = true; const done = () => { ig.hidden = true; cleanup && cleanup(); cleanup = null; document.documentElement.style.overflow = ''; closing = false; opener && opener.focus(); };
     if (reduce) done(); else gsap.to(ig, { opacity: 0, duration: .3, ease: 'power2.in', onComplete: done }); }
   document.getElementById('open').addEventListener('click', open);
   document.getElementById('close').addEventListener('click', close);
