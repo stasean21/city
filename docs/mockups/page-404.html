@@ -1,0 +1,158 @@
+<title>Страница 404 m/design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+<style>
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Semibold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+/* 404 m/design: тёмный экран как у загрузчика, цифры крутятся барабаном и встают на 4·0·4 */
+:root {
+  color-scheme: dark;
+  --f-head: 'Gilroy', 'Inter', system-ui, sans-serif;
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --ink: #1D1E22; --ink-soft: #2C2D32; --ink-hover: #393A3F; --white: #FFFFFF; --bg: #F6F4F2;
+  --dark-text: #A9A7A3; --footer-text: #8F8D89; --line: rgba(255,255,255,.12); --accent: #F59958;
+  --out: cubic-bezier(.22,1,.36,1);
+  --digit: clamp(140px, min(28vw, 40vh), 380px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: var(--ink); color: var(--dark-text); font: 400 15px/25px var(--f-body); overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.page { min-height: 100%; display: flex; flex-direction: column; padding: 40px 24px 32px; max-width: 1240px; margin: 0 auto; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.brand { font: 600 18px/1 var(--f-head); color: var(--white); letter-spacing: -.3px; display: flex; align-items: baseline; }
+.brand .sl { color: var(--accent); }
+.brand .word { display: inline-block; min-width: 6ch; }
+.status { font: 500 13px/20px var(--f-body); color: var(--footer-text); font-variant-numeric: tabular-nums; display: flex; gap: 10px; align-items: center; }
+.status i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.status.done i { animation: none; }
+.status:not(.done) i { animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+
+/* полоса загрузки, которая «застревает» */
+.bar { height: 2px; background: var(--line); margin-top: 20px; border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--white); transition: background-color .4s; }
+.bar.stuck i { background: var(--accent); }
+
+/* барабан цифр */
+.stage { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 0; }
+.drum { display: flex; gap: clamp(4px, 1vw, 16px); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.col { height: var(--digit); overflow: hidden; position: relative; }
+.col .strip { display: flex; flex-direction: column; will-change: transform; }
+.col .strip span { height: var(--digit); display: block; font: 700 var(--digit)/1 var(--f-head); letter-spacing: -.06em; color: var(--white); text-align: center; font-variant-numeric: tabular-nums; }
+.col.zero .strip span.final { color: var(--white); position: relative; }
+/* слэш как в логотипе m/design — появляется через ноль */
+.slash { position: absolute; left: 50%; top: 50%; width: 12%; height: 118%; background: var(--accent); border-radius: 999px; transform: translate(-50%, -50%) rotate(28deg) scaleY(0); transform-origin: 50% 50%; transition: transform .7s var(--out); pointer-events: none; }
+.drum.landed .slash { transform: translate(-50%, -50%) rotate(28deg) scaleY(1); }
+.col.zero { overflow: visible; }
+.col.zero .clip { height: var(--digit); overflow: hidden; }
+
+.msg { text-align: center; margin-top: clamp(16px, 3vw, 40px); opacity: 0; transform: translateY(16px); transition: opacity .6s var(--out), transform .8s var(--out); }
+.drum.landed ~ .msg { opacity: 1; transform: none; }
+.msg h1 { font: 700 clamp(28px, 3.4vw, 44px)/1.15 var(--f-head); letter-spacing: -1px; color: var(--white); text-wrap: balance; }
+.msg p { margin: 12px auto 28px; max-width: 440px; }
+.acts { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 10px; border-radius: 15px; padding: 10px 18px; font: 500 16px/22px var(--f-body); background: var(--white); color: var(--ink); transition: background-color .2s; }
+.btn:hover { background: var(--bg); }
+.btn.sec { background: var(--ink-soft); color: var(--white); } .btn.sec:hover { background: var(--ink-hover); }
+.hint { margin-top: 20px; font-size: 13px; color: var(--footer-text); }
+
+/* быстрые ссылки на услуги */
+.links { border-top: 1px solid var(--line); padding-top: 20px; display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; font-size: 14px; opacity: 0; transition: opacity .6s .3s; }
+.page.ready .links { opacity: 1; }
+.links span { color: var(--footer-text); }
+.links nav { display: flex; gap: 8px 24px; flex-wrap: wrap; }
+.links a { color: var(--dark-text); transition: color .2s; } .links a:hover { color: var(--white); }
+
+@media (max-width: 767px) {
+  .page { padding: 24px 16px 24px; }
+  .links { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="page" id="page">
+  <div class="top">
+    <a class="brand" href="#" aria-label="m/design — на главную">m<span class="sl">/</span><span class="word" id="word">design</span></a>
+    <span class="status" id="status" aria-live="polite"><i></i><span id="statusT">загружаю страницу · 0%</span></span>
+  </div>
+  <div class="bar" id="bar"><i id="barI"></i></div>
+
+  <main class="stage">
+    <div class="drum" id="drum" role="img" aria-label="404" title="Нажмите — прокрутить ещё раз">
+      <div class="col"><div class="strip"></div></div>
+      <div class="col zero"><div class="clip"><div class="strip"></div></div><span class="slash"></span></div>
+      <div class="col"><div class="strip"></div></div>
+    </div>
+    <div class="msg">
+      <h1>Такой страницы нет</h1>
+      <p>Ссылка устарела или в ней опечатка. Всё остальное на месте.</p>
+      <div class="acts"><a class="btn" href="#">На главную ↗</a><a class="btn sec" href="#">Все услуги</a></div>
+      <p class="hint">Нажмите на цифры — крутанём ещё раз</p>
+    </div>
+  </main>
+
+  <div class="links"><span>Возможно, вы искали</span>
+    <nav><a href="#">Инфографика</a><a href="#">Предметная съёмка</a><a href="#">Видеообложки</a><a href="#">Рекламные баннеры</a><a href="#">Лендинги и сайты</a><a href="#">ИИ-агенты</a></nav></div>
+</div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const page = document.getElementById('page'), drum = document.getElementById('drum');
+  const word = document.getElementById('word'), status = document.getElementById('status'), statusT = document.getElementById('statusT');
+  const bar = document.getElementById('bar'), barI = document.getElementById('barI');
+  const FINAL = [4, 0, 4];
+  const strips = [...drum.querySelectorAll('.strip')];
+  const ease = t => 1 - Math.pow(1 - t, 4);
+  let raf = [];
+
+  // каждая колонка — лента из N случайных цифр, последняя — нужная; лента едет вверх и встаёт
+  const build = (strip, final, n) => {
+    const digits = Array.from({ length: n }, () => Math.floor(Math.random() * 10));
+    digits.push(final);
+    strip.innerHTML = digits.map((d, i) => `<span${i === n ? ' class="final"' : ''}>${d}</span>`).join('');
+    strip.style.transform = 'translateY(0)';
+    return n;
+  };
+  const spin = (onDone) => {
+    drum.classList.remove('landed');
+    raf.forEach(cancelAnimationFrame); raf = [];
+    let left = strips.length;
+    strips.forEach((s, i) => {
+      const n = build(s, FINAL[i], 18 + i * 8), dur = 1400 + i * 450, t0 = performance.now();
+      const h = s.firstElementChild.getBoundingClientRect().height;
+      const step = now => { const p = Math.min(1, (now - t0) / dur);
+        s.style.transform = `translateY(${-ease(p) * n * h}px)`;
+        if (p < 1) raf[i] = requestAnimationFrame(step); else if (--left === 0) { drum.classList.add('landed'); onDone && onDone(); } };
+      raf[i] = requestAnimationFrame(step);
+    });
+  };
+
+  // шаг 1: как загрузчик — слова сменяются, полоса растёт и застревает на 99%
+  const WORDS = ['design', 'cards', 'photo', 'motion', 'web', 'agents', 'data', '...'];
+  const intro = () => new Promise(res => {
+    let i = 0; const t0 = performance.now(), D = 1500;
+    const wt = setInterval(() => { word.textContent = WORDS[i++ % WORDS.length]; }, 150);
+    const tick = now => { const p = Math.min(1, (now - t0) / D); const pct = Math.round(ease(p) * 99);
+      barI.style.width = pct + '%'; statusT.textContent = 'загружаю страницу · ' + pct + '%';
+      if (p < 1) requestAnimationFrame(tick); else { clearInterval(wt); word.textContent = '404'; bar.classList.add('stuck'); res(); } };
+    requestAnimationFrame(tick);
+  });
+  const finish = () => { status.classList.add('done'); statusT.textContent = 'ошибка 404 · страница не найдена'; page.classList.add('ready'); };
+
+  if (reduce) {
+    strips.forEach((s, i) => { s.innerHTML = `<span class="final">${FINAL[i]}</span>`; });
+    word.textContent = '404'; barI.style.width = '99%'; bar.classList.add('stuck'); drum.classList.add('landed'); finish();
+  } else {
+    // барабан крутится уже во время «загрузки», встаёт сразу после
+    intro().then(() => {});
+    spin(finish);
+  }
+  drum.addEventListener('click', () => { if (!reduce) spin(); });
+  document.querySelectorAll('a[href="#"]').forEach(a => a.addEventListener('click', e => e.preventDefault()));
+})();
+</script>
