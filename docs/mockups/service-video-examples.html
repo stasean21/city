@@ -1,0 +1,193 @@
+<title>Видеообложки — показ работ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+<style>
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Semibold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+/* видеообложки m/design: три способа показать ролики; «видео» — анимированные заглушки */
+:root {
+  color-scheme: light;
+  --f-head: 'Gilroy', 'Inter', system-ui, sans-serif;
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --bg: #F6F4F2; --bg-3: #EAE8E4; --white: #FFFFFF; --ink: #1D1E22; --ink-soft: #2C2D32;
+  --text: #717171; --text-3: #A1A09F; --text-4: #CFCCC7; --warm-2: #615D55; --dark-text: #A9A7A3;
+  --accent: #F59958; --border: #E4E4E4;
+  --out: cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font: 400 15px/25px var(--f-body); color: var(--text); padding-block: 40px 120px; overflow-x: hidden; }
+.container { max-width: 1096px; margin: 0 auto; padding: 0 24px; }
+.lab { font: 500 13px/20px var(--f-body); color: var(--ink); background: var(--white); display: inline-block; padding: 6px 12px; border-radius: 999px; margin-bottom: 12px; }
+.why { max-width: 620px; font-size: 14px; margin-bottom: 40px; }
+.v { margin-bottom: 200px; }
+.pill { display: inline-flex; background: var(--bg-3); border-radius: 999px; padding: 6px 14px; font: 400 13px/20px var(--f-body); color: var(--warm-2); margin-bottom: 24px; }
+.display { font: 700 clamp(34px, 4.1vw, 58px)/1.1 var(--f-head); letter-spacing: -1.5px; color: var(--ink); text-wrap: balance; }
+.lead { font: 400 clamp(16px, 1.4vw, 20px)/1.6 var(--f-body); color: var(--text); }
+.head { display: grid; grid-template-columns: 1fr minmax(200px, 400px); gap: 40px; align-items: end; margin-bottom: 48px; }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- «ролик»: анимированная обложка-заглушка ---------- */
+.vid { position: relative; overflow: hidden; background: var(--tone, #E6DDCB); width: 100%; height: 100%; container-type: size; }
+.vid .prod { position: absolute; left: 50%; bottom: 18%; width: 34%; height: 52%; transform: translateX(-50%); border-radius: 30% 30% 10% 10%; background: var(--obj, #1D1E22); }
+.vid .glow { position: absolute; left: 50%; bottom: 14%; width: 70%; height: 10%; transform: translateX(-50%); border-radius: 50%; background: rgba(29,30,34,.16); }
+.vid .t1, .vid .t2 { position: absolute; left: 7%; right: 7%; font: 700 9cqw/1.05 var(--f-head); color: var(--ink); letter-spacing: -.02em; }
+.vid .t1 { top: 7%; } .vid .t2 { top: 7%; }
+.vid .chip { position: absolute; left: 7%; bottom: 7%; background: var(--white); color: var(--ink); font: 600 4.6cqw/1 var(--f-body); padding: 2.4cqw 3.6cqw; border-radius: 999px; }
+.vid .badge { position: absolute; right: 7%; top: 30%; width: 20cqw; height: 20cqw; border-radius: 50%; background: var(--accent); color: var(--white); display: grid; place-items: center; font: 700 5.2cqw/1 var(--f-head); }
+/* сценарий 6 с: товар въезжает и поворачивается, заголовок меняется, бейдж выпрыгивает, кнопка */
+.play .prod { animation: prod 6s var(--out) infinite; }
+.play .glow { animation: glow 6s var(--out) infinite; }
+.play .t1 { animation: t1 6s infinite; } .play .t2 { animation: t2 6s infinite; }
+.play .badge { animation: badge 6s var(--out) infinite; } .play .chip { animation: chip 6s var(--out) infinite; }
+@keyframes prod { 0% { transform: translateX(-50%) translateY(40%) scale(.7); opacity: 0; } 10% { opacity: 1; } 22% { transform: translateX(-50%) translateY(0) scale(1); } 45% { transform: translateX(-50%) rotate(-8deg) scale(1.06); } 70% { transform: translateX(-50%) rotate(6deg) scale(1.12); } 100% { transform: translateX(-50%) rotate(0) scale(1); } }
+@keyframes glow { 0%, 10% { opacity: 0; } 22%, 100% { opacity: 1; } }
+@keyframes t1 { 0%, 8% { opacity: 0; transform: translateY(-20%); } 16%, 44% { opacity: 1; transform: none; } 50%, 100% { opacity: 0; } }
+@keyframes t2 { 0%, 50% { opacity: 0; transform: translateY(20%); } 58%, 96% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes badge { 0%, 30% { transform: scale(0) rotate(-30deg); } 38% { transform: scale(1.15) rotate(6deg); } 44%, 100% { transform: scale(1) rotate(0); } }
+@keyframes chip { 0%, 66% { opacity: 0; transform: translateY(40%); } 74%, 100% { opacity: 1; transform: none; } }
+.still .t2, .still .badge, .still .chip { display: none; } .still .t1 { opacity: 1; }
+
+/* ---------- A — лента маркетплейса ---------- */
+.feedwrap { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 60px; align-items: center; }
+.phone { background: var(--ink); border-radius: 40px; padding: 12px; }
+.screen { border-radius: 30px; overflow: hidden; background: var(--white); height: 620px; position: relative; }
+.sbar { position: absolute; top: 0; left: 0; right: 0; z-index: 3; background: var(--white); padding: 14px 14px 10px; }
+.search { height: 34px; border-radius: 10px; background: var(--bg-3); display: flex; align-items: center; padding: 0 12px; font-size: 13px; color: var(--ink); }
+.feed { position: absolute; left: 0; right: 0; top: 58px; padding: 0 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; will-change: transform; }
+.fc .img { aspect-ratio: 3/4; border-radius: 10px; overflow: hidden; position: relative; }
+.fc.mine .img { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fc .p { font: 600 13px/1.2 var(--f-body); color: var(--ink); margin-top: 6px; }
+.fc .n i { display: block; height: 7px; border-radius: 4px; background: var(--bg-3); margin-top: 5px; } .fc .n i + i { width: 60%; }
+.fc .tag { position: absolute; left: 6px; top: 6px; z-index: 2; background: var(--ink); color: var(--white); font: 500 10px/14px var(--f-body); padding: 2px 7px; border-radius: 999px; }
+.feedtxt h3 { font: 600 28px/1.25 var(--f-head); letter-spacing: -.5px; color: var(--ink); margin-bottom: 12px; }
+.feedtxt p { max-width: 420px; margin-bottom: 24px; }
+.feedtxt .legend { display: flex; gap: 20px; font-size: 13px; color: var(--ink); flex-wrap: wrap; }
+.legend span { display: flex; gap: 8px; align-items: center; } .legend i { width: 16px; height: 12px; border-radius: 3px; background: var(--bg-3); } .legend i.o { outline: 2px solid var(--accent); background: var(--white); }
+
+/* ---------- B — стена роликов ---------- */
+.reel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.rv { position: relative; aspect-ratio: 9/16; border-radius: 20px; overflow: hidden; cursor: pointer; }
+.rv .meta { position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 2; display: flex; justify-content: space-between; align-items: center; }
+.rv .meta span { background: var(--white); color: var(--ink); font: 500 12px/18px var(--f-body); padding: 3px 10px; border-radius: 999px; }
+.rv .meta b { background: var(--ink); color: var(--white); font: 500 11px/16px var(--f-body); padding: 3px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.rv .vid .chip { display: none; }
+.rv:nth-child(even) { transform: translateY(48px); }
+.reel-wrap { padding-bottom: 48px; }
+
+/* ---------- C — раскадровка ---------- */
+.story { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: 60px; align-items: center; }
+.player { aspect-ratio: 9/16; max-width: 100%; border-radius: 27px; overflow: hidden; position: relative; }
+.player .vid { animation-play-state: paused; }
+.player .vid * { animation-play-state: paused !important; }
+.tl h3 { font: 600 28px/1.25 var(--f-head); letter-spacing: -.5px; color: var(--ink); margin-bottom: 12px; }
+.tl > p { max-width: 440px; margin-bottom: 28px; }
+.track { position: relative; height: 96px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; cursor: ew-resize; touch-action: pan-y; }
+.track .fr { border-radius: 8px; overflow: hidden; position: relative; }
+.head-l { position: absolute; top: -8px; bottom: -8px; width: 2px; background: var(--accent); left: 0; pointer-events: none; }
+.head-l::before { content: ""; position: absolute; top: -4px; left: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.marks { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-top: 16px; }
+.marks div { border-top: 2px solid var(--border); padding-top: 10px; transition: border-color .3s; }
+.marks div.on { border-color: var(--ink); }
+.marks b { display: block; font: 600 16px/1.3 var(--f-head); color: var(--ink); }
+.marks span { font-size: 13px; line-height: 18px; }
+.time { font: 500 13px var(--f-body); color: var(--ink); font-variant-numeric: tabular-nums; margin-bottom: 10px; }
+
+@media (max-width: 767px) {
+  .head, .feedwrap, .story { grid-template-columns: 1fr; gap: 24px; }
+  .screen { height: 520px; }
+  .reel { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rv:nth-child(even) { transform: translateY(32px); }
+  .player { max-width: 300px; margin: 0 auto; }
+  .marks { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .play *, .play { animation: none !important; } .feed { transform: none !important; } }
+</style>
+
+<div class="container"><p class="why" style="margin-bottom:64px">Три способа показать видеообложки. «Ролики» здесь — анимированные заглушки на 6 секунд: товар въезжает и поворачивается, меняется заголовок, выпрыгивает бейдж, появляется кнопка. На сайте будут ваши MP4.</p></div>
+
+<div class="v"><div class="container"><span class="lab">A — в ленте маркетплейса</span>
+  <p class="why">Телефон с выдачей маркетплейса: обычные карточки стоят, а ваша — с видеообложкой — двигается и сразу ловит взгляд. Лента сама прокручивается. Показывает не ролик, а результат: почему карточку с видео замечают.</p>
+  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">Заметна в выдаче</h2></div><p class="lead">Среди статичных карточек двигается только ваша.</p></div>
+  <div class="feedwrap">
+    <div class="phone" aria-hidden="true"><div class="screen"><div class="sbar"><div class="search">наушники беспроводные</div></div><div class="feed" id="feed"></div></div></div>
+    <div class="feedtxt"><h3>Покупатель листает выдачу за секунды</h3><p>Видеообложка двигается прямо в результатах поиска — глаз цепляется за неё раньше, чем за соседние карточки. Покрутите ленту в телефоне: ваша карточка обведена.</p>
+      <div class="legend"><span><i></i>обычная карточка</span><span><i class="o"></i>с видеообложкой</span></div></div>
+  </div>
+</div></div>
+
+<div class="v"><div class="container"><span class="lab">B — стена роликов</span>
+  <p class="why">Сетка вертикальных роликов в шахматном порядке, все играют сами, без звука, как в ленте сторис. Подпись — товар и длительность. Много работ сразу и всё в движении.</p>
+  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">Работы</h2></div><p class="lead">Короткие ролики 6–10 секунд для обложки карточки.</p></div>
+  <div class="reel-wrap"><div class="reel" id="reel"></div></div>
+</div></div>
+
+<div class="v"><div class="container"><span class="lab">C — раскадровка</span>
+  <p class="why">Один ролик и под ним монтажная дорожка с кадрами. Ведёте по дорожке — ролик перематывается, а снизу подсвечивается, что происходит на этом отрезке: зацепка, выгода, призыв. Показывает, что за 6 секунд стоит продуманная структура.</p>
+  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">6 секунд по плану</h2></div><p class="lead">Ведите по дорожке — увидите, из чего состоит обложка.</p></div>
+  <div class="story">
+    <div class="player" id="player"></div>
+    <div class="tl"><h3>Структура обложки</h3><p>Каждая секунда работает: сначала цепляем движением, потом показываем выгоду, в конце — повод открыть карточку.</p>
+      <p class="time" id="time">0,0 с / 6,0 с</p>
+      <div class="track" id="track" tabindex="0" aria-label="Монтажная дорожка, стрелки влево и вправо"><span class="head-l" id="headL"></span></div>
+      <div class="marks" id="marks"><div class="on"><b>0–1,5 с · зацепка</b><span>Товар въезжает в кадр — движение ловит взгляд</span></div><div><b>1,5–4 с · выгода</b><span>Главная мысль и бейдж поверх товара</span></div><div><b>4–6 с · призыв</b><span>Вторая мысль и кнопка — повод открыть карточку</span></div></div></div>
+  </div>
+</div></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const V = [
+    { tone: '#E2DAD9', obj: '#1D1E22', t1: 'Тишина без проводов', t2: '40 часов музыки', b: '−20%', c: 'Смотреть' },
+    { tone: '#D9DEE0', obj: '#615D55', t1: 'Кофе за 30 секунд', t2: 'Как в кофейне', b: 'хит', c: 'Купить' },
+    { tone: '#E6DDCB', obj: '#F59958', t1: 'Свеча ручной работы', t2: '50 часов горения', b: 'new', c: 'Выбрать' },
+    { tone: '#DCD9E2', obj: '#2C2D32', t1: 'Спина скажет спасибо', t2: 'Тест 14 дней', b: '−15%', c: 'Подробнее' },
+    { tone: '#D8E0D8', obj: '#BFD3BE', t1: 'Чай к осени', t2: '12 вкусов', b: 'new', c: 'Выбрать' },
+    { tone: '#E4E0D6', obj: '#1D1E22', t1: 'Накачает за 3 минуты', t2: 'Доставка завтра', b: 'хит', c: 'Заказать' },
+    { tone: '#E9D9D3', obj: '#E9B7A6', t1: 'Стойкость 24 часа', t2: '8 оттенков', b: '−10%', c: 'Купить' },
+    { tone: '#D6DBDF', obj: '#615D55', t1: 'Кроссовки для бега', t2: 'Лёгкие как носки', b: 'new', c: 'Смотреть' },
+  ];
+  const vid = (x, cls = 'play', delay = 0) => `<div class="vid ${cls}" style="--tone:${x.tone};--obj:${x.obj}${delay ? `;animation-delay:${delay}s` : ''}"><span class="glow" style="animation-delay:${delay}s"></span><span class="prod" style="animation-delay:${delay}s"></span><p class="t1" style="animation-delay:${delay}s">${x.t1}</p><p class="t2" style="animation-delay:${delay}s">${x.t2}</p><span class="badge" style="animation-delay:${delay}s">${x.b}</span><span class="chip" style="animation-delay:${delay}s">${x.c}</span></div>`;
+
+  // A — лента
+  const feed = document.getElementById('feed');
+  const items = Array.from({ length: 16 }, (_, i) => i);
+  const MINE = new Set([3, 10]);
+  feed.innerHTML = items.map(i => `<div class="fc${MINE.has(i) ? ' mine' : ''}"><div class="img">${MINE.has(i) ? '<span class="tag">видео</span>' + vid(V[0]) : vid(V[(i * 3) % 8], 'still')}</div><p class="p">${[1990, 2490, 1790, 2290, 3190][i % 5]} ₽</p><div class="n"><i></i><i></i></div></div>`).join('');
+  const screen = feed.parentElement; let y = 0, dir = 1, userScroll = false;
+  const maxY = () => feed.scrollHeight - screen.clientHeight + 70;
+  const tickA = () => { if (!userScroll) { y += .35 * dir; if (y > maxY()) dir = -1; if (y < 0) dir = 1; feed.style.transform = `translateY(${-y}px)`; } requestAnimationFrame(tickA); };
+  screen.addEventListener('wheel', e => { e.preventDefault(); userScroll = true; y = Math.max(0, Math.min(maxY(), y + e.deltaY)); feed.style.transform = `translateY(${-y}px)`; clearTimeout(screen._t); screen._t = setTimeout(() => userScroll = false, 2500); }, { passive: false });
+  let ty = null; screen.addEventListener('touchstart', e => { ty = e.touches[0].clientY; userScroll = true; }, { passive: true });
+  screen.addEventListener('touchmove', e => { if (ty === null) return; const d = ty - e.touches[0].clientY; ty = e.touches[0].clientY; y = Math.max(0, Math.min(maxY(), y + d)); feed.style.transform = `translateY(${-y}px)`; }, { passive: true });
+  screen.addEventListener('touchend', () => { ty = null; clearTimeout(screen._t); screen._t = setTimeout(() => userScroll = false, 2500); });
+  if (!reduce) requestAnimationFrame(tickA);
+
+  // B — стена
+  document.getElementById('reel').innerHTML = V.map((x, i) => `<div class="rv">${vid(x, 'play', -(i * .7))}<div class="meta"><span>${x.t1.split(' ')[0]}</span><b>0:0${6 + (i % 4)}</b></div></div>`).join('');
+
+  // C — раскадровка: дорожка управляет «перемоткой» через отрицательную задержку анимации
+  const player = document.getElementById('player'), track = document.getElementById('track'), headL = document.getElementById('headL');
+  const marks = [...document.querySelectorAll('#marks div')], time = document.getElementById('time');
+  player.innerHTML = vid(V[0], 'play');
+  track.insertAdjacentHTML('afterbegin', [0, 1, 2, 3, 4, 5].map(k => `<div class="fr">${vid(V[0], 'play', -(k + .6))}</div>`).join(''));
+  track.querySelectorAll('.fr .vid, .fr .vid *').forEach(el => { el.style.animationPlayState = 'paused'; });
+  track.querySelectorAll('.fr .vid *').forEach(el => { el.style.animation = ''; });
+  // кадры дорожки — стоп-кадры: замораживаем анимацию на нужной секунде
+  track.querySelectorAll('.fr').forEach((fr, k) => fr.querySelectorAll('.vid *').forEach(el => { el.style.animationDelay = -(k + .6) + 's'; el.style.animationPlayState = 'paused'; }));
+  const els = [...player.querySelectorAll('.vid *')];
+  let tSec = 0, scrub = false;
+  const setT = t => { tSec = Math.max(0, Math.min(5.99, t)); els.forEach(el => { el.style.animationDelay = -tSec + 's'; el.style.animationPlayState = 'paused'; });
+    headL.style.left = (tSec / 6 * 100) + '%'; time.textContent = tSec.toFixed(1).replace('.', ',') + ' с / 6,0 с';
+    const seg = tSec < 1.5 ? 0 : tSec < 4 ? 1 : 2; marks.forEach((m, k) => m.classList.toggle('on', k === seg)); };
+  const fromX = x => { const r = track.getBoundingClientRect(); setT((x - r.left) / r.width * 6); };
+  track.addEventListener('pointermove', e => { if (e.pointerType === 'mouse' || e.buttons) { scrub = true; fromX(e.clientX); } });
+  track.addEventListener('pointerdown', e => { scrub = true; fromX(e.clientX); });
+  track.addEventListener('pointerleave', () => { scrub = false; });
+  track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { scrub = true; setT(tSec + .25); } if (e.key === 'ArrowLeft') { scrub = true; setT(tSec - .25); } });
+  let last = performance.now();
+  const tickC = now => { const dt = (now - last) / 1000; last = now; if (!scrub && !reduce) setT((tSec + dt) % 6); requestAnimationFrame(tickC); };
+  setT(0); requestAnimationFrame(tickC);
+  // кадры дорожки берём из того же ролика
+  track.querySelectorAll('.fr .vid').forEach(v => v.classList.add('play'));
+})();
+</script>
