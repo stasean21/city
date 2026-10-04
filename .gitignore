@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# скриншоты главной для страницы сайтов — заливаются в Object Storage вручную
+shots

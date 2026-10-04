@@ -16,6 +16,7 @@ const ROUTE_LABELS = {
   contacts: 'Контакты',
   privacy: 'Политика конфиденциальности',
   styleguide: 'Styleguide',
+  'not-found': '404',
 }
 
 const router = useRouter()

@@ -1,0 +1,178 @@
+<title>ИИ-агенты — варианты E и F</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+<style>
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Semibold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Gilroy'; src: url('fonts/Gilroy-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+/* ИИ-агенты: конструктор агента и «как агент думает» */
+:root {
+  color-scheme: light;
+  --f-head: 'Gilroy', 'Inter', system-ui, sans-serif;
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --bg: #F6F4F2; --bg-3: #EAE8E4; --white: #FFFFFF; --ink: #1D1E22; --ink-soft: #2C2D32; --ink-hover: #393A3F;
+  --text: #717171; --text-3: #A1A09F; --text-4: #CFCCC7; --warm-2: #615D55; --dark-text: #A9A7A3; --footer-text: #8F8D89;
+  --accent: #F59958; --border: #E4E4E4;
+  --out: cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font: 400 15px/25px var(--f-body); color: var(--text); padding-block: 40px 120px; }
+.container { max-width: 1096px; margin: 0 auto; padding: 0 24px; }
+.lab { font: 500 13px/20px var(--f-body); color: var(--ink); background: var(--white); display: inline-block; padding: 6px 12px; border-radius: 999px; margin-bottom: 12px; }
+.why { max-width: 620px; font-size: 14px; margin-bottom: 40px; }
+.v { margin-bottom: 200px; }
+.pill { display: inline-flex; background: var(--bg-3); border-radius: 999px; padding: 6px 14px; font: 400 13px/20px var(--f-body); color: var(--warm-2); margin-bottom: 24px; }
+.display { font: 700 clamp(34px, 4.1vw, 58px)/1.1 var(--f-head); letter-spacing: -1.5px; color: var(--ink); text-wrap: balance; }
+.lead { font: 400 clamp(16px, 1.4vw, 20px)/1.6 var(--f-body); color: var(--text); }
+.head { display: grid; grid-template-columns: 1fr minmax(200px, 400px); gap: 40px; align-items: end; margin-bottom: 48px; }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- E — конструктор ---------- */
+.build { display: grid; grid-template-columns: 1fr minmax(300px, 400px); gap: 40px; align-items: start; }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.opt { all: unset; cursor: pointer; display: flex; flex-direction: column; gap: 6px; background: var(--white); border-radius: 20px; padding: 18px 20px; position: relative; transition: background-color .3s; }
+.opt b { font: 600 18px/1.3 var(--f-head); letter-spacing: -.2px; color: var(--ink); padding-right: 36px; transition: color .3s; }
+.opt span { font-size: 13px; line-height: 19px; transition: color .3s; }
+.opt::after { content: ""; position: absolute; right: 18px; top: 18px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--text-4); transition: background-color .3s, border-color .3s; }
+.opt[aria-pressed="true"] { background: var(--ink); } .opt[aria-pressed="true"] b { color: var(--white); } .opt[aria-pressed="true"] span { color: var(--dark-text); }
+.opt[aria-pressed="true"]::after { background: var(--accent); border-color: var(--accent); }
+.preview { position: sticky; top: 40px; background: var(--white); border-radius: 27px; padding: 20px; }
+.pv-top { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.ava { width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--white); display: flex; align-items: center; justify-content: center; font: 700 14px/1 var(--f-head); white-space: nowrap; flex: none; } .ava b { color: var(--accent); }
+.pv-top strong { display: block; font: 500 15px/20px var(--f-body); color: var(--ink); } .pv-top span { font-size: 12px; line-height: 16px; }
+.pv-feed { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; min-height: 250px; }
+.msg { max-width: 86%; padding: 9px 13px; border-radius: 16px; font-size: 13px; line-height: 19px; color: var(--ink); animation: pop .35s var(--out); }
+.msg.u { background: var(--bg-3); align-self: flex-end; border-bottom-right-radius: 5px; } .msg.a { background: var(--bg); align-self: flex-start; border-bottom-left-radius: 5px; }
+.msg.sys { align-self: center; background: transparent; color: var(--text-3); font-size: 12px; padding: 2px 0; }
+.msg.sys i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 6px; vertical-align: middle; }
+@keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+.pv-sum { border-top: 1px solid var(--border); padding-top: 14px; }
+.pv-sum p { font: 600 16px/1.3 var(--f-head); color: var(--ink); margin-bottom: 8px; }
+.pv-sum ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.pv-sum li { font: 500 12px/18px var(--f-body); color: var(--ink); background: var(--bg-3); padding: 3px 10px; border-radius: 999px; animation: pop .3s var(--out); }
+.pv-sum .empty { font-size: 13px; color: var(--text-3); }
+.pv-cta { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; gap: 12px; }
+.btn { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; border-radius: 15px; padding: 8px 16px; font: 500 15px/22px var(--f-body); background: var(--ink); color: var(--white); }
+.pv-cta small { font-size: 12px; line-height: 16px; color: var(--text-3); max-width: 160px; }
+
+/* ---------- F — как агент думает ---------- */
+.think { background: var(--ink); border-radius: 27px; padding: 32px; color: var(--dark-text); }
+.inbox { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.inbox button { all: unset; cursor: pointer; background: var(--ink-soft); color: var(--white); border-radius: 18px; border-bottom-right-radius: 6px; padding: 10px 14px; font: 400 14px/20px var(--f-body); transition: background-color .25s, color .25s; max-width: 320px; }
+.inbox button.on { background: var(--white); color: var(--ink); }
+.inbox button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pipe { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; position: relative; }
+.st { background: var(--ink-soft); border-radius: 20px; padding: 18px; min-height: 160px; display: flex; flex-direction: column; gap: 8px; opacity: .35; transform: translateY(6px); transition: opacity .45s, transform .5s var(--out), background-color .45s; }
+.st.on { opacity: 1; transform: none; }
+.st .n { font: 500 12px/16px var(--f-body); color: var(--accent); }
+.st b { font: 600 18px/1.3 var(--f-head); color: var(--white); letter-spacing: -.2px; }
+.st p { font-size: 13px; line-height: 19px; min-height: 38px; }
+.st .chip { align-self: flex-start; margin-top: auto; font: 500 12px/18px var(--f-body); padding: 3px 10px; border-radius: 999px; background: var(--ink); color: var(--white); }
+.st.end.ok { background: var(--white); } .st.end.ok b { color: var(--ink); } .st.end.ok p { color: var(--text); } .st.end.ok .chip { background: var(--accent); }
+.st.end.hand { background: var(--white); box-shadow: inset 0 0 0 2px var(--accent); } .st.end.hand b { color: var(--ink); } .st.end.hand p { color: var(--text); } .st.end.hand .chip { background: var(--ink); }
+.arrow { position: absolute; top: 50%; width: 12px; height: 2px; background: var(--ink-hover); }
+.think-foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 24px; font-size: 13px; }
+.think-foot b { color: var(--white); font-weight: 500; }
+
+@media (max-width: 767px) {
+  .head, .build { grid-template-columns: 1fr; gap: 24px; } .preview { position: static; }
+  .opts { grid-template-columns: 1fr; }
+  .think { padding: 20px; } .pipe { grid-template-columns: 1fr 1fr; } .st { min-height: 140px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="container"><p class="why" style="margin-bottom:64px">Ещё два способа показать ИИ-агента. Оба без выдуманных клиентов и цифр.</p></div>
+
+<div class="v"><div class="container"><span class="lab">E — соберите своего агента</span>
+  <p class="why">Клиент сам отмечает, что должен уметь агент, — справа сразу собирается превью: какой получится разговор и что агент делает. В конце кнопка «Обсудить такого агента». Посетитель уходит не с абстракцией, а с понятным составом заказа.</p>
+  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">Соберите своего агента</h2></div><p class="lead">Отметьте, что ему нужно уметь, — справа увидите, как он будет работать.</p></div>
+  <div class="build">
+    <div class="opts" id="opts">
+      <button class="opt" data-k="lead" aria-pressed="true"><b>Принимать заявки</b><span>Спрашивает, что нужно, и берёт контакт</span></button>
+      <button class="opt" data-k="faq" aria-pressed="true"><b>Отвечать на вопросы</b><span>Цены, сроки, условия — по вашей базе</span></button>
+      <button class="opt" data-k="night" aria-pressed="false"><b>Работать ночью</b><span>Отвечает, пока вы спите</span></button>
+      <button class="opt" data-k="table" aria-pressed="false"><b>Вести таблицу</b><span>Каждое обращение — строка: кто, что, статус</span></button>
+      <button class="opt" data-k="ping" aria-pressed="false"><b>Писать вам</b><span>Новая заявка — сразу в ваш Telegram</span></button>
+      <button class="opt" data-k="report" aria-pressed="false"><b>Отчёт утром</b><span>Сводка: что пришло и что ждёт ответа</span></button>
+    </div>
+    <div class="preview" aria-live="polite">
+      <div class="pv-top"><span class="ava">m<b>/</b></span><div><strong>Ваш агент</strong><span id="pvSub">превью разговора</span></div></div>
+      <div class="pv-feed" id="pvFeed"></div>
+      <div class="pv-sum"><p>Что будет уметь</p><ul id="pvList"></ul></div>
+      <div class="pv-cta"><small>Пример разговора — для наглядности</small><span class="btn">Обсудить такого агента ↗</span></div>
+    </div>
+  </div>
+</div></div>
+
+<div class="v"><div class="container"><span class="lab">F — как агент думает</span>
+  <p class="why">Выберите входящее сообщение — и увидите, что агент делает по шагам: понял вопрос → нашёл ответ в базе → проверил, можно ли отвечать самому → ответил или позвал вас. Главное, что снимает страх: если агент не уверен, он не выдумывает, а передаёт разговор человеку.</p>
+  <div class="head"><div><span class="pill">Примеры</span><h2 class="display">Как агент думает</h2></div><p class="lead">Выберите сообщение клиента — покажу, что происходит внутри.</p></div>
+  <div class="think">
+    <div class="inbox" id="inbox" role="group" aria-label="Сообщение клиента">
+      <button class="on" data-i="0">Сколько стоит инфографика на 6 слайдов?</button>
+      <button data-i="1">Работаете с юрлицами?</button>
+      <button data-i="2">Можете сделать 3D-анимацию упаковки к пятнице?</button>
+    </div>
+    <div class="pipe" id="pipe" aria-live="polite">
+      <div class="st"><span class="n">01</span><b>Понял вопрос</b><p></p><span class="chip"></span></div>
+      <div class="st"><span class="n">02</span><b>Поиск в базе</b><p></p><span class="chip"></span></div>
+      <div class="st"><span class="n">03</span><b>Проверка</b><p></p><span class="chip"></span></div>
+      <div class="st end"><span class="n">04</span><b></b><p></p><span class="chip"></span></div>
+    </div>
+    <div class="think-foot"><span>База ответов — ваши цены, условия и правила, которые собираем на старте.</span><span><b>Не уверен — не отвечает сам.</b></span></div>
+  </div>
+</div></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // E — конструктор
+  const LBL = { lead: 'Принимает заявки', faq: 'Отвечает по базе', night: 'Работает 24/7', table: 'Ведёт таблицу', ping: 'Пишет вам в Telegram', report: 'Отчёт каждое утро' };
+  const opts = [...document.querySelectorAll('.opt')], feed = document.getElementById('pvFeed'), list = document.getElementById('pvList'), sub = document.getElementById('pvSub');
+  const on = k => opts.find(o => o.dataset.k === k).getAttribute('aria-pressed') === 'true';
+  const render = () => {
+    const m = [];
+    if (on('night')) m.push(['sys', '<i></i>23:40 — вы не на связи, агент на месте']);
+    if (on('lead') || on('faq')) m.push(['u', on('faq') ? 'Здравствуйте! Сколько стоит инфографика?' : 'Здравствуйте! Нужна инфографика для Ozon']);
+    if (on('faq')) m.push(['a', 'Зависит от числа слайдов — после брифа пришлём смету с фиксированной суммой.']);
+    if (on('lead')) { m.push(['a', 'Расскажите, что за товар, и оставьте контакт — передам задачу.']); m.push(['u', 'Термокружка, Анна, @anna']); m.push(['a', 'Спасибо, Анна! Заявка принята.']); }
+    if (on('table')) m.push(['sys', '<i></i>строка добавлена в таблицу заявок']);
+    if (on('ping')) m.push(['sys', '<i></i>владельцу отправлено уведомление в Telegram']);
+    if (on('report')) m.push(['sys', '<i></i>09:00 — утренний отчёт отправлен']);
+    if (!m.length) m.push(['sys', 'Отметьте хотя бы одну задачу слева']);
+    feed.innerHTML = m.map(([c, t]) => `<div class="msg ${c}">${t}</div>`).join('');
+    const ks = opts.filter(o => o.getAttribute('aria-pressed') === 'true').map(o => o.dataset.k);
+    list.innerHTML = ks.length ? ks.map(k => `<li>${LBL[k]}</li>`).join('') : '<span class="empty">пока ничего</span>';
+    sub.textContent = ks.length + ' ' + (ks.length === 1 ? 'задача' : ks.length < 5 ? 'задачи' : 'задач');
+  };
+  opts.forEach(o => o.addEventListener('click', () => { o.setAttribute('aria-pressed', o.getAttribute('aria-pressed') !== 'true'); render(); }));
+  render();
+
+  // F — как агент думает
+  const CASES = [
+    { s: [['Вопрос о цене: инфографика, 6 слайдов', 'тема: цены'], ['Нашёл: «Цены на инфографику — по смете после брифа»', 'есть в базе'], ['Ответ есть и подходит — можно отвечать', 'можно самому']],
+      end: ['ok', 'Ответил клиенту', '«Сумма зависит от товара — после брифа пришлём смету». Предложил оставить контакт.', 'ответ за секунды'] },
+    { s: [['Вопрос об условиях: юрлица и документы', 'тема: условия'], ['Нашёл: «Работаем с юрлицами, договор и закрывающие»', 'есть в базе'], ['Ответ точный — можно отвечать', 'можно самому']],
+      end: ['ok', 'Ответил клиенту', '«Да, работаем с юридическими лицами — по договору, с закрывающими документами».', 'ответ за секунды'] },
+    { s: [['Нестандартная задача: 3D-анимация, жёсткий срок', 'тема: новая задача'], ['В базе нет такой услуги и сроков', 'нет в базе'], ['Ответ выдумывать нельзя — нужен человек', 'не уверен']],
+      end: ['hand', 'Позвал вас', 'Клиенту: «Уточню у специалиста и вернусь сегодня». Вам — уведомление с вопросом и контактом.', 'передано вам'] },
+  ];
+  const sts = [...document.querySelectorAll('#pipe .st')];
+  let run = 0;
+  const show = async i => {
+    const id = ++run; const c = CASES[i];
+    document.querySelectorAll('#inbox button').forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-pressed', k === i); });
+    sts.forEach(s => { s.classList.remove('on', 'ok', 'hand'); });
+    for (let k = 0; k < 4; k++) {
+      await new Promise(r => setTimeout(r, reduce ? 0 : (k ? 650 : 150))); if (id !== run) return;
+      const s = sts[k];
+      if (k < 3) { s.querySelector('p').textContent = c.s[k][0]; s.querySelector('.chip').textContent = c.s[k][1]; }
+      else { s.classList.add(c.end[0]); s.querySelector('b').textContent = c.end[1]; s.querySelector('p').textContent = c.end[2]; s.querySelector('.chip').textContent = c.end[3]; }
+      s.classList.add('on');
+    }
+  };
+  document.getElementById('inbox').addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(+b.dataset.i); });
+  const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { show(0); io.disconnect(); } }, { threshold: .3 });
+  io.observe(document.getElementById('pipe'));
+})();
+</script>

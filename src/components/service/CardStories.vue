@@ -6,16 +6,19 @@ import StackMarquee from '../ui/StackMarquee.vue'
 import CardScenes from './stories/CardScenes.vue'
 import BannerScenes from './stories/BannerScenes.vue'
 import PhotoScenes from './stories/PhotoScenes.vue'
+import VideoScenes from './stories/VideoScenes.vue'
+import SiteScenes from './stories/SiteScenes.vue'
+import AgentScenes from './stories/AgentScenes.vue'
 
 // «Как я делаю …»: сторис по этапам — утверждённый макет
 // docs/mockups/card-stories.html. Слева кадр со сценой этапа, справа список.
 // этапы — данные услуги, сцены — набор по имени (по одной на этап)
 const props = defineProps({
-  process: { type: Object, required: true }, // { title, lead, scenes: 'cards' | 'banners' | 'photo', steps: [{ title, text }] }
+  process: { type: Object, required: true }, // { title, lead, scenes: 'cards' | 'banners' | 'photo' | 'video' | 'site' | 'agent', steps: [{ title, text }] }
   stack: { type: Array, default: () => [] },
 })
 
-const SCENES = { cards: CardScenes, banners: BannerScenes, photo: PhotoScenes }
+const SCENES = { cards: CardScenes, banners: BannerScenes, photo: PhotoScenes, video: VideoScenes, site: SiteScenes, agent: AgentScenes }
 const sceneSet = computed(() => SCENES[props.process.scenes] ?? CardScenes)
 
 const steps = computed(() => (props.process.steps ?? [])

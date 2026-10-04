@@ -3,6 +3,8 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import BaseButton from '../ui/BaseButton.vue'
 import CoverImage from '../ui/CoverImage.vue'
 import SectionHead from '../ui/SectionHead.vue'
+import WorksGallery from './WorksGallery.vue'
+import { useWorksGallery } from '../../composables/useWorksGallery.js'
 
 // «Работы» на странице съёмки: два ряда кадров на всю ширину экрана.
 // при прокрутке верхний ряд едет влево, нижний вправо — от скролла,
@@ -11,7 +13,12 @@ const props = defineProps({
   works: { type: Array, required: true }, // работы услуги по order: { slug, cover, shape, caption }
   title: { type: String, default: 'Работы' },
   lead: { type: String, default: '' },
+  serviceTitle: { type: String, default: '' }, // название услуги — для галереи
 })
+
+// «Смотреть все работы»: все кадры; слайдов у кадров нет — в просмотре листаются работы
+const { galleryOpen, openGallery, closeGallery } = useWorksGallery()
+const galleryItems = computed(() => props.works.map(({ title, niche, cover, slides }) => ({ title, niche, cover, slides })))
 
 // в ряду минимум столько кадров — иначе ряд не шире экрана и ехать ему некуда
 const MIN_PER_ROW = 9
@@ -132,9 +139,13 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="container photo-rows__more">
-      <!-- TODO: куда ведёт «Смотреть все работы» — решит владелец -->
-      <BaseButton type="button" variant="primary" arrow>Смотреть все работы</BaseButton>
+      <BaseButton type="button" variant="primary" arrow aria-haspopup="dialog" @click="openGallery">Смотреть все работы</BaseButton>
     </div>
+
+    <!-- бесконечная галерея всех работ — монтируется только на время показа -->
+    <Teleport to="body">
+      <WorksGallery v-if="galleryOpen" :items="galleryItems" :title="serviceTitle" @close="closeGallery" />
+    </Teleport>
   </section>
 </template>
 

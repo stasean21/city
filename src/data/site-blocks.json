@@ -1,0 +1,96 @@
+{
+  "desktop": {
+    "width": 1440,
+    "height": 6443,
+    "container": {
+      "left": 13.611,
+      "width": 72.778,
+      "gutter": 2.29
+    },
+    "blocks": [
+      {
+        "id": "hero",
+        "top": 1.707,
+        "height": 6.202,
+        "gap": 120
+      },
+      {
+        "id": "services",
+        "top": 9.772,
+        "height": 17.054,
+        "gap": 120
+      },
+      {
+        "id": "process",
+        "top": 28.688,
+        "height": 9.868,
+        "gap": 120
+      },
+      {
+        "id": "reviews",
+        "top": 40.419,
+        "height": 18.625,
+        "gap": 120
+      },
+      {
+        "id": "about",
+        "top": 60.906,
+        "height": 9.584,
+        "gap": 120
+      },
+      {
+        "id": "faq",
+        "top": 72.353,
+        "height": 22.766,
+        "gap": 120
+      }
+    ]
+  },
+  "mobile": {
+    "width": 390,
+    "height": 6827,
+    "container": {
+      "left": 6.154,
+      "width": 87.692,
+      "gutter": 7.018
+    },
+    "blocks": [
+      {
+        "id": "hero",
+        "top": 1.055,
+        "height": 6.404,
+        "gap": 80
+      },
+      {
+        "id": "services",
+        "top": 8.63,
+        "height": 27.526,
+        "gap": 50
+      },
+      {
+        "id": "process",
+        "top": 36.889,
+        "height": 10.78,
+        "gap": 50
+      },
+      {
+        "id": "reviews",
+        "top": 48.401,
+        "height": 10.393,
+        "gap": 50
+      },
+      {
+        "id": "about",
+        "top": 59.527,
+        "height": 11.385,
+        "gap": 50
+      },
+      {
+        "id": "faq",
+        "top": 71.644,
+        "height": 22.541,
+        "gap": 50
+      }
+    ]
+  }
+}

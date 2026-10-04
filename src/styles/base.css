@@ -213,6 +213,11 @@ section {
   padding: 0 0 var(--section-gap);
 }
 
+/* страница под полноэкранным слоем (галерея работ) не прокручивается */
+html.is-scroll-locked {
+  overflow: hidden;
+}
+
 /* компоненты — раздел 8 брифа */
 
 .card {

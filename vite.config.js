@@ -13,10 +13,12 @@ export default defineConfig({
     includedRoutes(paths) {
       return paths
         // динамические шаблоны и редиректы не пререндерим
-        .filter(path => !path.includes(':slug') && !redirectPaths.has(path))
+        .filter(path => !path.includes(':') && !redirectPaths.has(path))
         .concat(
           works.map(work => `/works/${work.slug}`),
           services.map(service => `/services/${service.slug}`),
+          // страница 404 для хостинга: dist/404.html
+          '/404',
         )
     },
   },

@@ -4,13 +4,28 @@ import BaseButton from '../ui/BaseButton.vue'
 import CoverImage from '../ui/CoverImage.vue'
 import SectionHead from '../ui/SectionHead.vue'
 import SlidesLightbox from './SlidesLightbox.vue'
+import WorksGallery from './WorksGallery.vue'
+import { useWorksGallery } from '../../composables/useWorksGallery.js'
 import { dims, sizeAlt, sizeTag } from '../../utils/banners.js'
+import { plural } from '../../utils/plural.js'
 
 // «Любой размер»: мозаика из всех размеров всех кампаний, ряды выровнены по высоте.
 // клик открывает все размеры кампании одной лентой
 const props = defineProps({
   campaigns: { type: Array, required: true }, // уже по order
+  serviceTitle: { type: String, default: '' }, // название услуги — для галереи
 })
+
+// «Смотреть все работы»: плитка на кампанию — обложка первый размер, в просмотре
+// все размеры; баннеры разных пропорций показываются целиком (contain)
+const { galleryOpen, openGallery, closeGallery } = useWorksGallery()
+const galleryItems = computed(() => props.campaigns.map((campaign) => ({
+  title: campaign.title,
+  niche: `${campaign.sizes.length} ${plural(campaign.sizes.length, ['размер', 'размера', 'размеров'])}`,
+  cover: campaign.sizes[0].src,
+  slides: campaign.sizes.map((size) => ({ src: size.src, note: `${size.label} · ${dims(size)}` })),
+  fit: 'contain',
+})))
 
 // две кампании целиком: 14 плиток дают лишний ряд и выводят страницу за 8000px
 const LIMIT = 10
@@ -55,11 +70,15 @@ function openSet(campaign, event) {
     </ul>
 
     <div class="mosaic__more">
-      <!-- TODO: куда ведёт «Смотреть все работы» — решит владелец -->
-      <BaseButton type="button" variant="primary" arrow>Смотреть все работы</BaseButton>
+      <BaseButton type="button" variant="primary" arrow aria-haspopup="dialog" @click="openGallery">Смотреть все работы</BaseButton>
     </div>
 
     <SlidesLightbox ref="lightbox" />
+
+    <!-- бесконечная галерея всех работ — монтируется только на время показа -->
+    <Teleport to="body">
+      <WorksGallery v-if="galleryOpen" :items="galleryItems" :title="serviceTitle" @close="closeGallery" />
+    </Teleport>
   </div>
 </template>
 

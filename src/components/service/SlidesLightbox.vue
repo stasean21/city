@@ -2,6 +2,7 @@
 import { computed, nextTick, onUnmounted, ref } from 'vue'
 import CoverImage from '../ui/CoverImage.vue'
 import { dims, sizeAlt } from '../../utils/banners.js'
+import { plural } from '../../utils/plural.js'
 
 // просмотр слайдов работы: нативный <dialog> + showModal().
 // открывает родитель: lightbox.open(work, кнопка) — на неё вернётся фокус.
@@ -35,17 +36,9 @@ const slides = computed(() => {
   }))
 })
 
-// «1 размер», «3 размера», «6 размеров»
-function plural(n, [one, few, many]) {
-  const d = n % 10
-  const dd = n % 100
-  if (d === 1 && dd !== 11) return one
-  if (d >= 2 && d <= 4 && (dd < 12 || dd > 14)) return few
-  return many
-}
-
 const meta = computed(() => {
   const n = slides.value.length
+  // «1 размер», «3 размера», «6 размеров»
   if (isSet.value) return `${n} ${plural(n, ['размер', 'размера', 'размеров'])}`
   return `${work.value.niche} · ${n} слайдов`
 })

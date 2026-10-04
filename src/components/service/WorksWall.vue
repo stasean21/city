@@ -4,10 +4,17 @@ import BaseButton from '../ui/BaseButton.vue'
 import CoverImage from '../ui/CoverImage.vue'
 import SectionHead from '../ui/SectionHead.vue'
 import SlidesLightbox from './SlidesLightbox.vue'
+import WorksGallery from './WorksGallery.vue'
+import { useWorksGallery } from '../../composables/useWorksGallery.js'
 
 const props = defineProps({
   works: { type: Array, required: true }, // работы услуги, уже отсортированы по order
+  serviceTitle: { type: String, default: '' }, // название услуги — для галереи
 })
+
+// «Смотреть все работы»: все работы услуги, в просмотре листаются слайды работы
+const { galleryOpen, openGallery, closeGallery } = useWorksGallery()
+const galleryItems = computed(() => props.works.map(({ title, niche, cover, slides }) => ({ title, niche, cover, slides })))
 
 const LANES = 4
 // в колонке минимум столько разных работ — иначе при малом числе работ
@@ -164,12 +171,16 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="wall__more">
-        <!-- TODO: куда ведёт «Смотреть все работы» — решит владелец -->
-        <BaseButton type="button" variant="primary" arrow>Смотреть все работы</BaseButton>
+        <BaseButton type="button" variant="primary" arrow aria-haspopup="dialog" @click="openGallery">Смотреть все работы</BaseButton>
       </div>
     </div>
 
     <SlidesLightbox ref="lightbox" />
+
+    <!-- бесконечная галерея всех работ — монтируется только на время показа -->
+    <Teleport to="body">
+      <WorksGallery v-if="galleryOpen" :items="galleryItems" :title="serviceTitle" @close="closeGallery" />
+    </Teleport>
   </section>
 </template>
 

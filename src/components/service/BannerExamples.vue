@@ -6,6 +6,7 @@ import BannerMosaic from './BannerMosaic.vue'
 // pill «Примеры» только у первого
 defineProps({
   campaigns: { type: Array, required: true },
+  serviceTitle: { type: String, default: '' },
 })
 </script>
 
@@ -13,7 +14,7 @@ defineProps({
   <section id="works" class="banners">
     <div class="container">
       <BannerAdapt :campaigns="campaigns" />
-      <BannerMosaic class="banners__mosaic" :campaigns="campaigns" />
+      <BannerMosaic class="banners__mosaic" :campaigns="campaigns" :service-title="serviceTitle" />
     </div>
   </section>
 </template>
