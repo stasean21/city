@@ -1,0 +1,66 @@
+/* ---------- раскладки офферов ---------- */
+.lbl { display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; background: var(--white); border-radius: 999px; padding: 14px 22px; font: 500 22px/1 var(--f-body); color: var(--ink); }
+.lbl::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.code { display: inline-flex; align-items: center; gap: 14px; background: var(--ink); color: var(--white); border-radius: 18px; padding: 18px 26px; font: 500 26px/1 var(--f-body); white-space: nowrap; }
+.code span { color: var(--dark-text); font-weight: 400; }
+
+/* hero */
+.gH .lbl { margin-top: 56px; }
+.gH .hl { margin-top: 32px; font-size: 118px; letter-spacing: -4.4px; }
+.gH .row { margin-top: auto; display: flex; justify-content: space-between; align-items: end; gap: 40px; }
+.gH .row .sub { max-width: 640px; }
+
+/* ticket */
+.gK { justify-content: center; }
+.gK .top { margin-bottom: auto; }
+.gK .tk { margin-bottom: auto; display: grid; grid-template-columns: 380px 1fr; background: var(--white); border-radius: 40px; overflow: hidden; min-height: 640px; position: relative; }
+.gK .tk .stub { background: var(--ink); color: var(--white); display: flex; flex-direction: column; justify-content: space-between; padding: 44px 40px; }
+.gK .tk .stub small { font: 500 22px/1 var(--f-body); color: var(--dark-text); }
+.gK .tk .stub b { font: 500 116px/.95 var(--f-head); letter-spacing: -4px; }
+.gK .tk::before, .gK .tk::after { content: ''; position: absolute; left: 356px; width: 48px; height: 48px; border-radius: 50%; background: var(--bg); }
+.gK .tk::before { top: -24px; } .gK .tk::after { bottom: -24px; }
+.gK .tk .body { padding: 48px 56px; display: flex; flex-direction: column; }
+.gK .tk .body .hl { font-size: 64px; letter-spacing: -2.2px; }
+.gK .tk .body ul { list-style: none; margin-top: auto; }
+.gK .tk .body li { padding: 14px 0; border-top: 1px solid var(--bg-3); font: 400 25px/1.35 var(--f-body); color: var(--text); }
+.gK .tk .body li b { color: var(--ink); font-weight: 500; }
+.gK .tk .body .code { margin-top: 24px; align-self: flex-start; }
+
+/* ladder */
+.gL .hl { margin-top: 56px; }
+.gL .lad { margin-top: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: end; }
+.gL .lad div { border-radius: 26px; background: var(--white); padding: 26px 28px; display: flex; flex-direction: column; justify-content: space-between; }
+.gL .lad div:last-child { background: var(--ink); }
+.gL .lad b { font: 500 72px/1 var(--f-head); letter-spacing: -2.4px; color: var(--ink); }
+.gL .lad div:last-child b, .gL .lad div:last-child span { color: var(--white); }
+.gL .lad span { font: 500 24px/1.3 var(--f-body); color: var(--text); }
+
+/* days */
+.gY .hl { margin-top: 56px; }
+.gY .sub { margin-top: 24px; max-width: 760px; }
+.gY .dd { margin-top: auto; display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+.gY .dd div { background: var(--white); border-radius: 22px; height: 220px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+.gY .dd div:last-child { background: var(--ink); }
+.gY .dd small { font: 500 19px/1 var(--f-body); color: var(--text-3); }
+.gY .dd b { font: 500 64px/1 var(--f-head); letter-spacing: -2px; color: var(--ink); }
+.gY .dd div:last-child b { color: var(--white); }
+.gY .dd div:last-child small { color: var(--dark-text); }
+.gY .dd span { font-size: 17px; color: var(--accent); font-weight: 500; }
+
+/* gift equation */
+.gG .hl { margin-top: 56px; }
+.gG .eqn { margin-top: auto; display: grid; grid-template-columns: 1fr 80px 1fr 80px 1fr; align-items: stretch; gap: 10px; }
+.gG .eqn .op { display: grid; place-items: center; font: 500 84px/1 var(--f-head); color: var(--ink); }
+.gG .eqn .bx { border-radius: 28px; background: var(--white); padding: 30px; height: 380px; display: flex; flex-direction: column; justify-content: space-between; }
+.gG .eqn .bx.k { background: var(--ink); }
+.gG .eqn .bx.r { background: var(--bg-3); }
+.gG .eqn .bx b { font: 500 46px/1.05 var(--f-head); letter-spacing: -1.2px; color: var(--ink); }
+.gG .eqn .bx.k b { color: var(--white); }
+.gG .eqn .bx span { font: 400 23px/1.35 var(--f-body); color: var(--text); }
+.gG .eqn .bx.k span { color: var(--dark-text); }
+
+/* cta с кодовым словом */
+.gZ .hl { margin-top: auto; font-size: 104px; letter-spacing: -3.8px; }
+.gZ .sub { margin-top: 24px; max-width: 760px; }
+.gZ .bar { margin-top: 48px; display: flex; justify-content: space-between; align-items: center; gap: 32px; }
+.gZ .bar .code { font-size: 30px; padding: 22px 30px; }
