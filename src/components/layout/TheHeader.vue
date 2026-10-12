@@ -1,11 +1,14 @@
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import RollingText from '../ui/RollingText.vue'
 import { useActiveSection } from '../../composables/useActiveSection.js'
 import { messengers } from '../../utils/messengers.js'
 import { headerOffset, scrollBehaviorMode } from '../../utils/headerOffset.js'
+
+// сколько шапка остаётся на экране после перехода к блоку, мс
+const HEADER_PIN_MS = 10000
 
 // пункты — блоки главной; с любой страницы ведут на главную к блоку,
 // отступ под шапку даёт scrollBehavior в main.js
@@ -21,15 +24,18 @@ const navLinks = [
 const menuMessengers = messengers.filter((item) => item.svg)
 
 const route = useRoute()
+const router = useRouter()
 const activeHash = useActiveSection(navLinks.map((link) => link.hash))
 
 // тот же адрес (главная с этим hash) роутер считает дублем: навигации нет,
 // scrollBehavior не вызывается, а пользователь мог уже уехать от блока.
-// Прокручиваем сами тем же расчётом отступа
+// Прокручиваем сами тем же расчётом отступа. afterEach тут не сработает —
+// закрепляем шапку здесь же
 function onNavClick(hash) {
   if (route.path !== '/' || route.hash !== hash) return
   const el = document.querySelector(hash)
   if (!el) return
+  pinHeader()
   const top = el.getBoundingClientRect().top + window.scrollY - headerOffset()
   window.scrollTo({ top, behavior: scrollBehaviorMode() })
 }
@@ -70,12 +76,33 @@ function handleKeydown(event) {
   }
 }
 
+// после перехода к блоку шапка закреплена: прокрутка к якорю идёт вниз,
+// и без этого шапка пряталась бы, едва пользователь до блока доехал
+let pinnedUntil = 0
+let pinTimer = null
+
+function pinHeader() {
+  pinnedUntil = Date.now() + HEADER_PIN_MS
+  isHidden.value = false
+  clearTimeout(pinTimer)
+  // по истечении ничего не прячем сразу — следующая прокрутка решит сама
+  pinTimer = setTimeout(() => { pinnedUntil = 0 }, HEADER_PIN_MS)
+}
+
 // 70 = --header-h из tokens.css
 let lastScrollY = 0
 
 function handleScroll() {
   const currentScrollY = window.scrollY
   isScrolled.value = currentScrollY > 70
+
+  // lastScrollY обновляем и здесь: иначе первое движение после закрепления
+  // посчиталось бы большим скачком
+  if (Date.now() < pinnedUntil) {
+    isHidden.value = false
+    lastScrollY = currentScrollY
+    return
+  }
 
   if (isMenuOpen.value || currentScrollY <= 70) {
     isHidden.value = false
@@ -89,6 +116,7 @@ function handleScroll() {
 // шторка есть только на телефоне: при развороте на планшет закрываем,
 // иначе страница осталась бы без прокрутки
 let desktopQuery = null
+let removeAfterGuard = null
 
 function handleDesktop(event) {
   if (event.matches) closeMenu()
@@ -99,12 +127,18 @@ onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
   desktopQuery = window.matchMedia('(min-width: 768px)')
   desktopQuery.addEventListener('change', handleDesktop)
+  // любой переход с якорем: клик на той же странице и приход с другой
+  removeAfterGuard = router.afterEach((to) => {
+    if (to.hash) pinHeader()
+  })
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('keydown', handleKeydown)
   desktopQuery?.removeEventListener('change', handleDesktop)
+  removeAfterGuard?.()
+  clearTimeout(pinTimer)
   document.body.style.overflow = ''
 })
 </script>
