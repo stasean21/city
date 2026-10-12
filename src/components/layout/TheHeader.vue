@@ -1,10 +1,11 @@
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import RollingText from '../ui/RollingText.vue'
 import { useActiveSection } from '../../composables/useActiveSection.js'
 import { messengers } from '../../utils/messengers.js'
+import { headerOffset, scrollBehaviorMode } from '../../utils/headerOffset.js'
 
 // пункты — блоки главной; с любой страницы ведут на главную к блоку,
 // отступ под шапку даёт scrollBehavior в main.js
@@ -20,15 +21,17 @@ const navLinks = [
 const menuMessengers = messengers.filter((item) => item.svg)
 
 const route = useRoute()
-const router = useRouter()
 const activeHash = useActiveSection(navLinks.map((link) => link.hash))
 
-// тот же адрес (главная с этим hash) роутер считает дублем и не прокручивает —
-// а пользователь мог уже уехать от блока. Повторяем переход принудительно
+// тот же адрес (главная с этим hash) роутер считает дублем: навигации нет,
+// scrollBehavior не вызывается, а пользователь мог уже уехать от блока.
+// Прокручиваем сами тем же расчётом отступа
 function onNavClick(hash) {
-  if (route.name === 'home' && route.hash === hash) {
-    router.push({ path: '/', hash, force: true })
-  }
+  if (route.path !== '/' || route.hash !== hash) return
+  const el = document.querySelector(hash)
+  if (!el) return
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset()
+  window.scrollTo({ top, behavior: scrollBehaviorMode() })
 }
 
 const isMenuOpen = ref(false)

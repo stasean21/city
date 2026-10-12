@@ -306,10 +306,13 @@ onMounted(async () => {
 
   removeBeforeGuard = router.beforeEach((to, from) => {
     if (from.matched.length === 0) return true
+    // тот же путь, сменился только якорь или query — без шторок, просто прокрутка
+    if (to.path === from.path) return true
     return leaveTransition(to)
   })
   removeAfterGuard = router.afterEach((to, from) => {
     if (from.matched.length === 0) return
+    if (to.path === from.path) return
     enterTransition()
   })
 

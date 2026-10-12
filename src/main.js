@@ -6,22 +6,20 @@ import '@fontsource/inter/400.css'
 import '@fontsource/inter/500.css'
 import './styles/tokens.css'
 import './styles/base.css'
-
-function headerOffset() {
-  const root = getComputedStyle(document.documentElement)
-  const rem = parseFloat(root.fontSize)
-  const token = (name) => parseFloat(root.getPropertyValue(name)) * rem
-  return token('--header-top') + token('--header-h') + token('--s-24')
-}
+import { headerOffset, scrollBehaviorMode } from './utils/headerOffset.js'
 
 export const createApp = ViteSSG(
   App,
   {
     routes,
-    scrollBehavior(to) {
-      // шапка фиксирована и перекрывает якорь: отступ — её верх и высота
-      // плюс зазор, как у липких колонок (читаем токены, на мобилке они меньше)
-      if (to.hash) return { el: to.hash, top: headerOffset() }
+    scrollBehavior(to, from) {
+      if (to.hash) {
+        // плавно — только внутри той же страницы; с другой страницы прокрутка
+        // мгновенная, её закрывают шторки. Первая загрузка (from без matched) —
+        // тоже сразу
+        const samePage = from.matched.length > 0 && to.path === from.path
+        return { el: to.hash, top: headerOffset(), behavior: samePage ? scrollBehaviorMode() : 'auto' }
+      }
       return { top: 0 }
     },
   },
