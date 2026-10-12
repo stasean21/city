@@ -172,8 +172,9 @@ function toTop() {
 }
 
 @media (max-width: 767px) {
+  /* снизу запас под нижнюю панель шапки — конец карточки виден над ней */
   .site-footer {
-    margin: 0 var(--s-8) var(--s-8);
+    margin: 0 var(--s-8) calc(var(--dock-h) + var(--s-32) + env(safe-area-inset-bottom));
     padding: var(--s-24) var(--s-20) 0;
   }
 
