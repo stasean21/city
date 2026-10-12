@@ -1,14 +1,22 @@
 <script setup>
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import CoverImage from '../ui/CoverImage.vue'
 
-defineProps({
+const props = defineProps({
   service: { type: Object, required: true },
-  // первые работы услуги — обложки для веера (берутся три)
+  // работы услуги — обложки для веера (берутся три, см. fanWorks)
   works: { type: Array, default: () => [] },
   // на странице есть блок примеров #works — показываем кнопку к нему
   examples: { type: Boolean, default: false },
+})
+
+// карточки первого экрана: отмеченные полем hero (1 — центр, 2 — слева, 3 — справа),
+// иначе — первые три по order, как раньше
+const fanWorks = computed(() => {
+  const picked = props.works.filter((w) => w.hero).sort((a, b) => a.hero - b.hero)
+  return (picked.length ? picked : props.works).slice(0, 3)
 })
 </script>
 
@@ -38,7 +46,7 @@ defineProps({
       <slot name="fan">
         <div v-if="works.length" class="service-hero__fan once-in" aria-hidden="true">
           <CoverImage
-            v-for="(work, i) in works.slice(0, 3)"
+            v-for="(work, i) in fanWorks"
             :key="work.slug"
             class="service-hero__card"
             :class="`is-${['center', 'left', 'right'][i]}`"
