@@ -9,7 +9,7 @@ const year = computed(() => new Date().getFullYear())
 const route = useRoute()
 
 // в футере свой порядок кругов; одноцветные глифы (mono), без них круг не выводим
-const ORDER = ['telegram', 'whatsapp', 'vk']
+const ORDER = ['telegram', 'whatsapp', 'vk', 'max']
 const footerMessengers = ORDER
   .map((id) => messengers.find((item) => item.id === id))
   .filter((item) => item?.mono)
@@ -269,6 +269,24 @@ function toTop() {
   outline-offset: var(--focus-ring);
 }
 
+/* четыре мессенджера: строка шире на круг — на 992–1085 не помещается.
+   Поля капсул ужимаем, а меню растягиваем на свободное место: на широком
+   экране пункты расходятся, на 992 сжимаются до минимума */
+@media (min-width: 992px) {
+  .site-footer__top:has(.site-footer__messengers li:nth-child(4)) {
+    gap: var(--s-12);
+  }
+
+  .site-footer__top:has(.site-footer__messengers li:nth-child(4)) .site-footer__nav {
+    flex: 1;
+    justify-content: space-around;
+  }
+
+  .site-footer__top:has(.site-footer__messengers li:nth-child(4)) .site-footer__link {
+    padding-inline: var(--s-4);
+  }
+}
+
 /* меню целиком уходит на вторую строку, если в одну не помещается */
 @media (max-width: 991px) {
   .site-footer__top {
@@ -356,6 +374,26 @@ function toTop() {
 
   .site-footer__mail-icon {
     display: none;
+  }
+
+  /* четыре круга с почтой в строку не помещаются даже без конверта:
+     почта — отдельной строкой на всю ширину, круги — строкой ниже */
+  .site-footer__contacts:has(li:nth-child(4)) {
+    flex-wrap: wrap;
+    gap: var(--s-8);
+  }
+
+  .site-footer__contacts:has(li:nth-child(4)) .site-footer__mail {
+    flex-basis: 100%;
+    padding: 0 var(--s-16) 0 var(--s-12);
+  }
+
+  .site-footer__contacts:has(li:nth-child(4)) .site-footer__mail-icon {
+    display: block;
+  }
+
+  .site-footer__contacts:has(li:nth-child(4)) .site-footer__messengers {
+    gap: var(--s-8);
   }
 }
 </style>

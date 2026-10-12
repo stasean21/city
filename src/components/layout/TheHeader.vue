@@ -4,15 +4,18 @@ import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import RollingText from '../ui/RollingText.vue'
 import { useActiveSection } from '../../composables/useActiveSection.js'
-import { messengers } from '../../utils/messengers.js'
+import { messengers, withIdPrefix } from '../../utils/messengers.js'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
 import navLinks from '../../data/nav.json'
 
 // сколько шапка остаётся на экране после перехода к блоку, мс
 const HEADER_PIN_MS = 3000
 
-// мессенджер без логотипа в шторке не показываем — пустая плитка
-const menuMessengers = messengers.filter((item) => item.svg)
+// мессенджер без логотипа в шторке не показываем — пустая плитка.
+// Свой префикс id: градиенты логотипов не должны ссылаться на копию в блоке контактов
+const menuMessengers = messengers
+  .filter((item) => item.svg)
+  .map((item) => ({ ...item, svg: withIdPrefix(item.svg, 'sheet-') }))
 
 const route = useRoute()
 const router = useRouter()
@@ -204,7 +207,7 @@ onUnmounted(() => {
             class="menu-messenger"
             target="_blank"
             rel="noopener"
-            :aria-label="item.name"
+            :aria-label="`Написать в ${item.name}`"
           >
             <span class="menu-messenger__icon" aria-hidden="true" v-html="item.svg"></span>
           </a>
