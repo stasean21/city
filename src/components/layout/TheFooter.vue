@@ -85,34 +85,35 @@ function toTop() {
 </template>
 
 <style scoped>
-/* плавающая тёмная карточка с отступом от краёв экрана */
+/* тёмный «двойник» шапки: плавающая карточка, внутри всё на плашках --r-btn (15),
+   отступ карточки --footer-pad (12) → радиус карточки 15 + 12 = 27 (--r-footer) */
 .site-footer {
   margin: 0 var(--s-16) var(--s-16);
-  padding: var(--s-32) var(--s-40) 0;
+  padding: var(--footer-pad);
   background: var(--ink);
   border-radius: var(--r-footer);
   color: var(--footer-text);
 }
 
-/* ширина содержимого — как у контента страницы: поля даёт сама карточка,
-   поэтому у контейнера внутри своих полей нет */
+/* строка идёт на всю ширину карточки, как в шапке: кнопки в 12px от края */
 .site-footer .container {
-  max-width: var(--container);
+  max-width: none;
   padding-inline: 0;
 }
 
-/* строка 1: логотип · меню по центру · почта и мессенджеры */
+/* строка 1: логотип · меню · почта · мессенджеры */
 .site-footer__top {
   display: flex;
   align-items: center;
   gap: var(--s-16);
-  padding-bottom: var(--s-32);
-  border-bottom: var(--hairline) solid var(--footer-border);
+  padding-left: var(--s-24);
+  container-type: inline-size;
 }
 
 .site-footer__logo {
   display: block;
   flex: none;
+  margin-right: auto;
 }
 
 .site-footer__logo img {
@@ -123,19 +124,35 @@ function toTop() {
 
 .site-footer__nav {
   display: flex;
-  margin-inline: auto;
 }
 
-/* капсула ховера — как в шапке по высоте, но поля --s-8: с --nav-link-px
-   (и даже с --pill-px) строка не помещается в карточку уже на 992–1085 */
+/* пункт — плашка высотой как почта и квадраты; активной подсветки нет */
 .site-footer__link {
-  padding: var(--nav-link-py) var(--s-8);
-  border-radius: var(--r-pill);
+  display: inline-flex;
+  align-items: center;
+  height: var(--footer-icon-btn);
+  padding: 0 var(--s-8);
+  border-radius: var(--r-btn);
   font: 500 var(--t-ui)/1.375 var(--f-body);
   color: var(--white);
-  opacity: .7;
+  opacity: .65;
   white-space: nowrap;
   transition: opacity var(--ease), background-color var(--ease);
+}
+
+/* поля пунктов как в шапке — когда строка шире 65rem; уже (1024) с ними
+   логотип, меню, почта и четыре квадрата в одну строку не помещаются */
+@container (min-width: 65rem) {
+  .site-footer__link {
+    padding: 0 var(--nav-link-px);
+  }
+}
+
+/* 992–1007: даже с полями 8 строка шире карточки */
+@container (max-width: 58rem) {
+  .site-footer__link {
+    padding: 0 var(--s-4);
+  }
 }
 
 .site-footer__link:hover {
@@ -146,7 +163,7 @@ function toTop() {
 .site-footer__contacts {
   display: flex;
   align-items: center;
-  gap: var(--s-8);
+  gap: var(--s-16);
   flex: none;
 }
 
@@ -156,7 +173,7 @@ function toTop() {
   gap: var(--s-8);
   height: var(--footer-icon-btn);
   padding: 0 var(--s-16) 0 var(--s-12);
-  border-radius: var(--r-pill);
+  border-radius: var(--r-btn);
   background: var(--ink-soft);
   font: 500 var(--t-footer-mail)/1.375 var(--f-body);
   color: var(--white);
@@ -185,14 +202,15 @@ function toTop() {
   gap: var(--s-8);
 }
 
+/* мессенджеры — скруглённые квадраты, не круги */
 .site-footer__messenger {
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--footer-icon-btn);
   height: var(--footer-icon-btn);
+  border-radius: var(--r-btn);
   background: var(--ink-soft);
-  border-radius: var(--r-pill);
   color: var(--white);
   transition: background-color var(--ease);
 }
@@ -219,7 +237,9 @@ function toTop() {
   align-items: center;
   justify-content: space-between;
   gap: var(--s-16) var(--s-24);
-  padding: var(--s-20) 0 var(--s-24);
+  margin-top: var(--footer-pad);
+  padding: var(--s-20) var(--s-24) var(--s-24);
+  border-top: var(--hairline) solid var(--footer-border);
 }
 
 .site-footer__legal {
@@ -234,8 +254,11 @@ function toTop() {
 
 .site-footer__privacy,
 .site-footer__up {
-  padding: var(--s-8) var(--pill-px);
-  border-radius: var(--r-pill);
+  display: inline-flex;
+  align-items: center;
+  height: var(--footer-up-h);
+  padding: 0 var(--pill-px);
+  border-radius: var(--r-btn);
   color: var(--white);
   white-space: nowrap;
   transition: background-color var(--ease);
@@ -246,8 +269,6 @@ function toTop() {
 }
 
 .site-footer__up {
-  display: inline-flex;
-  align-items: center;
   gap: var(--s-8);
   border: 0;
   background: var(--ink-soft);
@@ -269,39 +290,16 @@ function toTop() {
   outline-offset: var(--focus-ring);
 }
 
-/* четыре мессенджера: строка шире на круг — на 992–1085 не помещается.
-   Поля капсул ужимаем, а меню растягиваем на свободное место: на широком
-   экране пункты расходятся, на 992 сжимаются до минимума */
-@media (min-width: 992px) {
-  .site-footer__top:has(.site-footer__messengers li:nth-child(4)) {
-    gap: var(--s-12);
-  }
-
-  .site-footer__top:has(.site-footer__messengers li:nth-child(4)) .site-footer__nav {
-    flex: 1;
-    justify-content: space-around;
-  }
-
-  .site-footer__top:has(.site-footer__messengers li:nth-child(4)) .site-footer__link {
-    padding-inline: var(--s-4);
-  }
-}
-
-/* меню целиком уходит на вторую строку, если в одну не помещается */
+/* меню целиком уходит на вторую строку: в одну не помещается */
 @media (max-width: 991px) {
   .site-footer__top {
     flex-wrap: wrap;
   }
 
-  /* текст первого пункта — ровно под логотипом: поле капсулы выносим за край */
   .site-footer__nav {
     order: 1;
     flex-basis: 100%;
-    margin-inline: calc(-1 * var(--s-8)) 0;
-  }
-
-  .site-footer__contacts {
-    margin-left: auto;
+    margin-left: calc(-1 * var(--s-8));
   }
 }
 
@@ -309,46 +307,47 @@ function toTop() {
   /* снизу запас под нижнюю панель шапки — конец карточки виден над ней */
   .site-footer {
     margin: 0 var(--s-8) calc(var(--dock-h) + var(--s-32) + env(safe-area-inset-bottom));
-    padding: var(--s-24) var(--s-20) 0;
   }
 
+  /* в столбик: логотип → меню → почта → квадраты */
   .site-footer__top {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     flex-wrap: nowrap;
+    padding: var(--s-12) 0 0;
+  }
+
+  .site-footer__logo {
+    margin: 0 0 0 var(--s-12);
   }
 
   .site-footer__nav {
     order: 0;
-    margin-inline: 0;
     flex-wrap: wrap;
     gap: var(--s-4) var(--s-20);
+    margin-left: var(--s-12);
   }
 
-  /* на таче капсула ховера не нужна — без горизонтальных полей */
+  /* на таче ни ховера, ни плашки — без полей, ниже по высоте */
   .site-footer__link {
-    padding-inline: 0;
+    height: auto;
+    padding: var(--s-4) 0;
   }
 
-  /* почта и три круга — в одну строку: почта сжимается, круги нет */
   .site-footer__contacts {
-    align-self: stretch;
-    margin-left: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--s-8);
   }
 
   .site-footer__mail {
-    flex: 1;
-    min-width: 0;
-    font-size: var(--t-small);
-  }
-
-  .site-footer__messengers li {
-    flex: none;
+    justify-content: flex-start;
   }
 
   .site-footer__bottom {
     flex-direction: column;
     align-items: stretch;
+    padding: var(--s-20) var(--s-12) var(--s-12);
   }
 
   .site-footer__meta {
@@ -357,43 +356,6 @@ function toTop() {
 
   .site-footer__privacy {
     padding-inline: 0;
-  }
-}
-
-/* на узком телефоне адрес с конвертом и три круга в строку не помещаются:
-   конверт прячем, зазоры сжимаем — адрес виден целиком */
-@media (max-width: 479px) {
-  .site-footer__contacts,
-  .site-footer__messengers {
-    gap: var(--s-4);
-  }
-
-  .site-footer__mail {
-    padding: 0 var(--s-12);
-  }
-
-  .site-footer__mail-icon {
-    display: none;
-  }
-
-  /* четыре круга с почтой в строку не помещаются даже без конверта:
-     почта — отдельной строкой на всю ширину, круги — строкой ниже */
-  .site-footer__contacts:has(li:nth-child(4)) {
-    flex-wrap: wrap;
-    gap: var(--s-8);
-  }
-
-  .site-footer__contacts:has(li:nth-child(4)) .site-footer__mail {
-    flex-basis: 100%;
-    padding: 0 var(--s-16) 0 var(--s-12);
-  }
-
-  .site-footer__contacts:has(li:nth-child(4)) .site-footer__mail-icon {
-    display: block;
-  }
-
-  .site-footer__contacts:has(li:nth-child(4)) .site-footer__messengers {
-    gap: var(--s-8);
   }
 }
 </style>
