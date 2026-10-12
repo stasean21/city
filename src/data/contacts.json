@@ -1,5 +1,6 @@
 [
-  { "id": "whatsapp", "name": "WhatsApp", "url": "https://wa.me/79204299113" },
   { "id": "telegram", "name": "Telegram", "url": "https://t.me/muntyanu_design" },
-  { "id": "vk", "name": "Vk", "url": "https://vk.ru/muntyanu_design" }
+  { "id": "whatsapp", "name": "WhatsApp", "url": "https://wa.me/79204299113" },
+  { "id": "vk", "name": "Vk", "url": "https://vk.ru/muntyanu_design" },
+  { "id": "max", "name": "Max", "url": "https://max.ru/u/f9LHodD0cOIzd1DR_dyDsswoXp9vJ-f2jdaVOxF6CqBnHAWpu7NckxBqBw0" }
 ]
