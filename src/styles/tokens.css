@@ -313,6 +313,9 @@ html {
   /* футер — кнопки мессенджеров */
   --footer-icon-btn: 2.75rem; /* 44 — круг */
   --footer-icon:     1.25rem; /* 20 — логотип в круге */
+  --t-footer-mail:   .875rem;  /* 14 — адрес в почте-капсуле */
+  --footer-mail-icon: 1.125rem; /* 18 — конверт */
+  --footer-up-icon:  .875rem;  /* 14 — стрелка «Наверх» */
 
   /* header */
   --header-h:     4.375rem; /* 70 */

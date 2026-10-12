@@ -11,3 +11,15 @@ export function headerOffset() {
 export function scrollBehaviorMode() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 }
+
+// повторный клик по ссылке на тот же якорь (адрес уже /#reviews): роутер считает
+// это дублем, навигации и scrollBehavior нет — прокручиваем сами тем же расчётом.
+// true — прокрутили (вызывающему, например, закрепить шапку)
+export function scrollToSameAnchor(route, hash) {
+  if (route.path !== '/' || route.hash !== hash) return false
+  const el = document.querySelector(hash)
+  if (!el) return false
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset()
+  window.scrollTo({ top, behavior: scrollBehaviorMode() })
+  return true
+}

@@ -1,0 +1,7 @@
+[
+  { "label": "Услуги", "hash": "#services" },
+  { "label": "Этапы работы", "hash": "#process" },
+  { "label": "Отзывы", "hash": "#reviews" },
+  { "label": "Обо мне", "hash": "#about" },
+  { "label": "FAQ", "hash": "#faq" }
+]

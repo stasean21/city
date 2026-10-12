@@ -5,20 +5,11 @@ import BaseButton from '../ui/BaseButton.vue'
 import RollingText from '../ui/RollingText.vue'
 import { useActiveSection } from '../../composables/useActiveSection.js'
 import { messengers } from '../../utils/messengers.js'
-import { headerOffset, scrollBehaviorMode } from '../../utils/headerOffset.js'
+import { scrollToSameAnchor } from '../../utils/headerOffset.js'
+import navLinks from '../../data/nav.json'
 
 // сколько шапка остаётся на экране после перехода к блоку, мс
 const HEADER_PIN_MS = 3000
-
-// пункты — блоки главной; с любой страницы ведут на главную к блоку,
-// отступ под шапку даёт scrollBehavior в main.js
-const navLinks = [
-  { label: 'Услуги',       hash: '#services' },
-  { label: 'Этапы работы', hash: '#process' },
-  { label: 'Отзывы',       hash: '#reviews' },
-  { label: 'Обо мне',      hash: '#about' },
-  { label: 'FAQ',          hash: '#faq' },
-]
 
 // мессенджер без логотипа в шторке не показываем — пустая плитка
 const menuMessengers = messengers.filter((item) => item.svg)
@@ -27,17 +18,12 @@ const route = useRoute()
 const router = useRouter()
 const activeHash = useActiveSection(navLinks.map((link) => link.hash))
 
-// тот же адрес (главная с этим hash) роутер считает дублем: навигации нет,
-// scrollBehavior не вызывается, а пользователь мог уже уехать от блока.
-// Прокручиваем сами тем же расчётом отступа. afterEach тут не сработает —
-// закрепляем шапку здесь же
+// пункты (data/nav.json, общие с футером) — блоки главной: с любой страницы
+// ведут на главную к блоку, отступ под шапку даёт scrollBehavior в main.js.
+// Повторный клик по тому же якорю прокручиваем сами; afterEach тогда не
+// сработает — закрепляем шапку здесь же
 function onNavClick(hash) {
-  if (route.path !== '/' || route.hash !== hash) return
-  const el = document.querySelector(hash)
-  if (!el) return
-  pinHeader()
-  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset()
-  window.scrollTo({ top, behavior: scrollBehaviorMode() })
+  if (scrollToSameAnchor(route, hash)) pinHeader()
 }
 
 const isMenuOpen = ref(false)

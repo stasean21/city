@@ -9,7 +9,15 @@ const icons = import.meta.glob('../assets/messengers/*.svg', {
   eager: true,
 })
 
+// одноцветные глифы (fill="currentColor") — для тёмного футера
+const monoIcons = import.meta.glob('../assets/messengers/mono/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
+
 export const messengers = contacts.map((item) => ({
   ...item,
   svg: icons[`../assets/messengers/${item.id}.svg`] ?? null,
+  mono: monoIcons[`../assets/messengers/mono/${item.id}.svg`] ?? null,
 }))
