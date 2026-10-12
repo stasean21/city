@@ -407,7 +407,7 @@ onUnmounted(() => {
             />
           </span>
           <span class="caption ig__tag" aria-hidden="true">
-            {{ items[cell.idx].title }}<span class="ig__niche">{{ items[cell.idx].niche }}</span>
+            <span class="ig__name">{{ items[cell.idx].title }}</span><span class="ig__niche">{{ items[cell.idx].niche }}</span>
           </span>
         </button>
       </div>
@@ -564,12 +564,11 @@ onUnmounted(() => {
 
 .ig__tag {
   position: absolute;
-  left: var(--s-12);
-  bottom: var(--s-12);
+  left: var(--s-8);
+  bottom: var(--s-8);
   display: flex;
-  gap: var(--s-8);
-  max-width: calc(100% - 2 * var(--s-12));
-  padding: var(--s-4) var(--s-12);
+  max-width: calc(100% - 2 * var(--s-8));
+  padding: var(--s-4) var(--s-8);
   overflow: hidden;
   color: var(--ink);
   white-space: nowrap;
@@ -577,8 +576,17 @@ onUnmounted(() => {
   border-radius: var(--r-pill);
 }
 
+/* на маленькой плитке — только название одной строкой; категория — в aria-label
+   карточки и в просмотре работы */
+.ig__name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .ig__niche {
-  color: var(--text-3);
+  display: none;
 }
 
 /* ---------- шапка и подсказка ---------- */

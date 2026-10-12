@@ -279,8 +279,8 @@ html {
   --slash-rot:     28deg;      /* наклон слэша, как в логотипе m/ */
 
   /* бесконечная галерея всех работ услуги (WorksGallery) */
-  --gallery-tile-w:   15rem;    /* 240 — плитка 3:4 */
-  --gallery-gap:      var(--s-24);
+  --gallery-tile-w:   10.5rem;  /* 168 — плитка 3:4: на 1440 видно ~8×3 */
+  --gallery-gap:      var(--s-16);
   --gallery-btn:      3rem;     /* 48 — круглая кнопка закрытия */
   --gallery-arrow:    3.5rem;   /* 56 — стрелки просмотра */
   --gallery-backdrop: rgb(29 30 34 / .92); /* --ink с прозрачностью — затемнение просмотра */
@@ -398,8 +398,8 @@ html {
     --live-screen-h:  26.25rem; /* 420 */
     --xray-screen-h:  28.75rem; /* 460 */
     --reel-shift:     var(--s-32);
-    --gallery-tile-w: 11.25rem; /* 180 */
-    --gallery-gap:    var(--s-16);
+    --gallery-tile-w: 8.25rem;  /* 132 */
+    --gallery-gap:    var(--s-12);
     --gallery-arrow:  var(--lightbox-btn); /* 44 */
     --adapt-stage-h:  23.75rem; /* 380 */
     --mosaic-h:       5rem;     /* 80 */
