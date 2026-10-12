@@ -29,6 +29,7 @@ onMounted(() => {
       :class="{ 'is-broken': broken }"
       :src="src"
       :alt="alt"
+      draggable="false"
       :width="width"
       :height="height"
       :loading="lazy ? 'lazy' : undefined"

@@ -113,6 +113,9 @@ const drag = { moved: false, sx: 0, sy: 0, px: 0, py: 0 }
 
 function onPointerDown(event) {
   if (viewShown.value || (event.pointerType === 'mouse' && event.button !== 0)) return
+  // без этого браузер начинает нативный drag картинки (призрак за курсором,
+  // pointercancel обрывает перетаскивание) и выделяет текст; click всё равно придёт
+  if (event.pointerType === 'mouse') event.preventDefault()
   dragging.value = true
   drag.moved = false
   drag.sx = event.clientX
@@ -377,7 +380,7 @@ onUnmounted(() => {
     aria-modal="true"
     :aria-label="`Все работы: ${title}`"
   >
-    <div ref="wrapEl" class="ig__wrap" :class="{ 'is-drag': dragging }" @pointerdown="onPointerDown">
+    <div ref="wrapEl" class="ig__wrap" :class="{ 'is-drag': dragging }" @pointerdown="onPointerDown" @dragstart.prevent>
       <div
         ref="canvasEl"
         class="ig__canvas"
@@ -502,6 +505,12 @@ onUnmounted(() => {
 
 .ig__wrap.is-drag {
   cursor: grabbing;
+}
+
+/* картинки не тянутся как файлы — тянется полотно */
+.ig__wrap img {
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .ig__canvas {
