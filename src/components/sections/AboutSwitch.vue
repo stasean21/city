@@ -7,19 +7,19 @@ const items = [
     word: 'Дизайн',
     note: 'Инфографика, AI-фото и видеообложки для карточек.',
     photo: 'https://storage.yandexcloud.net/landing-main/about/design.webp',
-    alt: '[Имя] работает над макетом карточки',
+    alt: 'Станислав работает над макетом карточки',
   },
   {
     word: 'Реклама',
     note: 'Кабинеты Ozon и Wildberries, SEO, тесты обложек.',
     photo: 'https://storage.yandexcloud.net/landing-main/about/ads.webp',
-    alt: '[Имя] в рекламном кабинете маркетплейса',
+    alt: 'Станислав в рекламном кабинете маркетплейса',
   },
   {
     word: 'Цифры',
     note: 'Смотрю, что сработало, и делаю следующую итерацию.',
     photo: 'https://storage.yandexcloud.net/landing-main/about/data.webp',
-    alt: '[Имя] разбирает графики продаж',
+    alt: 'Станислав разбирает графики продаж',
   },
 ].map((item, i) => ({ ...item, num: String(i + 1).padStart(2, '0') }))
 
@@ -192,7 +192,7 @@ onUnmounted(() => {
             @error="markBroken(AVATAR)"
           />
           <span v-else class="about__avatar"></span>
-          <span class="small about__name">[Имя]</span>
+          <span class="small about__name">Станислав</span>
         </span>
       </div>
     </div>

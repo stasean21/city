@@ -12,8 +12,8 @@ export default defineConfig({
   ssgOptions: {
     includedRoutes(paths) {
       return paths
-        // динамические шаблоны и редиректы не пререндерим
-        .filter(path => !path.includes(':') && !redirectPaths.has(path))
+        // динамические шаблоны, редиректы и служебный /styleguide не пререндерим
+        .filter(path => !path.includes(':') && !redirectPaths.has(path) && path !== '/styleguide')
         .concat(
           works.map(work => `/works/${work.slug}`),
           services.map(service => `/services/${service.slug}`),
