@@ -321,12 +321,15 @@ html {
   --footer-up-icon:  .875rem;  /* 14 — стрелка «Наверх» */
 
   /* header */
-  --header-h:     4.375rem; /* 70 */
+  --header-h:     3.5rem;   /* 56 — панель: кнопка 40 + 2 × --header-pad */
   --header-top:   2.5rem;   /* 40 */
   --logo-h:       1.5rem;   /* 24 */
   --nav-gap:      3rem;     /* 48 — от последнего пункта до кнопки */
   --nav-link-py:  .625rem;  /* 10 */
   --nav-link-px:  1.25rem;  /* 20 */
+  /* шапка-панель: кнопка r-btn (15) внутри панели с отступом s-8 → радиус панели 15 + 8 = 23 */
+  --header-pad:   var(--s-8);
+  --header-r:     calc(var(--r-btn) + var(--header-pad));
 
   /* нижняя панель и шторка меню на телефоне */
   --dock-h:        3.75rem; /* 60 — нижняя панель */

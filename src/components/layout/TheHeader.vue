@@ -75,7 +75,6 @@ function onNavClick(hash) {
 
 const isMenuOpen = ref(false)
 const isHidden = ref(false)
-const isScrolled = ref(false)
 const menuButton = ref(null)
 const tileEls = ref([])
 
@@ -122,12 +121,11 @@ function pinHeader() {
   pinTimer = setTimeout(() => { pinnedUntil = 0 }, HEADER_PIN_MS)
 }
 
-// 70 = --header-h из tokens.css
+// до 70px от верха шапка не прячется
 let lastScrollY = 0
 
 function handleScroll() {
   const currentScrollY = window.scrollY
-  isScrolled.value = currentScrollY > 70
 
   // lastScrollY обновляем и здесь: иначе первое движение после закрепления
   // посчиталось бы большим скачком
@@ -184,7 +182,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="site-header" :class="{ 'has-bg': isScrolled && !isHidden }">
+  <header class="site-header">
     <div class="site-header__inner" :class="{ 'is-hidden': isHidden }">
       <RouterLink to="/" class="site-header__logo" @click="closeMenu">
         <img src="/logo/logo-light.svg" alt="m/design" width="175" height="51" />
@@ -301,27 +299,20 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
-/* фон и скругление — на самой панели, а не на .site-header:
-   иначе при скролле подсвечивался бы прямоугольник во всю ширину экрана,
-   а не плавающая «таблетка» в границах контейнера */
+/* вся шапка — одна белая панель в границах контейнера, всегда с фоном.
+   Радиус по правилу вложенности: кнопка --r-btn + отступ --header-pad.
+   Слева воздух перед логотипом, с трёх других сторон — --header-pad */
 .site-header__inner {
-  /* как .container: содержимое шапки ровно по краям контента страницы */
   max-width: calc(var(--container) + 2 * var(--gutter));
   height: 100%;
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: var(--header-pad) var(--header-pad) var(--header-pad) var(--s-24);
   display: flex;
   align-items: center;
-  border-radius: calc(var(--header-h) / 2);
-  background: transparent;
-  transition: transform var(--ease), background-color var(--ease);
+  border-radius: var(--header-r);
+  background: var(--white);
+  transition: transform var(--ease);
   pointer-events: auto;
-}
-
-/* фон — только когда панель реально показана
-   (проскроллили вниз и сейчас скроллим вверх) */
-.site-header.has-bg .site-header__inner {
-  background: var(--bg);
 }
 
 .site-header__inner.is-hidden {
@@ -345,24 +336,22 @@ onUnmounted(() => {
   width: auto;
 }
 
-/* меню — белая капсула-переключатель; отступы между пунктами дают их поля */
+/* меню внутри панели, справа у кнопки; отступы между пунктами дают их поля */
 .site-header__nav {
   position: relative;
   display: flex;
   align-items: center;
-  padding: var(--s-4);
-  border-radius: var(--r-pill);
-  background: var(--white);
 }
 
-/* одна тёмная таблетка под активным пунктом: ширину и сдвиг ставит placePill() */
+/* бежевая плашка под активным пунктом, по высоте пункта (= кнопки):
+   ширину и сдвиг ставит placePill() */
 .site-header__pill {
   position: absolute;
-  top: var(--s-4);
-  bottom: var(--s-4);
+  top: 0;
+  bottom: 0;
   left: 0;
-  border-radius: var(--r-pill);
-  background: var(--ink);
+  border-radius: var(--r-btn);
+  background: var(--bg);
   opacity: 0;
   transition: transform var(--ease), width var(--ease), opacity var(--ease);
 }
@@ -372,8 +361,10 @@ onUnmounted(() => {
   position: relative;
   font: 500 var(--t-ui)/1.375 var(--f-body);
   color: var(--text);
-  padding: var(--nav-link-py) var(--nav-link-px);
-  border-radius: var(--r-pill);
+  /* высота как у .btn: те же поля по вертикали и прозрачная рамка */
+  padding: var(--s-8) var(--nav-link-px);
+  border: var(--hairline) solid transparent;
+  border-radius: var(--r-btn);
   white-space: nowrap;
   transition: color var(--ease);
 }
@@ -382,10 +373,10 @@ onUnmounted(() => {
   color: var(--ink);
 }
 
-/* текст над таблеткой */
+/* текст над плашкой */
 .site-header__link.is-active {
   z-index: 1;
-  color: var(--white);
+  color: var(--ink);
 }
 
 /* буквы катаются внутри RollingText — :deep() пробивает её собственный
@@ -399,16 +390,10 @@ onUnmounted(() => {
   outline-offset: var(--focus-ring);
 }
 
-/* на тёмной таблетке тёмное кольцо не видно */
-.site-header__link.is-active:focus-visible {
-  outline-color: var(--accent);
-}
-
-/* от капсулы меню до кнопки — --nav-gap;
-   слева от меню места даёт margin-right: auto у логотипа */
+/* от меню до кнопки — --s-16; слева от меню места даёт margin-right: auto у логотипа */
 .site-header__cta {
   flex: none;
-  margin-left: var(--nav-gap);
+  margin-left: var(--s-16);
   white-space: nowrap;
 }
 
@@ -426,8 +411,10 @@ onUnmounted(() => {
     display: none;
   }
 
-  /* сверху только логотип, без подложки */
-  .site-header.has-bg .site-header__inner {
+  /* сверху только логотип, без подложки и полей панели */
+  .site-header__inner {
+    padding: 0 var(--gutter);
+    border-radius: 0;
     background: transparent;
   }
 
