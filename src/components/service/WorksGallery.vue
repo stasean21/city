@@ -535,7 +535,7 @@ onUnmounted(() => {
   overflow: hidden;
   background: var(--white);
   border: 0;
-  border-radius: var(--r-card);
+  border-radius: var(--r-lg);
 }
 
 .ig__card:focus-visible {
@@ -573,6 +573,7 @@ onUnmounted(() => {
 
 .ig__tag {
   position: absolute;
+  font-size: var(--gallery-tag);
   left: var(--s-8);
   bottom: var(--s-8);
   display: flex;
