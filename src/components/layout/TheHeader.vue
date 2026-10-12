@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import RollingText from '../ui/RollingText.vue'
@@ -20,6 +20,50 @@ const menuMessengers = messengers
 const route = useRoute()
 const router = useRouter()
 const activeHash = useActiveSection(navLinks.map((link) => link.hash))
+
+// ---------- скользящая таблетка под активным пунктом ----------
+// ссылки — по hash: порядок массива ref в v-for Vue не гарантирует
+const linkEls = new Map()
+const pillEl = ref(null)
+let pillShown = false
+let pillFrame = 0
+
+function setLinkEl(hash, comp) {
+  if (comp) linkEls.set(hash, comp.$el)
+  else linkEls.delete(hash)
+}
+
+function placePill() {
+  const pill = pillEl.value
+  if (!pill) return
+  const link = linkEls.get(activeHash.value)
+  // активного блока нет — гаснет на месте, без «улёта»
+  if (!link) {
+    pill.style.opacity = '0'
+    pillShown = false
+    return
+  }
+  const move = () => {
+    pill.style.width = `${link.offsetWidth}px`
+    pill.style.transform = `translateX(${link.offsetLeft}px)`
+  }
+  if (pillShown) {
+    move()
+    return
+  }
+  // из невидимого состояния: сперва без анимации ставим на ссылку, потом проявляем
+  pill.style.transition = 'none'
+  move()
+  void pill.offsetWidth
+  pill.style.transition = ''
+  pill.style.opacity = '1'
+  pillShown = true
+}
+
+function onResize() {
+  cancelAnimationFrame(pillFrame)
+  pillFrame = requestAnimationFrame(placePill)
+}
 
 // пункты (data/nav.json, общие с футером) — блоки главной: с любой страницы
 // ведут на главную к блоку, отступ под шапку даёт scrollBehavior в main.js.
@@ -120,6 +164,11 @@ onMounted(() => {
   removeAfterGuard = router.afterEach((to) => {
     if (to.hash) pinHeader()
   })
+  // таблетка: ширина пунктов зависит от шрифта — пересчёт и после его загрузки
+  watch(activeHash, placePill, { flush: 'post' })
+  window.addEventListener('resize', onResize)
+  document.fonts?.ready.then(placePill)
+  placePill()
 })
 
 onUnmounted(() => {
@@ -127,6 +176,8 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
   desktopQuery?.removeEventListener('change', handleDesktop)
   removeAfterGuard?.()
+  window.removeEventListener('resize', onResize)
+  cancelAnimationFrame(pillFrame)
   clearTimeout(pinTimer)
   document.body.style.overflow = ''
 })
@@ -140,9 +191,11 @@ onUnmounted(() => {
       </RouterLink>
 
       <nav class="site-header__nav" aria-label="Блоки главной">
+        <span ref="pillEl" class="site-header__pill" aria-hidden="true"></span>
         <RouterLink
           v-for="link in navLinks"
           :key="link.hash"
+          :ref="(comp) => setLinkEl(link.hash, comp)"
           :to="{ path: '/', hash: link.hash }"
           active-class=""
           exact-active-class=""
@@ -292,33 +345,47 @@ onUnmounted(() => {
   width: auto;
 }
 
+/* меню — белая капсула-переключатель; отступы между пунктами дают их поля */
 .site-header__nav {
+  position: relative;
   display: flex;
   align-items: center;
+  padding: var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--white);
+}
+
+/* одна тёмная таблетка под активным пунктом: ширину и сдвиг ставит placePill() */
+.site-header__pill {
+  position: absolute;
+  top: var(--s-4);
+  bottom: var(--s-4);
+  left: 0;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  opacity: 0;
+  transition: transform var(--ease), width var(--ease), opacity var(--ease);
 }
 
 .site-header__link {
   --roll-h: 1.375em;
+  position: relative;
   font: 500 var(--t-ui)/1.375 var(--f-body);
-  color: var(--ink);
-  opacity: 0.85;
+  color: var(--text);
   padding: var(--nav-link-py) var(--nav-link-px);
   border-radius: var(--r-pill);
-  background: transparent;
   white-space: nowrap;
-  transition: opacity var(--ease), background-color var(--ease);
+  transition: color var(--ease);
 }
 
-/* --nav-gap-dense — от текста до текста; паддинги капсул больше половины
-   зазора, поэтому соседние капсулы заходят друг под друга */
-.site-header__link + .site-header__link {
-  margin-left: calc(var(--nav-gap-dense) - 2 * var(--nav-link-px));
+.site-header__link:hover {
+  color: var(--ink);
 }
 
-.site-header__link:hover,
+/* текст над таблеткой */
 .site-header__link.is-active {
-  opacity: 1;
-  background: var(--bg-3);
+  z-index: 1;
+  color: var(--white);
 }
 
 /* буквы катаются внутри RollingText — :deep() пробивает её собственный
@@ -332,11 +399,16 @@ onUnmounted(() => {
   outline-offset: var(--focus-ring);
 }
 
-/* от текста последнего пункта до кнопки — --nav-gap;
-   слева от пунктов места даёт margin-right: auto у логотипа */
+/* на тёмной таблетке тёмное кольцо не видно */
+.site-header__link.is-active:focus-visible {
+  outline-color: var(--accent);
+}
+
+/* от капсулы меню до кнопки — --nav-gap;
+   слева от меню места даёт margin-right: auto у логотипа */
 .site-header__cta {
   flex: none;
-  margin-left: calc(var(--nav-gap) - var(--nav-link-px));
+  margin-left: var(--nav-gap);
   white-space: nowrap;
 }
 
