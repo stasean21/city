@@ -22,7 +22,9 @@ const LANES = 4
 const MIN_PER_LANE = 3
 const MOBILE_LIMIT = 6
 // скорость и направление колонок: две едут вверх, две вниз
-const SPEED = [0.6, 0.45, 0.7, 0.5]
+const SPEED = [0.32, 0.22, 0.38, 0.26]
+// сглаживание: колонки догоняют скролл за столько секунд — колесо не даёт ступенек
+const SCRUB = 1.2
 
 // на мобилке — простая сетка первых работ; до монтирования (и в пререндере) — стена
 const isMobile = ref(false)
@@ -55,7 +57,6 @@ let mm = null
 let ScrollTrigger = null
 let unmounted = false
 let mqMobile = null
-let refreshQueued = false
 
 function openWork(work, event) {
   lightbox.value.open(work, event.currentTarget)
@@ -65,26 +66,19 @@ function syncMedia() {
   isMobile.value = mqMobile.matches
 }
 
-// обложки догружаются лениво и меняют высоту колонок — пересчитываем разом
-function queueRefresh() {
-  if (refreshQueued) return
-  refreshQueued = true
-  requestAnimationFrame(() => {
-    refreshQueued = false
-    ScrollTrigger?.refresh()
-  })
-}
-
-function onImageLoad(event) {
-  if (event.target.tagName === 'IMG') queueRefresh()
+// у обложек aspect-ratio 3:4 — высота колонок известна до загрузки картинок,
+// пересчёт на каждую картинку не нужен (он и дёргал колонки посреди скролла).
+// Один раз — после загрузки страницы: шрифты могли поменять высоту подписей
+function onWindowLoad() {
+  ScrollTrigger?.refresh()
 }
 
 onMounted(async () => {
   mqMobile = window.matchMedia('(max-width: 767px)')
   syncMedia()
   mqMobile.addEventListener('change', syncMedia)
-  // load не всплывает — ловим на погружении
-  sectionEl.value.addEventListener('load', onImageLoad, true)
+  // при переходе внутри сайта load окна давно прошёл — тогда и ждать нечего
+  if (document.readyState !== 'complete') window.addEventListener('load', onWindowLoad, { once: true })
 
   // gsap — только в браузере: страница пререндерится
   const [{ gsap }, st] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
@@ -102,20 +96,27 @@ onMounted(async () => {
     // элемент — в замыкании: revert при уходе со страницы пересчитывает
     // функциональные значения, когда ссылка шаблона может быть уже пустой
     const cols = [...wall.querySelectorAll('.wall__lane')]
-    const travel = (lane, i) => -Math.max(0, lane.offsetHeight - wall.clientHeight) * SPEED[i]
+    // потолок хода — не больше высоты окна стены, иначе с десятками работ колонки
+    // «пролетают». Потолок до умножения на скорость: самая быстрая колонка проходит
+    // не больше окна, остальные меньше — разные скорости сохраняются
+    const maxSpeed = Math.max(...SPEED)
+    const travel = (lane, i) => -Math.min(
+      Math.max(0, lane.offsetHeight - wall.clientHeight),
+      wall.clientHeight / maxSpeed,
+    ) * SPEED[i]
     const trigger = () => ({
       trigger: sectionEl.value,
       start: 'top bottom',
       end: 'bottom top',
-      scrub: true,
+      scrub: SCRUB,
       invalidateOnRefresh: true,
     })
     cols.forEach((lane, i) => {
       // чётные едут вверх, нечётные — вниз
       if (i % 2 === 0) {
-        gsap.fromTo(lane, { y: 0 }, { y: () => travel(lane, i), ease: 'none', scrollTrigger: trigger() })
+        gsap.fromTo(lane, { y: 0 }, { y: () => travel(lane, i), ease: 'none', force3D: true, scrollTrigger: trigger() })
       } else {
-        gsap.fromTo(lane, { y: () => travel(lane, i) }, { y: 0, ease: 'none', scrollTrigger: trigger() })
+        gsap.fromTo(lane, { y: () => travel(lane, i) }, { y: 0, ease: 'none', force3D: true, scrollTrigger: trigger() })
       }
     })
   })
@@ -126,7 +127,7 @@ onBeforeUnmount(() => {
   unmounted = true
   // revert убивает и твины, и их ScrollTrigger'ы, возвращает transform
   mm?.revert()
-  sectionEl.value?.removeEventListener('load', onImageLoad, true)
+  window.removeEventListener('load', onWindowLoad)
   mqMobile?.removeEventListener('change', syncMedia)
 })
 </script>
