@@ -8,7 +8,7 @@ import { messengers } from '../../utils/messengers.js'
 import { headerOffset, scrollBehaviorMode } from '../../utils/headerOffset.js'
 
 // сколько шапка остаётся на экране после перехода к блоку, мс
-const HEADER_PIN_MS = 10000
+const HEADER_PIN_MS = 3000
 
 // пункты — блоки главной; с любой страницы ведут на главную к блоку,
 // отступ под шапку даёт scrollBehavior в main.js
