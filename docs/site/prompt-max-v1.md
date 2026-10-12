@@ -43,10 +43,8 @@
 Добавь Max **последним**: Telegram, WhatsApp, VK, Max.
 
 ```json
-{ "id": "max", "name": "Max", "url": "ССЫЛКА_НА_MAX" }
+{ "id": "max", "name": "Max", "url": "https://max.ru/u/f9LHodD0cOIzd1DR_dyDsswoXp9vJ-f2jdaVOxF6CqBnHAWpu7NckxBqBw0" }
 ```
-
-**Если вместо `ССЫЛКА_НА_MAX` не подставлена настоящая ссылка (`https://max.ru/…`), запись не добавляй совсем.** Иконки из п. 1 положи, они подхватятся, когда появится ссылка. Кнопка с пустой или заглушечной ссылкой на сайт попасть не должна.
 
 `src/utils/messengers.js` подхватывает `svg` и `mono` по `id` через `import.meta.glob`, правки в нём не нужны. Проверь, что для `max` оба поля не `null`.
 
@@ -60,4 +58,4 @@
 
 ## 4. Готово, когда
 
-`npm run build` без ошибок; в `dist/index.html` есть ссылка на Max (если она подставлена); коммит «Контакты: Max».
+`npm run build` без ошибок; в `dist/index.html` есть ссылка на Max; коммит «Контакты: Max».
