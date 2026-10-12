@@ -1,0 +1,34 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+
+
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --text:#717171; --accent:#F59958; --white:#fff; --fh:Gilroy,Inter,sans-serif; --fb:Inter,Arial,sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: var(--fb); width: 1440px; padding: 40px 0 30px; }
+.v { width: 1144px; margin: 0 auto 50px; }
+.vt { font: 600 22px var(--fh); color: var(--ink); margin-bottom: 4px; }
+.vd { font: 400 14px/1.5 var(--fb); color: var(--text); margin-bottom: 14px; max-width: 900px; }
+.st { font: 500 12px var(--fb); color: #999; margin: 12px 0 6px; }
+a { text-decoration: none; white-space: nowrap; }
+.tab { font: 500 16px var(--fb); color: var(--text); padding: 0 18px; display: inline-flex; align-items: center; }
+.tab.h { color: var(--ink); }
+.cta { display: inline-flex; align-items: center; gap: 12px; background: var(--ink); color: #fff; font: 500 16px var(--fb); padding: 0 18px; }
+/* A — капсула меню + кнопка внутри одной капсулы, логотип отдельно */
+.a .row { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+.a .cap { display: flex; align-items: center; background: var(--white); border-radius: 999px; padding: 4px; height: 52px; }
+.a .tab { height: 44px; border-radius: 999px; }
+.a .tab.on { background: var(--bg); color: var(--ink); }
+.a .cta { height: 44px; border-radius: 999px; margin-left: 8px; }
+/* B — вся шапка одна панель, радиусы по правилу вложенности: 15 + 8 = 23 */
+.b .bar { display: flex; align-items: center; background: var(--white); border-radius: 23px; padding: 8px 8px 8px 24px; height: 60px; }
+.b .bar img { margin-right: auto; }
+.b nav { display: flex; }
+.b .tab { height: 44px; border-radius: 15px; }
+.b .tab.on { background: var(--bg); color: var(--ink); }
+.b .cta { height: 44px; border-radius: 15px; margin-left: 16px; }
+</style></head><body><div class="v a"><div class="vt">A · Меню и кнопка в одной капсуле</div><div class="vd">Пункты и «Обсудить задачу» живут в одной белой капсуле, логотип отдельно слева. Все скругления — капсульные (одинаковые). Текущий пункт — бежевая «таблетка» цвета фона, которая скользит между пунктами; тёмной остаётся только кнопка — нет спора двух тёмных элементов.</div><div class="st">первый экран</div><div class="row"><img src="/home/user/city-main/public/logo/logo-light.svg" style="height:24px;display:block"><div class="cap"><a class="tab  ">Услуги</a><a class="tab  ">Этапы работы</a><a class="tab  ">Отзывы</a><a class="tab  ">Обо мне</a><a class="tab  ">FAQ</a><a class="cta">Обсудить задачу <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div></div><div class="st">наведение на «Отзывы»</div><div class="row"><img src="/home/user/city-main/public/logo/logo-light.svg" style="height:24px;display:block"><div class="cap"><a class="tab  ">Услуги</a><a class="tab  ">Этапы работы</a><a class="tab  h">Отзывы</a><a class="tab  ">Обо мне</a><a class="tab  ">FAQ</a><a class="cta">Обсудить задачу <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div></div><div class="st">листаем «Этапы работы»</div><div class="row"><img src="/home/user/city-main/public/logo/logo-light.svg" style="height:24px;display:block"><div class="cap"><a class="tab  ">Услуги</a><a class="tab on ">Этапы работы</a><a class="tab  ">Отзывы</a><a class="tab  ">Обо мне</a><a class="tab  ">FAQ</a><a class="cta">Обсудить задачу <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div></div></div><div class="v b"><div class="vt">B · Вся шапка — одна панель</div><div class="vd">Логотип, меню и кнопка на одной белой панели. Радиусы по правилу вложенности: кнопка и пункты 15px, панель 15 + 8 = 23px. Текущий пункт — бежевая плашка того же радиуса 15px, что и кнопка, скользит между пунктами.</div><div class="st">первый экран</div><div class="bar"><img src="/home/user/city-main/public/logo/logo-light.svg" style="height:24px;display:block"><nav><a class="tab  ">Услуги</a><a class="tab  ">Этапы работы</a><a class="tab  ">Отзывы</a><a class="tab  ">Обо мне</a><a class="tab  ">FAQ</a></nav><a class="cta">Обсудить задачу <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div><div class="st">наведение на «Отзывы»</div><div class="bar"><img src="/home/user/city-main/public/logo/logo-light.svg" style="height:24px;display:block"><nav><a class="tab  ">Услуги</a><a class="tab  ">Этапы работы</a><a class="tab  h">Отзывы</a><a class="tab  ">Обо мне</a><a class="tab  ">FAQ</a></nav><a class="cta">Обсудить задачу <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div><div class="st">листаем «Этапы работы»</div><div class="bar"><img src="/home/user/city-main/public/logo/logo-light.svg" style="height:24px;display:block"><nav><a class="tab  ">Услуги</a><a class="tab on ">Этапы работы</a><a class="tab  ">Отзывы</a><a class="tab  ">Обо мне</a><a class="tab  ">FAQ</a></nav><a class="cta">Обсудить задачу <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div></div></body></html>
