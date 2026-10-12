@@ -11,7 +11,7 @@ const props = defineProps({
   size: { type: String, default: 'md' },
   arrow: { type: Boolean, default: false },
   roll: { type: Boolean, default: false },
-  to: { type: String, default: null },
+  to: { type: [String, Object], default: null },
   href: { type: String, default: null },
 })
 
@@ -51,7 +51,8 @@ const classes = computed(() => ['btn', `btn--${props.variant}`])
     :aria-label="roll ? label : null"
   >
     <RollingText v-if="roll" :text="label" />
-    <slot v-else />
+    <!-- надпись — один элемент ряда: иначе gap кнопки встаёт между словами -->
+    <span v-else class="btn__label"><slot /></span>
 
     <RicochetArrow v-if="arrow" size="var(--btn-icon)" />
   </component>
@@ -71,6 +72,10 @@ const classes = computed(() => ['btn', `btn--${props.variant}`])
   cursor: pointer;
   text-decoration: none;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.btn__label {
+  white-space: nowrap;
 }
 
 .btn--primary {

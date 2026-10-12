@@ -153,16 +153,14 @@ onUnmounted(() => {
         </RouterLink>
       </nav>
 
-      <!-- на планшете «задачу» прячется: пять пунктов и полная подпись не помещаются -->
       <BaseButton
-        to="/#contact"
+        :to="{ path: '/', hash: '#contact' }"
         variant="primary"
         arrow
         class="site-header__cta"
-        aria-label="Обсудить задачу"
         @click="onNavClick('#contact')"
       >
-        Обсудить<span class="site-header__cta-tail"> задачу</span>
+        Обсудить задачу
       </BaseButton>
     </div>
 
@@ -228,7 +226,7 @@ onUnmounted(() => {
         Меню
       </button>
 
-      <BaseButton to="/#contact" variant="primary" arrow class="dock__cta" @click="closeMenu(); onNavClick('#contact')">
+      <BaseButton :to="{ path: '/', hash: '#contact' }" variant="primary" arrow class="dock__cta" @click="closeMenu(); onNavClick('#contact')">
         Обсудить задачу
       </BaseButton>
     </div>
@@ -339,11 +337,6 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
-@media (max-width: 991px) {
-  .site-header__cta-tail {
-    display: none;
-  }
-}
 
 /* телефон: затемнение, шторка, нижняя панель — только ≤767 */
 .menu-overlay,
