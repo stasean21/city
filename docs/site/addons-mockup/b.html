@@ -1,0 +1,49 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --text:#717171; --text-3:#A1A09F; --accent:#F59958; --white:#fff; --border:#E4E4E4; --fh:Gilroy,Inter,sans-serif; --fb:Inter,Arial,sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: var(--fb); color: var(--text); width: 1440px; padding: 56px 0 72px; }
+.c { width: 1312px; margin: 0 auto; }
+.lab { font: 500 13px var(--fb); color: #999; margin-bottom: 18px; }
+.pill { display: inline-block; background: var(--bg-3); border-radius: 999px; padding: 6px 14px; font: 400 14px var(--fb); color: var(--ink); }
+.prices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; opacity: .45; }
+.pc { background: var(--white); border-radius: 20px; padding: 32px 36px; height: 150px; }
+.pc.d { background: var(--ink); }
+.pc b { font: 500 28px var(--fh); color: var(--ink); } .pc.d b { color: #fff; }
+.pc p { margin-top: 18px; font: 500 40px var(--fh); color: var(--ink); } .pc.d p { color: #fff; }
+.head { display: flex; justify-content: space-between; align-items: flex-end; margin: 56px 0 28px; }
+.head h3 { font: 600 32px/1.2 var(--fh); letter-spacing: -.64px; color: var(--ink); }
+.head .ld { font: 400 17px/1.5 var(--fb); max-width: 460px; }
+/* A — список-таблица */
+.list { background: var(--white); border-radius: 20px; padding: 8px 36px; }
+.row { display: grid; grid-template-columns: 260px 1fr 120px 120px; align-items: center; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--border); }
+.row:last-child { border-bottom: 0; }
+.row b { font: 500 20px var(--fh); color: var(--ink); }
+.row span { font: 400 15px/1.5 var(--fb); }
+.row em { font: 500 20px var(--fh); font-style: normal; color: var(--ink); text-align: right; }
+.row a { justify-self: end; display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--fb); color: var(--ink); background: var(--bg); border-radius: 12px; padding: 8px 14px; }
+.row.hot b::after { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-left: 10px; vertical-align: middle; }
+/* B — плитки */
+.tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.t { background: var(--white); border-radius: 20px; padding: 24px; min-height: 230px; display: flex; flex-direction: column; }
+.t small { font: 500 13px var(--fb); color: var(--text-3); }
+.t b { margin-top: 28px; font: 500 21px/1.15 var(--fh); color: var(--ink); }
+.t span { margin-top: 10px; font: 400 14px/1.45 var(--fb); flex: 1; }
+.t em { margin-top: 18px; font: 500 22px var(--fh); font-style: normal; color: var(--ink); }
+.t.d { background: var(--ink); } .t.d b, .t.d em { color: #fff; } .t.d span { color: #B8B6B2; } .t.d small { color: var(--accent); }
+/* C — полоса «добавить к заказу» */
+.bar { background: var(--white); border-radius: 20px; padding: 28px 32px; display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start; }
+.bar h4 { font: 500 24px/1.2 var(--fh); color: var(--ink); }
+.bar .bl { margin-top: 10px; font: 400 15px/1.5 var(--fb); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 12px; background: var(--bg); border-radius: 999px; padding: 12px 12px 12px 20px; font: 500 16px var(--fb); color: var(--ink); }
+.chip i { font-style: normal; font: 500 14px var(--fb); background: var(--white); border-radius: 999px; padding: 6px 12px; }
+.chip.d { background: var(--ink); color: #fff; } .chip.d i { background: var(--accent); color: var(--ink); }
+.hint { margin-top: 18px; font: 400 14px/1.5 var(--fb); color: var(--text-3); }
+</style></head><body><div class="c"><div class="lab">Вариант B</div><div class="prices"><div class="pc"><b>Главный слайд</b><p>750 ₽</p></div><div class="pc d"><b>Карточка целиком</b><p>3 000 ₽</p></div><div class="pc"><b>Серия товаров</b><p>5 500 ₽</p></div></div><div class="head"><h3>Дополнительные услуги</h3><p class="ld">Добавьте к заказу то, что нужно именно вашему товару.</p></div><div class="tiles"><div class="t"><small>01</small><b>Rich-контент</b><span>Расширенное описание для карточки: блоки с картинками и текстом под Ozon и WB</span><em>от … ₽</em></div><div class="t"><small>02</small><b>Дополнительный слайд</b><span>Ещё один слайд к готовой карточке в том же стиле</span><em>… ₽</em></div><div class="t"><small>03</small><b>Ресайз</b><span>Адаптация готовых слайдов под другие размеры и площадки</span><em>… ₽</em></div><div class="t"><small>04</small><b>Замена товара</b><span>Готовая карточка под другой товар: новые фото и тексты, тот же дизайн</span><em>… ₽</em></div><div class="t d"><small>05</small><b>Срочно</b><span>Работа вне очереди — сдача быстрее основного срока</span><em>+ …%</em></div></div></div></body></html>
