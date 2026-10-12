@@ -1,29 +1,64 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import RollingText from '../ui/RollingText.vue'
+import { useActiveSection } from '../../composables/useActiveSection.js'
+import { messengers } from '../../utils/messengers.js'
 
-// «Услуги» и «Процесс» временно убраны — вели на /#services и /#process,
-// а этих секций на главной пока нет
+// пункты — блоки главной; с любой страницы ведут на главную к блоку,
+// отступ под шапку даёт scrollBehavior в main.js
 const navLinks = [
-  { label: 'Работы', to: '/works' },
-  { label: 'Обо мне', to: '/about' },
-  { label: 'Контакты', to: '/contacts' },
+  { label: 'Услуги',       hash: '#services' },
+  { label: 'Этапы работы', hash: '#process' },
+  { label: 'Отзывы',       hash: '#reviews' },
+  { label: 'Обо мне',      hash: '#about' },
+  { label: 'FAQ',          hash: '#faq' },
 ]
+
+// мессенджер без логотипа в шторке не показываем — пустая плитка
+const menuMessengers = messengers.filter((item) => item.svg)
+
+const route = useRoute()
+const router = useRouter()
+const activeHash = useActiveSection(navLinks.map((link) => link.hash))
+
+// тот же адрес (главная с этим hash) роутер считает дублем и не прокручивает —
+// а пользователь мог уже уехать от блока. Повторяем переход принудительно
+function onNavClick(hash) {
+  if (route.name === 'home' && route.hash === hash) {
+    router.push({ path: '/', hash, force: true })
+  }
+}
 
 const isMenuOpen = ref(false)
 const isHidden = ref(false)
 const isScrolled = ref(false)
+const menuButton = ref(null)
+const tileEls = ref([])
 
 function openMenu() {
   isMenuOpen.value = true
   isHidden.value = false
   document.body.style.overflow = 'hidden'
+  nextTick(() => tileEls.value[0]?.$el?.focus({ preventScroll: true }))
 }
 
 function closeMenu() {
+  if (!isMenuOpen.value) return
   isMenuOpen.value = false
   document.body.style.overflow = ''
+  menuButton.value?.focus({ preventScroll: true })
+}
+
+function toggleMenu() {
+  if (isMenuOpen.value) closeMenu()
+  else openMenu()
+}
+
+function onTileClick(hash) {
+  closeMenu()
+  onNavClick(hash)
 }
 
 function handleKeydown(event) {
@@ -48,14 +83,25 @@ function handleScroll() {
   lastScrollY = currentScrollY
 }
 
+// шторка есть только на телефоне: при развороте на планшет закрываем,
+// иначе страница осталась бы без прокрутки
+let desktopQuery = null
+
+function handleDesktop(event) {
+  if (event.matches) closeMenu()
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('keydown', handleKeydown)
+  desktopQuery = window.matchMedia('(min-width: 768px)')
+  desktopQuery.addEventListener('change', handleDesktop)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('keydown', handleKeydown)
+  desktopQuery?.removeEventListener('change', handleDesktop)
   document.body.style.overflow = ''
 })
 </script>
@@ -67,62 +113,99 @@ onUnmounted(() => {
         <img src="/logo/logo-light.svg" alt="m/design" width="175" height="51" />
       </RouterLink>
 
-      <nav class="site-header__nav">
+      <nav class="site-header__nav" aria-label="Блоки главной">
         <RouterLink
           v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
+          :key="link.hash"
+          :to="{ path: '/', hash: link.hash }"
+          active-class=""
+          exact-active-class=""
           class="site-header__link"
+          :class="{ 'is-active': activeHash === link.hash }"
+          :aria-current="activeHash === link.hash ? 'true' : null"
           :aria-label="link.label"
+          @click="onNavClick(link.hash)"
         >
           <RollingText :text="link.label" :step="30" />
         </RouterLink>
       </nav>
 
-      <BaseButton to="/contacts" variant="primary" arrow class="site-header__cta">
-        Обсудить задачу
-      </BaseButton>
-
-      <button
-        class="site-header__burger"
-        aria-label="Открыть меню"
-        aria-controls="site-mobile-menu"
-        :aria-expanded="isMenuOpen"
-        @click="openMenu"
+      <!-- на планшете «задачу» прячется: пять пунктов и полная подпись не помещаются -->
+      <BaseButton
+        to="/#contact"
+        variant="primary"
+        arrow
+        class="site-header__cta"
+        aria-label="Обсудить задачу"
+        @click="onNavClick('#contact')"
       >
-        <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
-          <path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.5" />
-        </svg>
-      </button>
+        Обсудить<span class="site-header__cta-tail"> задачу</span>
+      </BaseButton>
     </div>
+
+    <!-- телефон: затемнение, шторка и нижняя панель. Порядок в DOM = порядок
+         слоёв: панель поверх шторки, шторка поверх затемнения -->
+    <div class="menu-overlay" :class="{ 'is-open': isMenuOpen }" aria-hidden="true" @click="closeMenu"></div>
 
     <div
       id="site-mobile-menu"
-      class="mobile-menu"
+      class="menu-sheet"
       :class="{ 'is-open': isMenuOpen }"
       role="dialog"
       aria-modal="true"
+      aria-label="Меню"
       :inert="!isMenuOpen"
     >
-      <button class="mobile-menu__close" aria-label="Закрыть меню" @click="closeMenu">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1.5" />
-        </svg>
-      </button>
+      <span class="menu-sheet__grip" aria-hidden="true"></span>
 
-      <nav class="mobile-menu__nav">
+      <nav class="menu-sheet__grid" aria-label="Блоки главной">
         <RouterLink
-          v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
-          class="mobile-menu__link"
-          @click="closeMenu"
+          v-for="(link, i) in navLinks"
+          :key="link.hash"
+          ref="tileEls"
+          :to="{ path: '/', hash: link.hash }"
+          active-class=""
+          exact-active-class=""
+          class="menu-tile"
+          :class="{ 'is-active': activeHash === link.hash }"
+          :aria-current="activeHash === link.hash ? 'true' : null"
+          @click="onTileClick(link.hash)"
         >
-          {{ link.label }}
+          <span class="caption menu-tile__num" aria-hidden="true">{{ String(i + 1).padStart(2, '0') }}</span>
+          <span class="h3 menu-tile__label">{{ link.label }}</span>
         </RouterLink>
       </nav>
 
-      <BaseButton to="/contacts" variant="primary" arrow class="mobile-menu__cta" @click="closeMenu">
+      <ul class="menu-sheet__messengers">
+        <li v-for="item in menuMessengers" :key="item.id">
+          <a
+            :href="item.url"
+            class="menu-messenger"
+            target="_blank"
+            rel="noopener"
+            :aria-label="item.name"
+          >
+            <span class="menu-messenger__icon" aria-hidden="true" v-html="item.svg"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dock on-dark" :class="{ 'is-open': isMenuOpen }">
+      <button
+        ref="menuButton"
+        type="button"
+        class="ui dock__menu"
+        aria-controls="site-mobile-menu"
+        :aria-expanded="isMenuOpen"
+        :aria-label="isMenuOpen ? 'Закрыть меню' : 'Открыть меню'"
+        @click="toggleMenu"
+      >
+        <span class="dock__icon" aria-hidden="true"><i></i><i></i></span>
+        Меню
+      </button>
+
+      <BaseButton to="/#contact" variant="primary" arrow class="dock__cta" @click="closeMenu(); onNavClick('#contact')">
         Обсудить задачу
       </BaseButton>
     </div>
@@ -152,19 +235,16 @@ onUnmounted(() => {
   padding: 0 var(--gutter);
   display: flex;
   align-items: center;
-  /* от текста последнего пункта до кнопки — тот же --nav-gap */
-  gap: calc(var(--nav-gap) - var(--nav-link-px));
   border-radius: calc(var(--header-h) / 2);
   background: transparent;
-  transition: transform var(--ease), background-color var(--ease), box-shadow var(--ease);
+  transition: transform var(--ease), background-color var(--ease);
   pointer-events: auto;
 }
 
-/* свечение — временное, для теста; видно только когда панель
-   реально показана (проскроллили вниз и сейчас скроллим вверх) */
+/* фон — только когда панель реально показана
+   (проскроллили вниз и сейчас скроллим вверх) */
 .site-header.has-bg .site-header__inner {
   background: var(--bg);
-  box-shadow: 0 0 var(--s-16) rgba(255, 0, 0, .15);
 }
 
 .site-header__inner.is-hidden {
@@ -177,6 +257,7 @@ onUnmounted(() => {
 
 .site-header__logo {
   display: flex;
+  flex: none;
   align-items: center;
   margin-right: auto;
 }
@@ -187,12 +268,9 @@ onUnmounted(() => {
   width: auto;
 }
 
-/* --nav-gap — расстояние от текста до текста; паддинги подложки
-   ховера съедают часть зазора, поэтому вычитаем их */
 .site-header__nav {
   display: flex;
   align-items: center;
-  gap: calc(var(--nav-gap) - 2 * var(--nav-link-px));
 }
 
 .site-header__link {
@@ -203,10 +281,18 @@ onUnmounted(() => {
   padding: var(--nav-link-py) var(--nav-link-px);
   border-radius: var(--r-pill);
   background: transparent;
-  transition: opacity .2s ease, background-color .2s ease;
+  white-space: nowrap;
+  transition: opacity var(--ease), background-color var(--ease);
 }
 
-.site-header__link:hover {
+/* --nav-gap-dense — от текста до текста; паддинги капсул больше половины
+   зазора, поэтому соседние капсулы заходят друг под друга */
+.site-header__link + .site-header__link {
+  margin-left: calc(var(--nav-gap-dense) - 2 * var(--nav-link-px));
+}
+
+.site-header__link:hover,
+.site-header__link.is-active {
   opacity: 1;
   background: var(--bg-3);
 }
@@ -217,60 +303,30 @@ onUnmounted(() => {
   transform: translateY(-100%);
 }
 
-.site-header__link.router-link-active {
-  opacity: 1;
-  background: var(--bg-3);
+.site-header__link:focus-visible {
+  outline: var(--focus-ring) solid var(--ink);
+  outline-offset: var(--focus-ring);
 }
 
-.site-header__burger {
+/* от текста последнего пункта до кнопки — --nav-gap;
+   слева от пунктов места даёт margin-right: auto у логотипа */
+.site-header__cta {
+  flex: none;
+  margin-left: calc(var(--nav-gap) - var(--nav-link-px));
+  white-space: nowrap;
+}
+
+@media (max-width: 991px) {
+  .site-header__cta-tail {
+    display: none;
+  }
+}
+
+/* телефон: затемнение, шторка, нижняя панель — только ≤767 */
+.menu-overlay,
+.menu-sheet,
+.dock {
   display: none;
-  background: none;
-  border: 0;
-  color: var(--ink);
-  padding: var(--s-8);
-}
-
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-  padding: var(--gutter);
-  transform: translateX(100%);
-  transition: transform var(--ease);
-  pointer-events: auto;
-}
-
-.mobile-menu.is-open {
-  transform: translateX(0);
-}
-
-.mobile-menu__close {
-  align-self: flex-end;
-  background: none;
-  border: 0;
-  color: var(--ink);
-  padding: var(--s-8);
-}
-
-.mobile-menu__nav {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-24);
-  margin-top: var(--s-60);
-}
-
-.mobile-menu__link {
-  font: 500 var(--t-h3) var(--f-head);
-  color: var(--ink);
-}
-
-.mobile-menu__cta {
-  width: 100%;
-  margin-top: auto;
-  justify-content: space-between;
 }
 
 @media (max-width: 767px) {
@@ -279,8 +335,207 @@ onUnmounted(() => {
     display: none;
   }
 
-  .site-header__burger {
+  /* сверху только логотип, без подложки */
+  .site-header.has-bg .site-header__inner {
+    background: transparent;
+  }
+
+  .menu-overlay {
     display: block;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--ease);
+  }
+
+  .menu-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu-sheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: var(--s-12) var(--s-12) calc(var(--dock-h) + var(--s-32) + env(safe-area-inset-bottom));
+    background: var(--bg);
+    border-radius: var(--r-stage) var(--r-stage) 0 0;
+    transform: translateY(100%);
+    transition: transform var(--ease);
+    pointer-events: auto;
+  }
+
+  .menu-sheet.is-open {
+    transform: translateY(0);
+  }
+
+  .menu-sheet__grip {
+    align-self: center;
+    width: var(--grip-w);
+    height: var(--grip-h);
+    margin-bottom: var(--s-16);
+    border-radius: var(--r-pill);
+    background: var(--bg-3);
+  }
+
+  .menu-sheet__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-8);
+  }
+
+  .menu-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: var(--tile-h);
+    padding: var(--s-12) var(--s-16);
+    border-radius: var(--r-card);
+    background: var(--white);
+    color: var(--ink);
+    transition: background-color var(--ease), color var(--ease);
+  }
+
+  /* пятая плитка (FAQ) — на всю ширину, ниже, номер и название в строку */
+  .menu-tile:last-child {
+    grid-column: span 2;
+    height: var(--tile-h-wide);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--s-16);
+  }
+
+  /* .h3 из base.css красит в --ink — цвет берём у плитки */
+  .menu-tile__label {
+    color: inherit;
+  }
+
+  .menu-tile__num {
+    color: var(--text-3);
+    transition: color var(--ease);
+  }
+
+  .menu-tile.is-active {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .menu-tile.is-active .menu-tile__num {
+    color: var(--accent);
+  }
+
+  .menu-sheet__messengers {
+    display: flex;
+    gap: var(--s-8);
+    margin-top: var(--s-12);
+  }
+
+  .menu-sheet__messengers li {
+    flex: 1;
+  }
+
+  .menu-messenger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--dock-msg-h);
+    border-radius: var(--r-card);
+    background: var(--white);
+  }
+
+  .menu-messenger__icon {
+    width: var(--footer-icon);
+    height: var(--footer-icon);
+  }
+
+  .menu-messenger__icon :deep(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .menu-tile:focus-visible,
+  .menu-messenger:focus-visible {
+    outline: var(--focus-ring) solid var(--ink);
+    outline-offset: var(--focus-ring);
+  }
+
+  /* нижняя панель-капсула: видна всегда, поверх шторки */
+  .dock {
+    display: flex;
+    align-items: center;
+    gap: var(--dock-pad);
+    position: fixed;
+    left: var(--s-12);
+    right: var(--s-12);
+    bottom: calc(var(--s-16) + env(safe-area-inset-bottom));
+    height: var(--dock-h);
+    padding: var(--dock-pad);
+    border-radius: var(--r-pill);
+    background: var(--ink);
+    pointer-events: auto;
+  }
+
+  /* у капсул --r-pill вложенное скругление (панель − отступ) выходит само */
+  .dock__menu {
+    display: flex;
+    align-items: center;
+    gap: var(--s-8);
+    height: calc(var(--dock-h) - 2 * var(--dock-pad));
+    padding: 0 var(--s-16) 0 var(--s-12);
+    border: 0;
+    border-radius: var(--r-pill);
+    background: var(--ink-soft);
+    color: var(--white);
+    cursor: pointer;
+  }
+
+  /* две линии; в открытом меню сходятся в крестик */
+  .dock__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(2 * var(--dock-line-gap) - var(--dock-line-w));
+    width: var(--dock-icon);
+    height: var(--dock-icon);
+  }
+
+  .dock__icon i {
+    display: block;
+    width: var(--dock-line);
+    height: var(--dock-line-w);
+    background: currentColor;
+    transition: transform var(--ease);
+  }
+
+  .dock.is-open .dock__icon i:first-child {
+    transform: translateY(var(--dock-line-gap)) rotate(45deg);
+  }
+
+  .dock.is-open .dock__icon i:last-child {
+    transform: translateY(calc(-1 * var(--dock-line-gap))) rotate(-45deg);
+  }
+
+  /* .on-dark у панели делает primary белой с тёмным текстом */
+  .dock .dock__cta {
+    flex: 1;
+    justify-content: center;
+    height: calc(var(--dock-h) - 2 * var(--dock-pad));
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+  }
+
+  .dock__menu:focus-visible,
+  .dock .dock__cta:focus-visible {
+    outline: var(--focus-ring) solid var(--white);
+    outline-offset: var(--focus-ring);
   }
 }
 </style>
