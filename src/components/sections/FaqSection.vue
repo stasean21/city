@@ -1,9 +1,10 @@
 <script setup>
 import { computed, h, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import AccordionItem from '../ui/AccordionItem.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import faq from '../../data/faq.json'
-import contacts from '../../data/contacts.json'
+import { scrollToSameAnchor } from '../../utils/headerOffset.js'
 
 // по умолчанию — блок главной; страница услуги передаёт свои вопросы
 const props = defineProps({
@@ -12,8 +13,9 @@ const props = defineProps({
   items: { type: Array, default: () => faq },
 })
 
-// адрес — из общего списка мессенджеров, заполняется там
-const TELEGRAM = contacts.find((c) => c.id === 'telegram').url
+// кнопка ведёт к блоку «Обсудим задачу?» этой же страницы (он есть на главной
+// и на каждой услуге); повторный клик по тому же якорю прокручиваем сами
+const route = useRoute()
 
 // открыт один вопрос; клик по открытому закрывает его
 const openIndex = ref(0)
@@ -51,8 +53,13 @@ const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJs
         <h2 class="display faq__title">{{ title }}</h2>
         <p class="lead">{{ lead }}</p>
         <div class="faq__cta">
-          <BaseButton :href="TELEGRAM" target="_blank" rel="noopener" variant="primary" arrow>
-            Написать в Telegram
+          <BaseButton
+            :to="{ hash: '#contact' }"
+            variant="primary"
+            arrow
+            @click="scrollToSameAnchor(route, '#contact', route.path)"
+          >
+            Обсудить задачу
           </BaseButton>
         </div>
       </div>
