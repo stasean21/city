@@ -103,7 +103,7 @@ onUnmounted(() => {
                 </template>
                 <CoverImage v-else class="vfeed__media" :src="card.work.poster" :width="300" :height="400" />
               </div>
-              <p class="small vfeed__price">[—] ₽</p>
+              <p class="small vfeed__price">— ₽</p>
               <span class="vfeed__line"></span>
               <span class="vfeed__line is-short"></span>
             </div>

@@ -32,6 +32,8 @@ function toTop() {
           </RouterLink>
         </nav>
 
+        <a href="mailto:design@muntyanu.ru" class="small site-footer__link">design@muntyanu.ru</a>
+
         <ul class="site-footer__messengers">
           <li v-for="item in messengers" :key="item.id">
             <a
@@ -48,7 +50,7 @@ function toTop() {
       </div>
 
       <div class="caption site-footer__bottom">
-        <span>© {{ year }} m/design · работаю по всей России · физлица и юрлица — по договору · ИП [ФИО] · ИНН [—]</span>
+        <span>© {{ year }} m/design · работаю по всей России · физлица и юрлица — по договору · ИП Мунтяну Станислав · ИНН 366609497266</span>
         <div class="site-footer__meta">
           <RouterLink to="/privacy" class="site-footer__link">Политика конфиденциальности</RouterLink>
           <button type="button" class="site-footer__link site-footer__up" @click="toTop">Наверх ↑</button>
