@@ -1,5 +1,10 @@
 <script setup>
+import { useRoute } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
+import { scrollToSameAnchor } from '../../utils/headerOffset.js'
+
+// повторный клик по тому же якорю роутер не обрабатывает — прокручиваем сами
+const route = useRoute()
 </script>
 
 <template>
@@ -10,8 +15,12 @@ import BaseButton from '../ui/BaseButton.vue'
         <p class="lead hero__lead once-in">Собираю визуал, сайты и автоматизацию так, чтобы всё работало вместе —
           от первого показа в выдаче до первого заказа.</p>
         <div class="hero__actions once-in">
-          <BaseButton to="/works" variant="primary" roll>Смотреть работы</BaseButton>
-          <BaseButton to="/contacts" variant="secondary" arrow>Обсудить задачу</BaseButton>
+          <BaseButton :to="{ path: '/', hash: '#services' }" variant="primary" arrow @click="scrollToSameAnchor(route, '#services')">
+            Услуги и решения
+          </BaseButton>
+          <BaseButton :to="{ path: '/', hash: '#contact' }" variant="secondary" arrow @click="scrollToSameAnchor(route, '#contact')">
+            Обсудить задачу
+          </BaseButton>
         </div>
       </div>
     </div>

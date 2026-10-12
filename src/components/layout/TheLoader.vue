@@ -3,7 +3,6 @@ import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { gsap } from 'gsap'
 import { useAssetsReady } from '../../composables/useAssetsReady'
-import worksData from '../../data/works.json'
 import servicesData from '../../data/services.json'
 
 const WORDS = ['design', 'cards', 'infographic', 'photo', 'ai', 'motion', 'web', 'agents', 'data', 'design']
@@ -11,7 +10,6 @@ const FULL_SEQUENCE = WORDS.map((_, i) => i)
 
 const ROUTE_LABELS = {
   home: 'Главная',
-  works: 'Работы',
   about: 'Обо мне',
   contacts: 'Контакты',
   privacy: 'Политика конфиденциальности',
@@ -41,10 +39,6 @@ function setWordRef(el, i) { wordEls[i] = el }
 // на переходах между страницами загрузчик пишет название раздела назначения,
 // а не случайное слово из бренд-перебора — это отдельная задача от первой загрузки
 function getRouteLabel(to) {
-  if (to.name === 'work-detail') {
-    const work = worksData.find((w) => w.slug === to.params.slug)
-    return work?.title ?? 'Работы'
-  }
   if (to.name === 'service-detail') {
     const service = servicesData.find((s) => s.slug === to.params.slug)
     return service?.title ?? 'Услуги'
