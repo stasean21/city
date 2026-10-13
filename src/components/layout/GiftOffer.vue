@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import gift from '../../data/gift.json'
@@ -14,13 +14,10 @@ const START_KEY = 'gift-start'
 // пока открыты галерея, просмотр слайдов или мобильное меню — ждём их закрытия
 const BUSY_POLL = 500
 
-// «оживление» ярлыка: покачивание подарка и подсмотр выгоды по очереди
-const GIFT_NUDGE_MS = 15000 // между оживлениями
-const NUDGE_FIRST_MS = 3000 // первое — через столько после появления ярлыка
-const NUDGE_MAX = 6 // за визит, потом ярлык просто стоит
-const SHAKE_MS = 700 // длительность покачивания (= @keyframes)
-const PEEK_MS = 3000 // сколько видна выгода вместо «Ваш подарок»
-const NUDGE_RETRY_MS = 1000 // на паузе — проверяем снова, без накопления
+// ярлык по кругу показывает выгоды: «Ваш подарок» → выгода 1 → … → «Ваш подарок»
+const GIFT_ROTATE_MS = 8000 // сколько держится каждая подпись
+const SHAKE_MS = 700 // покачивание иконки при возврате к «Ваш подарок» (= @keyframes)
+const ROTATE_RETRY_MS = 1000 // на паузе (окно, галерея, меню, фон) — проверяем снова, без «пачки»
 
 const route = useRoute()
 const router = useRouter()
@@ -35,57 +32,57 @@ const tabEl = ref(null)
 let timer = 0
 let busyTimer = 0
 
-// ---------- оживление ярлыка ----------
-const shorts = gift.items.map((item) => item.short)
-const label = ref(gift.tab)
+// ---------- смена подписи ярлыка ----------
+const labels = [gift.tab, ...gift.items.map((item) => item.short)]
+const labelIndex = ref(0)
+const label = computed(() => labels[labelIndex.value])
 const labelW = ref(0)
 const measureEl = ref(null)
 const shaking = ref(false)
 const tabHover = ref(false)
-let nudges = 0
-let nextPeek = false
-let peekIndex = 0
-let nudgeTimer = 0
-let fxTimer = 0
+let rotateTimer = 0
+let shakeTimer = 0
 
-function scheduleNudge(ms) {
-  clearTimeout(nudgeTimer)
-  nudgeTimer = window.setTimeout(nudge, ms)
-}
-
-function stopNudges() {
-  clearTimeout(nudgeTimer)
-  clearTimeout(fxTimer)
-  shaking.value = false
-  label.value = gift.tab
-}
-
-// пауза: курсор или фокус на ярлыке, окно/галерея/меню открыты, вкладка в фоне
-function nudgePaused() {
-  return tabHover.value
-    || document.activeElement === tabEl.value
-    || document.visibilityState !== 'visible'
-    || isBusy()
-}
-
-function nudge() {
-  if (state.value !== 'tab' || nudges >= NUDGE_MAX) return
+function scheduleRotate(ms = GIFT_ROTATE_MS) {
+  clearTimeout(rotateTimer)
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-  if (nudgePaused()) {
-    scheduleNudge(NUDGE_RETRY_MS)
+  rotateTimer = window.setTimeout(rotate, ms)
+}
+
+function stopRotate() {
+  clearTimeout(rotateTimer)
+  clearTimeout(shakeTimer)
+  shaking.value = false
+  labelIndex.value = 0
+}
+
+function rotate() {
+  if (state.value !== 'tab' || tabHover.value) return
+  // окно/галерея/меню открыты или вкладка в фоне — ждём, продолжаем с того же места
+  if (document.visibilityState !== 'visible' || isBusy()) {
+    scheduleRotate(ROTATE_RETRY_MS)
     return
   }
-  nudges += 1
-  if (nextPeek) {
-    label.value = shorts[peekIndex % shorts.length]
-    peekIndex += 1
-    fxTimer = window.setTimeout(() => { label.value = gift.tab }, PEEK_MS)
-  } else {
+  labelIndex.value = (labelIndex.value + 1) % labels.length
+  if (labelIndex.value === 0) {
     shaking.value = true
-    fxTimer = window.setTimeout(() => { shaking.value = false }, SHAKE_MS)
+    clearTimeout(shakeTimer)
+    shakeTimer = window.setTimeout(() => { shaking.value = false }, SHAKE_MS)
   }
-  nextPeek = !nextPeek
-  scheduleNudge(GIFT_NUDGE_MS)
+  scheduleRotate()
+}
+
+// курсор или фокус на ярлыке — сразу «Ваш подарок» и стоп; ушли — через 8 с дальше
+function holdTab() {
+  tabHover.value = true
+  clearTimeout(rotateTimer)
+  labelIndex.value = 0
+}
+
+function releaseTab() {
+  if (!tabHover.value) return
+  tabHover.value = false
+  if (state.value === 'tab') scheduleRotate()
 }
 
 // ширина подписи — по скрытому измерителю, чтобы ярлык менял ширину плавно
@@ -98,9 +95,9 @@ watch(label, measureLabel)
 watch(state, (value) => {
   if (value === 'tab') {
     measureLabel()
-    scheduleNudge(NUDGE_FIRST_MS)
+    scheduleRotate()
   } else {
-    stopNudges()
+    stopRotate()
   }
 })
 
@@ -136,7 +133,7 @@ function showWhenFree() {
 }
 
 function open(byTab) {
-  // ярлык исчезнет без mouseleave — иначе оживления встали бы на паузу навсегда
+  // ярлык исчезнет без mouseleave — иначе смена встала бы на паузу навсегда
   tabHover.value = false
   fromTab.value = byTab
   state.value = 'open'
@@ -202,7 +199,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   clearTimeout(timer)
   clearTimeout(busyTimer)
-  stopNudges()
+  stopRotate()
   if (state.value === 'open') document.body.style.overflow = ''
 })
 </script>
@@ -265,8 +262,10 @@ onUnmounted(() => {
         aria-haspopup="dialog"
         :class="{ 'is-shaking': shaking }"
         @click="open(true)"
-        @mouseenter="tabHover = true"
-        @mouseleave="tabHover = false"
+        @mouseenter="holdTab"
+        @mouseleave="releaseTab"
+        @focus="holdTab"
+        @blur="releaseTab"
       >
         <svg class="gift__icon gift-tab__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3.5" y="8.5" width="17" height="4" rx="1.2" stroke="currentColor" stroke-width="1.6" />
