@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>m/design — промо</title>
+<style>
+@font-face { font-family: Gilroy; src: url(assets/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(assets/Gilroy-Semibold.woff2); font-weight: 600; }
+:root { --bg:#F6F4F2; --ink:#1D1E22; --text:#717171; --mute:#CFCCC7; --line:#EAE8E4; --white:#fff; --accent:#F59958; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: Gilroy, sans-serif; color: var(--ink); }
+#world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+.s { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: none; }
+.abs { position: absolute; }
+.m { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .04em .14em; margin: 0 -.04em -.14em; }
+.i { display: inline-block; }
+.pill { position: absolute; padding: 10px 22px; border-radius: 999px; background: var(--line); font: 500 26px/1 Gilroy; color: var(--ink); }
+img { display: block; }
+
+/* шапка */
+#hdr { left: 210px; top: 60px; width: 1500px; height: 64px; background: var(--white); border-radius: 24px; }
+#hdr .logo { position: absolute; left: 24px; top: 15px; width: 116.7px; height: 34px; }
+#hdr nav { position: absolute; left: 760px; top: 0; height: 64px; display: flex; align-items: center; gap: 40px; font: 500 17px Gilroy; color: var(--text); }
+#hdr .btn { position: absolute; right: 8px; top: 8px; height: 48px; padding: 0 22px; border-radius: 16px; background: var(--ink); color: var(--white); font: 500 17px/48px Gilroy; }
+.hook { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.hook .lines { position: absolute; left: 210px; top: 300px; font: 500 150px/1.05 Gilroy; letter-spacing: -4.5px; }
+
+/* ИИ-фото */
+.frame { position: absolute; overflow: hidden; border-radius: 27px; background: var(--white); }
+.frame img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+.head { position: absolute; font: 500 84px/1.08 Gilroy; letter-spacing: -2.4px; }
+#handle { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: var(--white); display: grid; place-items: center; }
+
+/* процесс */
+.steps { position: absolute; left: 960px; top: 500px; width: 700px; }
+.step { position: absolute; left: 0; display: flex; gap: 22px; align-items: baseline; font: 500 30px Gilroy; color: var(--mute); }
+.step b { font: 500 18px Gilroy; width: 28px; }
+.track { position: absolute; height: 4px; border-radius: 2px; background: var(--line); }
+
+/* выдача */
+.tile { position: absolute; width: 250px; height: 448px; border-radius: 14px; overflow: hidden; }
+.tile img { width: 100%; height: 100%; }
+#dim { position: absolute; left: 200px; top: 80px; width: 1048px; height: 912px; background: rgba(29,30,34,.58); }
+#card { position: absolute; overflow: hidden; border-radius: 27px; }
+#card img { width: 100%; height: 100%; object-fit: cover; }
+
+/* финал */
+.lw { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.lw svg { position: absolute; left: 460px; top: 324px; width: 1000px; height: 291.3px; }
+.tag { position: absolute; left: 0; width: 1920px; text-align: center; }
+
+#slashSvg { position: absolute; left: 0; top: 0; overflow: visible; }
+#cursor { position: absolute; left: 0; top: 0; width: 26px; height: 38px; transform-origin: 0 0; }
+</style></head>
+<body>
+<div id="world">
+
+  <!-- ХУК -->
+  <div class="s" id="H">
+    <div class="abs" id="hdr">
+      <svg class="logo" id="logoH" viewBox="0 0 4377 1275"></svg>
+      <nav><span>Услуги</span><span>Этапы работы</span><span>Отзывы</span><span>Обо мне</span><span>FAQ</span></nav>
+      <span class="btn">Обсудить задачу</span>
+    </div>
+    <div class="hook" id="hookL"><div class="lines"><span class="m"><span class="i h1">Карточку</span></span><br><span class="m"><span class="i h2">не видно в выдаче</span></span></div></div>
+    <div class="hook" id="hookR"><div class="lines"><span class="m"><span class="i h1">Карточку</span></span><br><span class="m"><span class="i h2">не видно в выдаче</span></span></div></div>
+  </div>
+
+  <!-- ИИ-ФОТО -->
+  <div class="s" id="A">
+    <div class="frame" style="left:300px;top:140px;width:600px;height:800px">
+      <img src="assets/model-white.webp" alt="">
+      <img src="assets/model-scene.webp" alt="" id="after">
+    </div>
+    <div id="handle"><svg width="26" height="14" viewBox="0 0 26 14"><path d="M8 1 2 7l6 6M18 1l6 6-6 6" fill="none" stroke="#1D1E22" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span class="pill" id="pillA" style="left:1020px;top:300px">ИИ-фотосессия</span>
+    <div class="head" style="left:1020px;top:380px"><span class="m"><span class="i" id="a1">Модель и сцена —</span></span><br><span class="m"><span class="i" id="a2">без студии</span></span></div>
+  </div>
+
+  <!-- ИНФОГРАФИКА -->
+  <div class="s" id="B">
+    <div class="frame" id="frameB" style="left:240px;top:180px;width:540px;height:720px">
+      <img src="assets/layer-0.webp" alt="">
+      <img src="assets/layer-1.webp" alt="" class="ly">
+      <img src="assets/layer-2.webp" alt="" class="ly">
+      <img src="assets/layer-3.webp" alt="" class="ly">
+      <img src="assets/final.webp" alt="" class="ly">
+    </div>
+    <div class="abs" id="colB" style="left:0;top:0;width:1920px;height:1080px">
+    <span class="pill" id="pillB" style="left:960px;top:180px">Процесс</span>
+    <div class="head" style="left:960px;top:250px;font-size:76px;letter-spacing:-2.2px"><span class="m"><span class="i" id="b1">Главный слайд —</span></span><br><span class="m"><span class="i" id="b2" style="color:var(--accent)">до 24 часов</span></span></div>
+    <div class="steps" id="steps"></div>
+    </div>
+  </div>
+
+  <!-- ВЫДАЧА -->
+  <div class="s" id="P">
+    <div id="grid"></div>
+    <div id="dim"></div>
+    <div class="tile" id="mine" style="left:732px;top:80px"><img src="assets/tile-mine.webp" alt=""></div>
+    <div id="card"><img src="assets/final.webp" alt=""></div>
+    <div class="head" style="left:1330px;top:330px;font-size:150px;line-height:1.02;letter-spacing:-4.5px"><span class="m"><span class="i" id="p1">Видно</span></span><br><span class="m"><span class="i" id="p2" style="color:var(--accent)">сразу.</span></span></div>
+  </div>
+
+  <!-- ФИНАЛ -->
+  <div class="s" id="E">
+    <div class="lw" id="lwL"><svg id="logoEL" viewBox="0 0 4377 1275"></svg></div>
+    <div class="lw" id="lwR"><svg id="logoER" viewBox="0 0 4377 1275"></svg></div>
+    <svg id="logoEM" viewBox="0 0 4377 1275" style="position:absolute;left:460px;top:324px;width:1000px;height:291.3px;visibility:hidden"></svg>
+    <div class="tag" style="top:690px;font:500 46px Gilroy;letter-spacing:-.9px"><span class="m"><span class="i" id="e1">Дизайн карточек для Ozon и Wildberries</span></span></div>
+    <div class="tag" style="top:768px;font:500 34px Gilroy;color:var(--text)"><span class="m"><span class="i" id="e2">t.me/muntyanu_design</span></span></div>
+  </div>
+
+  <svg id="slashSvg" width="1920" height="1080">
+    <defs><filter id="mb" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbg" stdDeviation="0 0"/></filter></defs>
+    <polygon id="slash" fill="#F59958"/>
+  </svg>
+  <svg id="cursor" viewBox="-2 -2 28 40"><path d="M0 0V30L8 23 13 34 18 32 13 21H23Z" fill="#1D1E22" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+</div>
+
+<script>
+// ---------- математика ----------
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
+const lerp = (a, b, k) => a + (b - a) * k
+// пружина с небольшим перелётом (ζ 0.74 → ~3%)
+const springF = (w = 13, z = 0.74) => (dt) => {
+  if (dt <= 0) return 0
+  const wd = w * Math.sqrt(1 - z * z)
+  return 1 - Math.exp(-z * w * dt) * (Math.cos(wd * dt) + (z * w / wd) * Math.sin(wd * dt))
+}
+const expoIn = (p) => (p <= 0 ? 0 : Math.pow(2, 10 * (p - 1)))
+const expoOut = (p) => (p >= 1 ? 1 : 1 - Math.pow(2, -10 * p))
+const expoInOut = (p) => (p <= 0 ? 0 : p >= 1 ? 1 : p < 0.5 ? Math.pow(2, 20 * p - 10) / 2 : (2 - Math.pow(2, -20 * p + 10)) / 2)
+const IN = (d) => (dt) => (dt <= 0 ? 0 : dt >= d ? 1 : expoIn(dt / d))
+const OUT = (d) => (dt) => (dt <= 0 ? 0 : dt >= d ? 1 : expoOut(dt / d))
+const INOUT = (d) => (dt) => (dt <= 0 ? 0 : dt >= d ? 1 : expoInOut(dt / d))
+const SP = springF()
+// цепочка: v0 + Σ (v_i − v_{i−1})·ease_i(t − t_i); значения могут зависеть от t
+function chain(t, list) {
+  const out = list[0].v(t).slice()
+  for (let i = 1; i < list.length; i++) {
+    const k = list[i].e(t - list[i].t)
+    if (!k) continue
+    const a = list[i - 1].v(t), b = list[i].v(t)
+    for (let j = 0; j < out.length; j++) out[j] += (b[j] - a[j]) * k
+  }
+  return out
+}
+const K = (t, v, e = SP) => ({ t, v: typeof v === 'function' ? v : () => v, e })
+const $ = (id) => document.getElementById(id)
+const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16))
+const mix = (a, b, k) => { const x = hex(a), y = hex(b); return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], k))).join(',')})` }
+
+// ---------- слэш ----------
+const TAN = 315 / 957
+const sl = (cx, cy, h, w) => { const dx = (h / 2) * TAN; return [cx - dx - w / 2, cy + h / 2, cx + dx - w / 2, cy - h / 2, cx + dx + w / 2, cy - h / 2, cx - dx + w / 2, cy + h / 2] }
+const rect = (x, y, w, h) => [x, y + h, x, y, x + w, y, x + w, y + h]
+// полуплоскость слева/справа от наклонной линии через (cx, cy)
+const xAt = (cx, cy, y) => cx + (cy - y) * TAN
+const half = (cx, cy, side, ox = 0, oy = 0) => {
+  const a = xAt(cx, cy, -4000) - ox, b = xAt(cx, cy, 5000) - ox, T = -4000 - oy, B = 5000 - oy
+  return side < 0
+    ? `polygon(-6000px ${T}px, ${a}px ${T}px, ${b}px ${B}px, -6000px ${B}px)`
+    : `polygon(${a}px ${T}px, 8000px ${T}px, 8000px ${B}px, ${b}px ${B}px)`
+}
+
+// ---------- камера ----------
+const D = (t) => Math.pow(1.04, t / 3) // непрерывный наезд: +4% за сцену, без сбросов
+const CK = (t, cx, cy, S, e = springF(9, 0.78)) => K(t, [cx, cy, S / D(t)], e)
+let CAM
+function cam(t) { const [cx, cy, F] = chain(t, CAM); return { cx, cy, s: F * D(t) } }
+const toWorld = (c, X, Y) => [c.cx + (X - 960) / c.s, c.cy + (Y - 540) / c.s]
+function cover(t) { const c = cam(t), p = sl(960, 540, 1700, 4300), o = []; for (let i = 0; i < 8; i += 2) o.push(...toWorld(c, p[i], p[i + 1])); return o }
+
+// ---------- разметка, измеренная один раз ----------
+let LOGO_H, LOGO_E, SLASH, CUR
+const BAR = { x: 1010, y: 0, w: 590 }
+const STEPS = ['Бриф', 'Анализ конкурентов', 'ИИ-фотосессия', 'Обработка', 'Инфографика', 'Карточка в выдаче']
+const STEP_Y = (i) => 62 * i
+const LAYERS_T = [7.0, 7.5, 8.0, 8.5]
+const GRID = { x: 200, y: 80, w: 250, h: 448, g: 16 }
+const SLOT = { x: 732 + 250 * 10 / 448, y: 80 + 448 * 8 / 803, w: 250 * 428 / 448, h: 448 * 572 / 803 }
+const CARD0 = { x: 240, y: 180, w: 540, h: 720 }
+
+// шторка в сцене ИИ-фото
+const xw = (t) => lerp(372, 872, INOUT(1.45)(t - 3.05))
+// заполнение полоски этапа
+const fill = (t) => LAYERS_T.reduce((s, tt) => s + 0.25 * SP(t - tt), 0)
+// перетаскивание карточки
+const dragK = (t) => INOUT(0.75)(t - 10.5)
+const cardRect = (t) => { const k = dragK(t), sp = springF(16, 0.7)(t - 11.25) * 0; return { x: lerp(CARD0.x, SLOT.x, k), y: lerp(CARD0.y, SLOT.y, k), w: lerp(CARD0.w, SLOT.w, k), h: lerp(CARD0.h, SLOT.h, k) } }
+
+function buildLogo(svg, src, keep) {
+  const doc = new DOMParser().parseFromString(src, 'image/svg+xml')
+  const g = doc.querySelector('g')
+  const paths = [...g.querySelectorAll('path')]
+  paths.forEach((p) => { if (p.getAttribute('fill').toUpperCase() === '#F59958') p.setAttribute('data-slash', '1') })
+  paths.forEach((p, i) => { if (!keep(i, p)) p.setAttribute('fill', 'none') })
+  svg.innerHTML = g.outerHTML
+  return [...svg.querySelectorAll('path')]
+}
+// параллелограмм слэша по рамке его path
+function slashFromBox(r) { const w = r.width * 123 / 438; return [r.left, r.bottom, r.right - w, r.top, r.right, r.top, r.left + w, r.bottom] }
+
+async function init() {
+  const src = await (await fetch('assets/logo-light.svg')).text()
+  const isSlash = (i, p) => p.getAttribute('data-slash') === '1'
+  const hp = buildLogo($('logoH'), src, (i, p) => !isSlash(i, p))
+  buildLogo($('logoEL'), src, (i) => i === 0)
+  buildLogo($('logoER'), src, (i, p) => i > 0 && !isSlash(i, p))
+  const ep = buildLogo($('logoEM'), src, () => true)
+
+  // шаги процесса
+  $('steps').innerHTML = STEPS.map((s, i) => `<div class="step" style="top:${STEP_Y(i)}px"><b>0${i + 1}</b>${s}</div>`).join('') +
+    `<div class="track" style="left:${BAR.x - 960}px;top:${STEP_Y(4) + 50}px;width:${BAR.w}px"></div>`
+  BAR.y = 500 + STEP_Y(4) + 50
+  // сетка выдачи
+  const ids = ['00', '01', '02', '03', '10', '11', '12', '13']
+  $('grid').innerHTML = ids.map((id, n) => { const c = n % 4, r = n >> 2; return `<div class="tile" style="left:${GRID.x + c * (GRID.w + GRID.g)}px;top:${GRID.y + r * (GRID.h + GRID.g)}px"><img src="assets/tile-${id}.webp" alt=""></div>` }).join('')
+
+  await document.fonts.ready
+  await Promise.all([...document.images].map((im) => im.decode().catch(() => {})))
+
+  // измеряем при камере = 1
+  $('world').style.transform = 'none'
+  for (const id of ['H', 'E']) $(id).style.display = 'block'
+  $('logoEM').style.visibility = 'visible'
+  const hs = hp.find((p) => isSlash(0, p)), es = ep.find((p) => isSlash(0, p))
+  hs.setAttribute('fill', '#F59958'); LOGO_H = slashFromBox(hs.getBoundingClientRect()); hs.setAttribute('fill', 'none')
+  LOGO_E = slashFromBox(es.getBoundingClientRect())
+  $('logoEM').style.display = 'none'
+  const lr = $('logoH').getBoundingClientRect(), LC = [lr.left + lr.width / 2, lr.top + lr.height / 2]
+  const h2 = document.querySelector('#hookL .h2').getBoundingClientRect()
+  const handleY = 540
+
+  CAM = [
+    CK(0, LC[0], LC[1], 3.6),
+    CK(0.5, 960, 520, 1.0, springF(11, 0.8)),
+    CK(2.0, 640, 540, 1.12),
+    CK(3.0, 610, 540, 1.3),
+    CK(4.55, 1000, 540, 1.08),
+    CK(5.5, 1010, 540, 1.1),
+    CK(6.0, 960, 540, 1.1),
+    CK(6.5, 1000, 540, 1.14),
+    CK(9.0, 510, 540, 1.42),
+    CK(10.0, 760, 540, 1.16),
+    CK(11.5, 900, 540, 1.08),
+    CK(12.0, 980, 540, 1.04),
+    CK(12.5, 1282, 360, 1.5),
+    CK(13.0, 960, 500, 1.02),
+  ]
+  // курсор: [x, y, видимость]
+  CUR = [
+    K(0, [1100, 780]),
+    K(2.5, [372 + 10, handleY + 12], springF(9, 0.8)),
+    K(3.05, (t) => [xw(t) + 10, handleY + 12], springF(30, 0.9)),
+    K(4.6, [1040, 820], springF(7, 0.8)),
+    K(6.0, [1560, 960], springF(30, 0.9)),
+    K(6.15, [1010 + 120, 500 + STEP_Y(4) + 14], springF(9, 0.8)),
+    K(7.0, [1300, 1000], springF(6, 0.8)),
+    K(10.0, [CARD0.x + 300, CARD0.y + 380], springF(30, 0.9)),
+    K(10.5, (t) => { const r = cardRect(t); return [r.x + r.w * 0.55, r.y + r.h * 0.55] }, springF(30, 0.9)),
+    K(11.35, [1150, 760], springF(7, 0.8)),
+  ]
+  const CUR_SHOW = [[2.45, 5.35], [6.1, 7.4], [10.1, 11.75]]
+  const CLICKS = [3.0, 6.5, 10.5]
+
+  SLASH = [
+    K(0, LOGO_H),
+    K(0.5, sl(1560, 470, 760, 110), springF(9, 0.78)),
+    K(1.45, sl(905, 460, 840, 64), OUT(0.3)),
+    K(1.72, cover, IN(0.28)),
+    K(2.0, (t) => sl(xw(t), 540, 800, 8), OUT(0.5)),
+    K(5.72, cover, IN(0.28)),
+    K(6.0, (t) => rect(BAR.x, BAR.y, Math.max(6, BAR.w * fill(t)), 4), OUT(0.5)),
+    K(9.72, cover, IN(0.28)),
+    K(10.0, sl(1430, 540, 940, 12), OUT(0.5)),
+    K(12.0, sl(20, 540, 1000, 12), OUT(0.36)),
+    K(12.72, cover, IN(0.28)),
+    K(13.0, LOGO_E, OUT(0.5)),
+  ]
+
+  window.__cursor = { CUR_SHOW, CLICKS }
+  window.__hook = { cut: [905, 460] }
+  window.ready = true
+}
+
+// ---------- кадр ----------
+const show = (id, on) => { $(id).style.display = on ? 'block' : 'none' }
+const rise = (el, t, t0, from = 112) => { el.style.transform = `translateY(${(1 - SP(t - t0)) * from}%)` }
+function slashAt(t) { return chain(t, SLASH) }
+
+function seek(t) {
+  const c = cam(t)
+  $('world').style.transform = `matrix(${c.s},0,0,${c.s},${960 - c.cx * c.s},${540 - c.cy * c.s})`
+
+  show('H', t < 2.0); show('A', t >= 2.0 && t < 6.0); show('B', t >= 6.0 && t < 10.0); show('P', t >= 10.0 && t < 13.0); show('E', t >= 13.0)
+
+  // ---- хук ----
+  if (t < 2.0) {
+    const k = springF(10, 0.8)(t - 0.62)
+    $('hdr').style.clipPath = `inset(0 0 ${clamp(k, 0, 1) * 100}% 0 round 24px)`
+    $('hdr').style.opacity = k > 0.995 ? 0 : 1
+    const [cx, cy] = window.__hook.cut
+    const sep = springF(14, 0.74)(t - 1.62) * 64
+    const n = [1 / Math.hypot(1, TAN), TAN / Math.hypot(1, TAN)]
+    for (const [id, side] of [['hookL', -1], ['hookR', 1]]) {
+      const el = $(id)
+      el.style.clipPath = half(cx, cy, side)
+      el.style.transform = `translate(${side * n[0] * sep}px, ${side * n[1] * sep}px)`
+      el.querySelectorAll('.h1').forEach((e) => rise(e, t, 1.0))
+      el.querySelectorAll('.h2').forEach((e) => rise(e, t, 1.08))
+    }
+  }
+
+  // ---- ИИ-фото ----
+  if (t >= 2.0 && t < 6.0) {
+    const x = xw(t)
+    $('after').style.clipPath = half(x - 300, 400, -1)
+    const hk = SP(t - 2.4)
+    $('handle').style.left = x + 'px'; $('handle').style.top = '540px'
+    $('handle').style.transform = `scale(${hk})`
+    $('pillA').style.clipPath = `inset(0 ${(1 - SP(t - 4.55)) * 100}% 0 0 round 999px)`
+    rise($('a1'), t, 4.6); rise($('a2'), t, 4.68)
+    $('a2').style.color = mix('#1D1E22', '#F59958', clamp(SP(t - 5.0)))
+  }
+
+  // ---- инфографика ----
+  if (t >= 6.0 && t < 10.0) {
+    const act = clamp(SP(t - 6.5))
+    document.querySelectorAll('#steps .step').forEach((s, i) => { s.style.color = i === 4 ? mix('#CFCCC7', '#1D1E22', act) : '#CFCCC7' })
+    $('pillB').style.clipPath = `inset(0 ${(1 - SP(t - 6.5)) * 100}% 0 0 round 999px)`
+    rise($('b1'), t, 6.55); rise($('b2'), t, 6.63)
+    // правая колонка уходит под маску перед наездом на слайд
+    $('colB').style.clipPath = `inset(0 0 0 ${lerp(930, 1900, INOUT(0.4)(t - 8.75))}px)`
+    document.querySelectorAll('#frameB .ly').forEach((im, i) => {
+      const p = OUT(0.42)(t - LAYERS_T[i])
+      im.style.clipPath = half(lerp(-260, 800, p), 360, -1)
+    })
+  }
+
+  // ---- выдача ----
+  if (t >= 10.0 && t < 13.0) {
+    const r = cardRect(t)
+    const settle = springF(15, 0.62)(t - 11.25)
+    const bump = t > 11.25 ? (1 - settle) * 0.06 : 0
+    const cs = 1 - bump
+    const card = $('card')
+    card.style.left = r.x + (r.w * (1 - cs)) / 2 + 'px'; card.style.top = r.y + (r.h * (1 - cs)) / 2 + 'px'
+    card.style.width = r.w * cs + 'px'; card.style.height = r.h * cs + 'px'
+    card.style.borderRadius = lerp(27, 10, dragK(t)) + 'px'
+    // плитка с текстом карточки раскрывается маской сверху вниз
+    $('mine').style.clipPath = `inset(0 0 ${(1 - OUT(0.35)(t - 11.5)) * 100}% 0 round 14px)`
+    card.style.visibility = t >= 11.85 ? 'hidden' : 'visible'
+    // гаснут конкуренты — справа от проходящего слэша
+    const p = slashAt(t)
+    const sx = (p[0] + p[2] + p[4] + p[6]) / 4, sy = (p[1] + p[3] + p[5] + p[7]) / 4
+    $('dim').style.clipPath = t >= 12.0 ? half(sx, sy, 1, 200, 80) : 'inset(100%)'
+    rise($('p1'), t, 12.22); rise($('p2'), t, 12.5)
+  }
+
+  // ---- финал ----
+  if (t >= 13.0) {
+    const L = LOGO_E
+    const cx = (L[0] + L[4]) / 2, cy = (L[1] + L[3]) / 2
+    const kL = springF(11, 0.78)(t - 13.42), kR = springF(11, 0.78)(t - 13.5)
+    $('lwL').style.clipPath = half(cx, cy, -1); $('lwR').style.clipPath = half(cx, cy, 1)
+    $('logoEL').style.transform = `translateX(${(1 - kL) * 300}px)`
+    $('logoER').style.transform = `translateX(${-(1 - kR) * 760}px)`
+    rise($('e1'), t, 14.0); rise($('e2'), t, 14.5)
+  }
+
+  // ---- слэш ----
+  const p = slashAt(t)
+  $('slash').setAttribute('points', [0, 2, 4, 6].map((i) => `${p[i]},${p[i + 1]}`).join(' '))
+  // размытие по скорости слэша на экране
+  const dt = 1 / 120, q = slashAt(t - dt), cq = cam(t - dt)
+  const scr = (cc, pp) => [960 + ((pp[0] + pp[4]) / 2 - cc.cx) * cc.s, 540 + ((pp[1] + pp[3]) / 2 - cc.cy) * cc.s]
+  const [ax, ay] = scr(c, p), [bx0, by0] = scr(cq, q)
+  const vx = (ax - bx0) / dt / 60, vy = (ay - by0) / dt / 60
+  const big = Math.abs(p[4] - p[0]) > 2400
+  const bx = big ? 0 : Math.min(Math.abs(vx) * 0.35, 40) / c.s, by = big ? 0 : Math.min(Math.abs(vy) * 0.35, 40) / c.s
+  $('mbg').setAttribute('stdDeviation', `${bx.toFixed(2)} ${by.toFixed(2)}`)
+  $('slash').setAttribute('filter', bx + by > 0.05 ? 'url(#mb)' : '')
+
+  // ---- курсор ----
+  const { CUR_SHOW, CLICKS } = window.__cursor
+  const [x, y] = chain(t, CUR)
+  let vis = 0
+  for (const [a, b] of CUR_SHOW) if (t >= a - 0.01 && t < b + 0.5) vis = Math.max(vis, SP(t - a) * (1 - SP(t - b)))
+  let press = 0
+  for (const tc of CLICKS) { const d = t - tc; if (d > -0.08 && d < 0.3) press = Math.max(press, Math.sin(clamp((d + 0.08) / 0.38) * Math.PI)) }
+  const cur = $('cursor')
+  cur.style.display = vis < 0.01 ? 'none' : 'block'
+  cur.style.transform = `translate(${x}px, ${y}px) scale(${1.25 * vis * (1 - 0.16 * press)})`
+}
+window.seek = seek
+
+// ---------- саундтрек: 120 BPM, бочка на каждую долю, удар на смене сцен ----------
+window.renderAudio = async function () {
+  const SR = 44100, LEN = 15, ctx = new OfflineAudioContext(2, SR * LEN, SR)
+  const master = ctx.createGain(); master.gain.value = 0.4; master.connect(ctx.destination)
+  const noise = ctx.createBuffer(1, SR, SR); const nd = noise.getChannelData(0)
+  for (let i = 0; i < SR; i++) nd[i] = Math.random() * 2 - 1
+  const env = (g, t, a, peak, d) => { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d) }
+  const kick = (t, amp = 1, len = 0.32) => {
+    const o = ctx.createOscillator(), g = ctx.createGain()
+    o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12)
+    env(g, t, 0.003, amp, len); o.connect(g).connect(master); o.start(t); o.stop(t + len + 0.05)
+  }
+  const noiseHit = (t, type, f, amp, d, q = 0.8) => {
+    const s = ctx.createBufferSource(), fl = ctx.createBiquadFilter(), g = ctx.createGain()
+    s.buffer = noise; fl.type = type; fl.frequency.value = f; fl.Q.value = q
+    env(g, t, 0.002, amp, d); s.connect(fl).connect(g).connect(master); s.start(t); s.stop(t + d + 0.05)
+  }
+  const tone = (t, f, amp, d, type = 'sine') => {
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = type; o.frequency.value = f
+    env(g, t, 0.01, amp, d); o.connect(g).connect(master); o.start(t); o.stop(t + d + 0.05)
+  }
+  const bass = (t, f, d) => {
+    const o = ctx.createOscillator(), fl = ctx.createBiquadFilter(), g = ctx.createGain()
+    o.type = 'sawtooth'; o.frequency.value = f; fl.type = 'lowpass'; fl.frequency.value = 320
+    env(g, t, 0.005, 0.16, d); o.connect(fl).connect(g).connect(master); o.start(t); o.stop(t + d + 0.05)
+  }
+  const ROOTS = [55, 43.65, 65.41, 49]
+  for (let b = 0; b < 30; b++) {
+    const t = b * 0.5
+    kick(t, b === 24 ? 1.25 : 0.95, b === 24 ? 0.6 : 0.32)
+    if (b >= 2) noiseHit(t + 0.25, 'highpass', 8000, 0.13, 0.05)
+    if (b >= 4 && b % 2 === 1) noiseHit(t, 'bandpass', 1900, 0.32, 0.16, 0.7)
+    if (b >= 2 && b < 26) { const r = ROOTS[Math.floor(b / 4) % 4]; bass(t + 0.25, r, 0.2) }
+  }
+  // удары на смене сцен
+  for (const t of [2, 6, 10, 13]) { noiseHit(t, 'lowpass', 2600, 0.5, 0.45, 0.5); tone(t, 55, 0.5, 0.6) }
+  // главный удар
+  noiseHit(12, 'lowpass', 4200, 0.7, 0.8, 0.5); tone(12, 41.2, 0.7, 1.0)
+  // подъём перед главным ударом
+  { const s = ctx.createBufferSource(), fl = ctx.createBiquadFilter(), g = ctx.createGain(); s.buffer = noise; s.loop = true
+    fl.type = 'bandpass'; fl.Q.value = 1.2; fl.frequency.setValueAtTime(400, 11); fl.frequency.exponentialRampToValueAtTime(6000, 12)
+    g.gain.setValueAtTime(0.0001, 11); g.gain.exponentialRampToValueAtTime(0.2, 11.98); g.gain.linearRampToValueAtTime(0, 12.0)
+    s.connect(fl).connect(g).connect(master); s.start(11); s.stop(12.05) }
+  // финальный аккорд
+  for (const f of [220, 261.63, 329.63, 440]) tone(13, f, 0.07, 1.9)
+  const buf = await ctx.startRendering()
+  // WAV 16 бит
+  const n = buf.length, data = new DataView(new ArrayBuffer(44 + n * 4))
+  const w = (o, s) => [...s].forEach((c, i) => data.setUint8(o + i, c.charCodeAt(0)))
+  w(0, 'RIFF'); data.setUint32(4, 36 + n * 4, true); w(8, 'WAVEfmt '); data.setUint32(16, 16, true); data.setUint16(20, 1, true); data.setUint16(22, 2, true)
+  data.setUint32(24, SR, true); data.setUint32(28, SR * 4, true); data.setUint16(32, 4, true); data.setUint16(34, 16, true); w(36, 'data'); data.setUint32(40, n * 4, true)
+  const L = buf.getChannelData(0), R = buf.getChannelData(1)
+  for (let i = 0; i < n; i++) {
+    const fade = i > n - SR * 0.25 ? (n - i) / (SR * 0.25) : 1
+    data.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[i] * fade)) * 32767, true)
+    data.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[i] * fade)) * 32767, true)
+  }
+  let bin = ''; const u8 = new Uint8Array(data.buffer)
+  for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000))
+  return btoa(bin)
+}
+init()
+</script>
+</body></html>
