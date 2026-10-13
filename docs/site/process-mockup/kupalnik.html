@@ -1,0 +1,334 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<title>Процесс — купальник</title>
+<style>
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+
+:root { --bg:#F6F4F2; --bg-2:#F9F7F3; --bg-3:#EAE8E4; --bg-4:#E6E4E0; --ink:#1D1E22; --text:#717171; --text-3:#A1A09F; --text-4:#CFCCC7; --accent:#F59958; --white:#fff; --border-soft:rgba(0,0,0,.1);
+  --fh:Gilroy,Inter,sans-serif; --fb:Inter,Arial,sans-serif; --u: calc(420px / 494); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); font-family: var(--fb); color: var(--text); }
+.wrap { width: 1200px; margin: 0 auto; padding: 80px 0; }
+.pill { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--bg-3); font: 400 14px var(--fb); color: var(--ink); }
+h2 { margin-top: 24px; font: 500 32px/1.25 var(--fh); letter-spacing: -.64px; color: var(--ink); }
+.lead { margin-top: 20px; max-width: 620px; font: 400 15px/25px var(--fb); }
+.layout { margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+
+/* кадр */
+.frame { position: relative; justify-self: center; width: 420px; aspect-ratio: 3/4; overflow: hidden; background: var(--white); border-radius: 27px; }
+.cap { position: absolute; left: 16px; bottom: 16px; z-index: 20; padding: 4px 12px; border-radius: 999px; background: var(--white); font: 400 12px/20px var(--fb); color: var(--text-3); }
+.stage { position: absolute; inset: 0; visibility: hidden; }
+.stage.on { visibility: visible; }
+.full { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.chip { position: absolute; z-index: 8; padding: calc(6*var(--u)) calc(12*var(--u)); border-radius: calc(10*var(--u)); font: 500 calc(13*var(--u)) var(--fb); color: var(--ink); background: var(--white); white-space: nowrap; }
+.chip.dark { color: var(--white); background: var(--ink); }
+.chip.acc { background: var(--accent); }
+
+/* обрезка скриншота выдачи: проценты считаются от исходника 2340×1774 */
+.crop { position: absolute; overflow: hidden; }
+.crop img { position: absolute; height: auto; }
+.crop4 { left: 0; right: 0; top: 0; aspect-ratio: 1822 / 1640; }
+.crop4 img { width: 128.43%; left: -24.75%; top: -8.17%; }
+.crop3 { inset: 0; }
+.crop3 img { width: 190.24%; left: -79.51%; top: -8.17%; }
+
+/* 1 бриф */
+.s1 { background: var(--bg-2); }
+.doc { position: absolute; left: 7%; right: 7%; top: 9%; padding: calc(28*var(--u)); background: var(--white); border-radius: calc(20*var(--u)); }
+.doc b { display: block; margin-bottom: calc(14*var(--u)); font: 600 calc(26*var(--u)) var(--fh); letter-spacing: calc(-.6*var(--u)); color: var(--ink); }
+.doc .tag { display: inline-block; margin-left: calc(8*var(--u)); padding: calc(3*var(--u)) calc(10*var(--u)); vertical-align: middle; border-radius: 999px; font: 500 calc(12*var(--u)) var(--fb); letter-spacing: 0; color: var(--ink); background: var(--bg-3); }
+.chk { display: flex; gap: calc(12*var(--u)); align-items: center; padding: calc(9*var(--u)) 0; font-size: calc(15*var(--u)); line-height: 1.35; color: var(--ink); }
+.box { position: relative; flex: none; width: calc(22*var(--u)); height: calc(22*var(--u)); border: calc(1.5*var(--u)) solid var(--bg-4); border-radius: calc(7*var(--u)); }
+.box .fill { position: absolute; inset: calc(-1.5*var(--u)); border-radius: calc(7*var(--u)); background: var(--ink); transform: scale(0); }
+.box svg { position: absolute; inset: calc(3*var(--u)); }
+.box path { stroke: var(--white); stroke-width: 2.4; fill: none; stroke-dasharray: 20; stroke-dashoffset: 20; stroke-linecap: round; stroke-linejoin: round; }
+.refs { display: flex; gap: calc(8*var(--u)); padding: calc(8*var(--u)) 0 0 calc(34*var(--u)); }
+.refs img { width: calc(64*var(--u)); height: calc(85*var(--u)); object-fit: cover; border-radius: calc(8*var(--u)); }
+.refs .sw { width: calc(64*var(--u)); height: calc(85*var(--u)); border-radius: calc(8*var(--u)); background: #D3262B; position: relative; }
+.refs .sw::after { content: ""; position: absolute; left: 0; right: 0; bottom: 22%; height: calc(5*var(--u)); background: #F4EEE6; }
+.clip { position: absolute; right: 5%; bottom: 5%; width: 34%; padding: calc(6*var(--u)) calc(6*var(--u)) calc(22*var(--u)); background: var(--white); border-radius: calc(10*var(--u)); transform: rotate(5deg); z-index: 3; }
+.clip img { display: block; width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: calc(5*var(--u)); }
+.clip span { position: absolute; left: 0; right: 0; bottom: calc(5*var(--u)); text-align: center; font: 500 calc(11*var(--u)) var(--fb); color: var(--text); }
+
+/* 2 анализ */
+.s2 { background: var(--bg-2); }
+.x { position: absolute; z-index: 4; border: calc(2.5*var(--u)) solid var(--accent); border-radius: calc(10*var(--u)); opacity: 0; }
+.lens { position: absolute; left: 0; top: 0; z-index: 5; width: calc(76*var(--u)); height: calc(76*var(--u)); border: calc(2.5*var(--u)) solid var(--ink); border-radius: 50%; background: rgba(255,255,255,.25); opacity: 0; }
+.lens::after { content: ""; position: absolute; right: calc(-22*var(--u)); bottom: calc(-6*var(--u)); width: calc(28*var(--u)); height: calc(3.5*var(--u)); border-radius: 2px; background: var(--ink); transform: rotate(45deg); }
+.notes { position: absolute; left: 6%; right: 6%; bottom: 13%; display: flex; flex-wrap: wrap; gap: calc(6*var(--u)); }
+.notes .chip { position: static; opacity: 0; }
+
+/* 3 ИИ-фотосессия */
+.s3 { background: var(--bg-4); }
+.s3 .shot { opacity: 0; }
+.s3 .shot.src { opacity: 1; }
+.flash { position: absolute; inset: 0; z-index: 6; background: var(--white); opacity: 0; }
+.rec { position: absolute; top: calc(18*var(--u)); left: 50%; z-index: 7; transform: translateX(-50%); display: flex; gap: calc(6*var(--u)); align-items: center; padding: calc(5*var(--u)) calc(12*var(--u)); border-radius: 999px; background: var(--white); font: 500 calc(12*var(--u)) var(--fb); color: var(--ink); white-space: nowrap; }
+.rec::before { content: ""; width: calc(8*var(--u)); height: calc(8*var(--u)); border-radius: 50%; background: var(--accent); }
+.strip { position: absolute; left: 50%; bottom: calc(56*var(--u)); z-index: 7; display: flex; gap: calc(6*var(--u)); transform: translateX(-50%); }
+.strip img { width: calc(38*var(--u)); height: calc(50*var(--u)); object-fit: cover; border: calc(2*var(--u)) solid var(--white); border-radius: calc(6*var(--u)); opacity: 0; }
+.strip img:first-child { opacity: 1; }
+
+/* 4 обработка */
+.s4 .after { clip-path: inset(0 100% 0 0); }
+.wipe { position: absolute; top: 0; bottom: 0; left: 0; z-index: 6; width: calc(2*var(--u)); background: var(--ink); opacity: 0; }
+.wipe::after { content: "замена фона"; position: absolute; top: calc(20*var(--u)); left: calc(8*var(--u)); padding: calc(4*var(--u)) calc(10*var(--u)); font: 500 calc(12*var(--u)) var(--fb); color: var(--white); white-space: nowrap; background: var(--ink); border-radius: calc(8*var(--u)); }
+.s4 .done { right: 5%; bottom: 5%; opacity: 0; }
+
+/* 5 инфографика */
+.s5 .ly { opacity: 0; }
+.s5 .ly.l0 { opacity: 1; }
+.s5 .add { right: 5%; bottom: 5%; opacity: 0; }
+
+/* 6 выдача */
+.s6 .serp { opacity: 0; }
+.hero-card { position: absolute; left: 0; top: 0; z-index: 9; width: 100%; height: 100%; overflow: hidden; transform-origin: 0 0; }
+.hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.s6 .win { left: 50%; top: 52%; transform: translateX(-50%); opacity: 0; z-index: 10; }
+
+/* список этапов */
+.steps { list-style: none; border-top: 1px solid var(--border-soft); }
+.step { border-bottom: 1px solid var(--border-soft); }
+.btn { display: grid; grid-template-columns: 40px 1fr; align-items: baseline; width: 100%; padding: 16px 0; text-align: left; background: none; border: 0; cursor: pointer; font: inherit; }
+.num { font: 400 12px/28px var(--fb); color: var(--text-4); transition: color .3s; }
+.ttl { font: 500 18px/1.33 var(--fh); letter-spacing: -.18px; color: var(--text-4); transition: color .3s; }
+.txt { grid-column: 2; margin-top: 4px; font: 400 14px/22px var(--fb); color: var(--text-4); transition: color .3s; }
+.on .num { color: var(--accent); }
+.on .ttl, .on .txt { color: var(--ink); }
+.btn:hover .ttl { color: var(--ink); }
+.bar { display: block; height: 2px; margin: 0 0 12px 40px; overflow: hidden; background: var(--bg-3); border-radius: 999px; opacity: 0; }
+.on .bar { opacity: 1; }
+.bar i { display: block; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+</style></head><body>
+<div class="wrap">
+  <span class="pill">Процесс</span>
+  <h2>Как я делаю карточку</h2>
+  <p class="lead">На примере реального товара — раздельного купальника для Ozon. Сначала согласуем главный слайд, потом — вся серия в его стиле.</p>
+
+  <div class="layout">
+    <div class="frame" id="frame" aria-hidden="true">
+
+      <!-- 1 бриф -->
+      <div class="stage s1" data-i="0">
+        <div class="doc">
+          <b>Бриф <span class="tag">купальник</span></b>
+          <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Раздельный, красный с белым кантом</div>
+          <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Женщины 20–35, к отпуску</div>
+          <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Ozon: главный слайд + серия</div>
+          <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Акцент — посадка и размеры 42–52</div>
+          <div class="chk"><span class="box"><span class="fill"></span><svg viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7"/></svg></span>Настроение: лето, юг, солнце</div>
+          <div class="refs"><span class="sw"></span><img src="../process-kupalnik/ai-2.webp" alt=""><img src="../process-kupalnik/ai-4.webp" alt=""></div>
+        </div>
+        <div class="clip"><img src="../process-kupalnik/source-white.webp" alt=""><span>фото от клиента</span></div>
+      </div>
+
+      <!-- 2 анализ -->
+      <div class="stage s2" data-i="1">
+        <div class="crop crop4"><img src="../process-kupalnik/competitors.webp" alt=""></div>
+        <span class="x" data-at="0"></span><span class="x" data-at="1"></span><span class="x" data-at="2"></span><span class="x" data-at="3"></span>
+        <div class="lens"></div>
+        <div class="notes">
+          <span class="chip">мелкий текст</span><span class="chip">размеров не видно</span><span class="chip">у всех море и пляж</span>
+          <span class="chip dark">идея: крупный заголовок, размеры, ткань</span>
+        </div>
+      </div>
+
+      <!-- 3 ИИ-фотосессия -->
+      <div class="stage s3" data-i="2">
+        <img class="full shot src" src="../process-kupalnik/source-white.webp" alt="">
+        <img class="full shot" src="../process-kupalnik/ai-1.webp" alt="">
+        <img class="full shot" src="../process-kupalnik/ai-2.webp" alt="">
+        <img class="full shot" src="../process-kupalnik/ai-3.webp" alt="">
+        <img class="full shot" src="../process-kupalnik/ai-4.webp" alt="">
+        <img class="full shot" src="../process-kupalnik/ai-5.webp" alt="">
+        <div class="flash"></div>
+        <span class="rec"><b class="lbl">исходник на белом</b></span>
+        <div class="strip">
+          <img src="../process-kupalnik/source-white.webp" alt=""><img src="../process-kupalnik/ai-1.webp" alt=""><img src="../process-kupalnik/ai-2.webp" alt=""><img src="../process-kupalnik/ai-3.webp" alt=""><img src="../process-kupalnik/ai-4.webp" alt=""><img src="../process-kupalnik/ai-5.webp" alt="">
+        </div>
+      </div>
+
+      <!-- 4 обработка -->
+      <div class="stage s4" data-i="3">
+        <img class="full before" src="../process-kupalnik/model-white.webp" alt="">
+        <img class="full after" src="../process-kupalnik/model-scene.webp" alt="">
+        <div class="wipe"></div>
+        <span class="chip done">свет и цвет под сцену</span>
+      </div>
+
+      <!-- 5 инфографика: нарастающие кадры главного слайда -->
+      <div class="stage s5" data-i="4">
+        <img class="full ly l0" src="../process-kupalnik/layer-0.webp" alt="">
+        <img class="full ly" src="../process-kupalnik/layer-1.webp" alt="">
+        <img class="full ly" src="../process-kupalnik/layer-2.webp" alt="">
+        <img class="full ly" src="../process-kupalnik/layer-3.webp" alt="">
+        <img class="full ly" src="../process-kupalnik/final.webp" alt="">
+        <span class="chip dark add"></span>
+      </div>
+
+      <!-- 6 выдача: было → стало -->
+      <div class="stage s6" data-i="5">
+        <div class="crop crop3 before"><img src="../process-kupalnik/competitors.webp" alt=""></div>
+        <div class="crop crop3 serp"><img src="../process-kupalnik/serp.webp" alt=""></div>
+        <div class="hero-card"><img src="../process-kupalnik/final.webp" alt=""></div>
+        <span class="chip acc win">видно сразу</span>
+      </div>
+
+      <span class="cap" id="cap">этап 1 из 6</span>
+    </div>
+
+    <ol class="steps" id="steps"></ol>
+  </div>
+</div>
+
+<script src="gsap.min.js"></script>
+<script>
+const STEPS = [
+  ['Бриф', 'Узнаю о товаре, аудитории и площадке. Собираю пожелания и референсы.'],
+  ['Анализ конкурентов', 'Разбираю выдачу Ozon: что делают другие и чем можно выделиться.'],
+  ['ИИ-фотосессия', 'Из фото на белом фоне генерирую модель в купальнике — ракурсы под каждый слайд.'],
+  ['Обработка', 'Переношу модель в летнюю сцену, выравниваю свет и цвет.'],
+  ['Инфографика', 'Собираю главный слайд: заголовок, размерный ряд, ткань крупным планом.'],
+  ['Карточка в выдаче', 'Ставлю карточку в выдачу и проверяю: видно её сразу или нет.'],
+]
+const DUR = 10
+const CLICK_HOLD_MS = 10000
+const frame = document.getElementById('frame')
+const list = document.getElementById('steps')
+list.innerHTML = STEPS.map(([t, x], i) => `<li class="step" data-i="${i}"><button class="btn" type="button"><span class="num">0${i + 1}</span><span class="ttl">${t}</span><span class="txt">${x}</span></button><span class="bar"><i></i></span></li>`).join('')
+const stage = (i) => frame.querySelector(`.stage[data-i="${i}"]`)
+const u = () => frame.clientWidth / 494
+
+// прямоугольник в долях от .crop4: [left, top, width, height] — карточки выдачи
+const CARDS4 = { kari: [0.0055, 0.005, 0.236, 0.349], zella: [0.258, 0.005, 0.236, 0.349], mine: [0.509, 0.005, 0.236, 0.349], mozzito: [0.509, 0.503, 0.236, 0.349] }
+// слот моей карточки внутри .crop3
+const SLOT3 = { left: 0.326, top: 0.0049, width: 0.348, height: 0.349 }
+
+const scenes = [
+  (s) => {
+    const t = gsap.timeline()
+    t.from(s.querySelector('.doc'), { y: 24 * u(), opacity: 0, duration: 0.6, ease: 'power2.out' })
+    t.from(s.querySelector('.clip'), { y: 40 * u(), rotate: 14, opacity: 0, duration: 0.7, ease: 'back.out(1.6)' }, 0.5)
+    s.querySelectorAll('.chk').forEach((c, i) => {
+      t.to(c.querySelector('.fill'), { scale: 1, duration: 0.25, ease: 'back.out(2)' }, 1.2 + i * 1.2)
+        .to(c.querySelector('path'), { strokeDashoffset: 0, duration: 0.3 }, '-=0.1')
+    })
+    t.from(s.querySelectorAll('.refs > *'), { scale: 0, opacity: 0, stagger: 0.15, duration: 0.4, ease: 'back.out(2)' }, 7.6)
+    return t
+  },
+  (s) => {
+    const t = gsap.timeline()
+    const crop = s.querySelector('.crop4')
+    const W = crop.clientWidth, H = crop.clientHeight
+    t.from(crop, { opacity: 0, y: 16 * u(), duration: 0.5, ease: 'power2.out' })
+    const order = ['kari', 'zella', 'mozzito', 'mine']
+    const xs = s.querySelectorAll('.x')
+    const lens = s.querySelector('.lens')
+    const half = 38 * u()
+    const notes = s.querySelectorAll('.notes .chip')
+    order.forEach((k, i) => {
+      const [l, tp, w, h] = CARDS4[k]
+      gsap.set(xs[i], { left: l * W, top: tp * H, width: w * W, height: h * H })
+      const p = { x: (l + w / 2) * W - half, y: (tp + h / 2) * H - half }
+      if (i === 0) t.set(lens, p, 0).to(lens, { opacity: 1, duration: 0.3 }, 1)
+      else t.to(lens, { ...p, duration: 0.9, ease: 'power2.inOut' }, 1.2 + i * 1.6)
+      t.to(xs[i], { opacity: 1, duration: 0.2 }, 2.1 + i * 1.6)
+      if (i < 3) t.fromTo(notes[i], { opacity: 0, y: 8 * u() }, { opacity: 1, y: 0, duration: 0.3 }, 2.2 + i * 1.6)
+    })
+    t.to(lens, { opacity: 0, duration: 0.3 }, 7.6)
+    t.fromTo(notes[3], { opacity: 0, y: 8 * u() }, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(2)' }, 7.8)
+    return t
+  },
+  (s) => {
+    const t = gsap.timeline()
+    const shots = s.querySelectorAll('.shot')
+    const thumbs = s.querySelectorAll('.strip img')
+    const flash = s.querySelector('.flash')
+    const lbl = s.querySelector('.lbl')
+    for (let i = 1; i < shots.length; i++) {
+      const at = 0.8 + (i - 1) * 1.7
+      t.call(() => { lbl.textContent = `ИИ-кадр ${i} / 5` }, null, at)
+        .fromTo(flash, { opacity: 0.85 }, { opacity: 0, duration: 0.4 }, at)
+        .set(shots[i], { opacity: 1 }, at)
+        .set(shots[i - 1], { opacity: 0 }, at)
+        .fromTo(thumbs[i], { opacity: 0, y: 8 * u() }, { opacity: 1, y: 0, duration: 0.3 }, at + 0.2)
+    }
+    t.set({}, {}, DUR - 0.2)
+    return t
+  },
+  (s) => {
+    const t = gsap.timeline()
+    const W = s.getBoundingClientRect().width
+    const wipe = s.querySelector('.wipe')
+    t.to(wipe, { opacity: 1, duration: 0.2 }, 1)
+      .fromTo(wipe, { x: 0 }, { x: W, duration: 3, ease: 'power1.inOut' }, 1)
+      .fromTo(s.querySelector('.after'), { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 3, ease: 'power1.inOut' }, 1)
+      .to(wipe, { opacity: 0, duration: 0.2 }, 4)
+      .fromTo(s.querySelector('.after'), { scale: 1.06 }, { scale: 1, duration: 4, ease: 'power2.out' }, 4)
+      .fromTo(s.querySelector('.done'), { opacity: 0, y: 8 * u() }, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(2)' }, 4.6)
+    t.set({}, {}, DUR - 0.2)
+    return t
+  },
+  (s) => {
+    const t = gsap.timeline()
+    const ly = s.querySelectorAll('.ly')
+    const add = s.querySelector('.add')
+    const names = ['+ заголовок', '+ размерный ряд', '+ ткань крупно', '+ детали']
+    names.forEach((n, i) => {
+      const at = 0.8 + i * 1.9
+      t.to(ly[i + 1], { opacity: 1, duration: 0.6, ease: 'power2.out' }, at)
+        .call(() => { add.textContent = n }, null, at)
+        .fromTo(add, { opacity: 0, y: 8 * u() }, { opacity: 1, y: 0, duration: 0.3 }, at)
+    })
+    t.to(add, { opacity: 0, duration: 0.3 }, 8.6)
+    t.set({}, {}, DUR - 0.2)
+    return t
+  },
+  (s) => {
+    const t = gsap.timeline()
+    const card = s.querySelector('.hero-card')
+    const W = s.clientWidth, H = s.clientHeight
+    t.set(card, { x: 0, y: 0, scaleX: 1, scaleY: 1, borderRadius: 0 })
+    t.to(card, { x: SLOT3.left * W, y: SLOT3.top * H, scaleX: SLOT3.width, scaleY: SLOT3.height, duration: 1.6, ease: 'power3.inOut' }, 1.6)
+    t.to(s.querySelector('.serp'), { opacity: 1, duration: 1, ease: 'power2.out' }, 4)
+    t.to(card, { opacity: 0, duration: 0.3 }, 4.6)
+    t.fromTo(s.querySelector('.win'), { opacity: 0, y: 8 * u() }, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(2)' }, 5)
+    t.set({}, {}, DUR - 0.2)
+    return t
+  },
+]
+
+let active = 0, tl = null, holdUntil = 0, holdTimer = null
+function reset(s) {
+  gsap.set(s.querySelectorAll('*'), { clearProps: 'all' })
+  const lbl = s.querySelector('.lbl'); if (lbl) lbl.textContent = 'исходник на белом'
+}
+function go(i, fromClick) {
+  tl?.kill(); clearTimeout(holdTimer)
+  const prev = stage(active); prev.classList.remove('on'); reset(prev)
+  active = i
+  const s = stage(i); reset(s); s.classList.add('on')
+  list.querySelectorAll('.step').forEach((el, k) => el.classList.toggle('on', k === i))
+  document.getElementById('cap').textContent = `этап ${i + 1} из ${STEPS.length}`
+  gsap.set(list.querySelectorAll('.bar i'), { scaleX: 0 })
+  if (fromClick) holdUntil = Date.now() + CLICK_HOLD_MS
+  tl = gsap.timeline({ onComplete: () => {
+    const next = () => go((active + 1) % STEPS.length)
+    const wait = holdUntil - Date.now()
+    if (wait > 0) holdTimer = setTimeout(next, wait); else next()
+  } })
+  tl.add(scenes[i](s), 0)
+  tl.to(list.querySelectorAll('.bar i')[i], { scaleX: 1, duration: DUR, ease: 'none' }, 0)
+  return tl
+}
+list.querySelectorAll('.btn').forEach((b, i) => b.addEventListener('click', () => go(i, true)))
+window.go = go
+const q = new URLSearchParams(location.search)
+if (q.has('shot')) { const t = go(Number(q.get('shot'))); t.pause().progress(Math.min(Number(q.get('p') ?? 1), 0.999)) }
+else window.addEventListener('load', () => go(0))
+</script>
+</body></html>
