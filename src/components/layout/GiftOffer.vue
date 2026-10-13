@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import gift from '../../data/gift.json'
@@ -14,6 +14,14 @@ const START_KEY = 'gift-start'
 // пока открыты галерея, просмотр слайдов или мобильное меню — ждём их закрытия
 const BUSY_POLL = 500
 
+// «оживление» ярлыка: покачивание подарка и подсмотр выгоды по очереди
+const GIFT_NUDGE_MS = 15000 // между оживлениями
+const NUDGE_FIRST_MS = 3000 // первое — через столько после появления ярлыка
+const NUDGE_MAX = 6 // за визит, потом ярлык просто стоит
+const SHAKE_MS = 700 // длительность покачивания (= @keyframes)
+const PEEK_MS = 3000 // сколько видна выгода вместо «Ваш подарок»
+const NUDGE_RETRY_MS = 1000 // на паузе — проверяем снова, без накопления
+
 const route = useRoute()
 const router = useRouter()
 
@@ -26,6 +34,75 @@ const tabEl = ref(null)
 
 let timer = 0
 let busyTimer = 0
+
+// ---------- оживление ярлыка ----------
+const shorts = gift.items.map((item) => item.short)
+const label = ref(gift.tab)
+const labelW = ref(0)
+const measureEl = ref(null)
+const shaking = ref(false)
+const tabHover = ref(false)
+let nudges = 0
+let nextPeek = false
+let peekIndex = 0
+let nudgeTimer = 0
+let fxTimer = 0
+
+function scheduleNudge(ms) {
+  clearTimeout(nudgeTimer)
+  nudgeTimer = window.setTimeout(nudge, ms)
+}
+
+function stopNudges() {
+  clearTimeout(nudgeTimer)
+  clearTimeout(fxTimer)
+  shaking.value = false
+  label.value = gift.tab
+}
+
+// пауза: курсор или фокус на ярлыке, окно/галерея/меню открыты, вкладка в фоне
+function nudgePaused() {
+  return tabHover.value
+    || document.activeElement === tabEl.value
+    || document.visibilityState !== 'visible'
+    || isBusy()
+}
+
+function nudge() {
+  if (state.value !== 'tab' || nudges >= NUDGE_MAX) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  if (nudgePaused()) {
+    scheduleNudge(NUDGE_RETRY_MS)
+    return
+  }
+  nudges += 1
+  if (nextPeek) {
+    label.value = shorts[peekIndex % shorts.length]
+    peekIndex += 1
+    fxTimer = window.setTimeout(() => { label.value = gift.tab }, PEEK_MS)
+  } else {
+    shaking.value = true
+    fxTimer = window.setTimeout(() => { shaking.value = false }, SHAKE_MS)
+  }
+  nextPeek = !nextPeek
+  scheduleNudge(GIFT_NUDGE_MS)
+}
+
+// ширина подписи — по скрытому измерителю, чтобы ярлык менял ширину плавно
+async function measureLabel() {
+  await nextTick()
+  if (measureEl.value) labelW.value = measureEl.value.offsetWidth
+}
+
+watch(label, measureLabel)
+watch(state, (value) => {
+  if (value === 'tab') {
+    measureLabel()
+    scheduleNudge(NUDGE_FIRST_MS)
+  } else {
+    stopNudges()
+  }
+})
 
 function read(storage, key) {
   try {
@@ -59,6 +136,8 @@ function showWhenFree() {
 }
 
 function open(byTab) {
+  // ярлык исчезнет без mouseleave — иначе оживления встали бы на паузу навсегда
+  tabHover.value = false
   fromTab.value = byTab
   state.value = 'open'
   document.body.style.overflow = 'hidden'
@@ -123,6 +202,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   clearTimeout(timer)
   clearTimeout(busyTimer)
+  stopNudges()
   if (state.value === 'open') document.body.style.overflow = ''
 })
 </script>
@@ -183,14 +263,23 @@ onUnmounted(() => {
         class="ui gift-tab"
         aria-label="Ваш подарок: открыть"
         aria-haspopup="dialog"
+        :class="{ 'is-shaking': shaking }"
         @click="open(true)"
+        @mouseenter="tabHover = true"
+        @mouseleave="tabHover = false"
       >
-        <svg class="gift__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg class="gift__icon gift-tab__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3.5" y="8.5" width="17" height="4" rx="1.2" stroke="currentColor" stroke-width="1.6" />
           <path d="M5 12.5v7.5h14v-7.5M12 8.5V20" stroke="currentColor" stroke-width="1.6" />
           <path d="M12 8.5c-1.2-3.5-5.5-4-5.5-1.5 0 1.5 2.5 1.5 5.5 1.5zM12 8.5c1.2-3.5 5.5-4 5.5-1.5 0 1.5-2.5 1.5-5.5 1.5z" stroke="currentColor" stroke-width="1.6" />
         </svg>
-        {{ gift.tab }}
+        <!-- подпись меняется («подсмотр выгоды») — скринридеру хватает aria-label -->
+        <span class="gift-tab__label" :style="labelW ? { width: `${labelW}px` } : null" aria-hidden="true">
+          <Transition name="gift-roll">
+            <span :key="label" class="gift-tab__text">{{ label }}</span>
+          </Transition>
+        </span>
+        <span ref="measureEl" class="gift-tab__measure" aria-hidden="true">{{ label }}</span>
         <span class="caption gift-tab__count" aria-hidden="true">{{ gift.items.length }}</span>
       </button>
     </Transition>
@@ -349,6 +438,82 @@ onUnmounted(() => {
   border-radius: var(--r-pill);
   background: var(--accent);
   color: var(--ink);
+}
+
+/* наведение: плашка чуть приподнимается, без тени */
+@media (hover: hover) {
+  .gift-tab {
+    transition: transform var(--ease), background-color var(--ease);
+  }
+
+  .gift-tab:hover {
+    background: var(--ink-hover);
+    transform: translateY(calc(-1 * var(--s-4) / 2));
+  }
+}
+
+/* подпись: окно в одну строку, ширина — по измерителю, текст прокручивается */
+.gift-tab__label {
+  position: relative;
+  display: inline-block;
+  height: 1.375em;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width var(--ease);
+}
+
+.gift-tab__text {
+  display: block;
+}
+
+.gift-tab__measure {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.gift-roll-enter-active,
+.gift-roll-leave-active {
+  transition: transform .35s ease, opacity .35s ease;
+}
+
+.gift-roll-leave-active {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.gift-roll-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.gift-roll-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+/* «встряхнуть подарок»: иконка качается, счётчик делает вдох; плашка стоит */
+.gift-tab.is-shaking .gift-tab__icon {
+  transform-origin: 50% 80%;
+  animation: gift-shake .7s ease-in-out;
+}
+
+.gift-tab.is-shaking .gift-tab__count {
+  animation: gift-breath .7s ease-in-out;
+}
+
+@keyframes gift-shake {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-12deg); }
+  50% { transform: rotate(10deg); }
+  75% { transform: rotate(-6deg); }
+}
+
+@keyframes gift-breath {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
 }
 
 .gift-tab:focus-visible {
