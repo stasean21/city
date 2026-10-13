@@ -1,0 +1,58 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(/home/user/city-main/public/fonts/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+
+
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --ink-soft:#2C2D32; --text:#717171; --text-3:#A1A09F; --dark-text:#B8B6B2; --accent:#F59958; --white:#fff; --fh:Gilroy,Inter,sans-serif; --fb:Inter,Arial,sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; height: 860px; position: relative; overflow: hidden; font-family: var(--fb); background: url(bg.png) top left / 1440px auto no-repeat var(--bg); }
+.dim { position: absolute; inset: 0; background: rgba(29,30,34,.4); }
+.x { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: var(--bg); color: var(--ink); }
+.btn { height: 48px; border-radius: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 20px; font: 500 16px var(--fb); background: var(--ink); color: #fff; }
+.btn.l { background: transparent; color: var(--text); }
+/* 1 — тост в углу */
+.toast { position: absolute; right: 24px; bottom: 24px; width: 380px; background: var(--white); border-radius: 27px; padding: 12px; }
+.toast .top { display: flex; align-items: center; gap: 12px; padding: 8px 8px 14px 12px; }
+.toast .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: var(--accent); display: grid; place-items: center; flex: none; }
+.toast h4 { font: 500 20px/1.2 var(--fh); color: var(--ink); letter-spacing: -.3px; flex: 1; }
+.toast h4 small { display: block; font: 400 13px var(--fb); color: var(--text); margin-top: 2px; letter-spacing: 0; }
+.toast ul { list-style: none; background: var(--bg); border-radius: 15px; padding: 6px 14px; }
+.toast li { display: flex; gap: 12px; align-items: baseline; padding: 8px 0; font: 400 14px/1.35 var(--fb); color: var(--text); border-bottom: 1px solid #E4E4E4; }
+.toast li:last-child { border-bottom: 0; }
+.toast li b { font: 600 16px var(--fh); color: var(--ink); width: 58px; flex: none; }
+.toast .btn { width: 100%; margin-top: 12px; }
+/* 2 — модальное окно, 4 плитки */
+.modal { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 760px; background: var(--white); border-radius: 27px; padding: 36px; }
+.modal .x { position: absolute; right: 16px; top: 16px; }
+.modal .pill { display: inline-flex; gap: 8px; align-items: center; background: var(--bg-3); border-radius: 999px; padding: 6px 14px 6px 10px; font: 400 14px var(--fb); color: var(--ink); }
+.modal .pill svg { color: var(--accent); width: 18px; height: 18px; }
+.modal h3 { margin-top: 16px; font: 600 44px/1.05 var(--fh); letter-spacing: -1.6px; color: var(--ink); }
+.modal p.ld { margin-top: 12px; font: 400 16px/1.5 var(--fb); color: var(--text); max-width: 520px; }
+.modal .g { margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.modal .g div { border-radius: 15px; background: var(--bg); padding: 18px; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; }
+.modal .g b { font: 600 32px/1 var(--fh); letter-spacing: -1px; color: var(--ink); }
+.modal .g span { font: 400 14px/1.35 var(--fb); color: var(--text); }
+.modal .g div:first-child { background: var(--ink); } .modal .g div:first-child b { color: #fff; } .modal .g div:first-child span { color: var(--dark-text); }
+.modal .act { margin-top: 24px; display: flex; align-items: center; gap: 12px; }
+.modal .note { margin-left: auto; font: 400 13px var(--fb); color: var(--text-3); }
+/* 3 — ярлык + выдвижная панель */
+.tab { position: absolute; left: 24px; bottom: 24px; height: 52px; border-radius: 17px; background: var(--ink); color: #fff; display: inline-flex; align-items: center; gap: 10px; padding: 0 18px 0 14px; font: 500 15px var(--fb); }
+.tab svg { color: var(--accent); }
+.tab i { font-style: normal; background: var(--accent); color: var(--ink); border-radius: 999px; font: 600 12px var(--fb); padding: 3px 8px; }
+.drawer { position: absolute; left: 24px; bottom: 88px; width: 400px; background: var(--ink); border-radius: 27px; padding: 24px; color: #fff; }
+.drawer .x { position: absolute; right: 12px; top: 12px; background: var(--ink-soft); color: #fff; }
+.drawer h4 { font: 500 24px/1.15 var(--fh); letter-spacing: -.5px; padding-right: 40px; }
+.drawer p { margin-top: 8px; font: 400 14px/1.45 var(--fb); color: var(--dark-text); }
+.drawer ol { list-style: none; margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+.drawer li { display: flex; align-items: center; gap: 14px; background: var(--ink-soft); border-radius: 15px; padding: 12px 14px; font: 400 14px/1.35 var(--fb); color: var(--dark-text); }
+.drawer li b { font: 600 18px var(--fh); color: #fff; width: 64px; flex: none; }
+.drawer .code { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.drawer .code span { font: 400 13px/1.4 var(--fb); color: var(--dark-text); }
+.drawer .code b { font: 600 18px var(--fh); color: var(--accent); }
+.drawer .btn { background: #fff; color: var(--ink); width: 100%; margin-top: 14px; }
+.lab { position: absolute; left: 24px; top: 16px; background: var(--ink); color: #fff; border-radius: 10px; padding: 6px 12px; font: 600 14px var(--fb); z-index: 5; }
+</style></head><body><div class="lab">3 · Ярлык + панель</div><div class="drawer"><span class="x"><svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.7"/></svg></span><h4>Подарки к первому заказу</h4><p>Четыре выгоды — для тех, кто пишет с сайта.</p><ol><li><b>−20%</b>на первые 3 заказа</li><li><b>7 дней</b>правок бесплатно</li><li><b>0 ₽</b>живая обложка — главный слайд в движении</li><li><b>−10%</b>на сертификацию у партнёра</li></ol><div class="code"><span>Напишите в мессенджер<br>кодовое слово</span><b>«подарок»</b></div><a class="btn">Написать <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><path d="M4 12L12 4M5 4h7v7" stroke="currentColor" stroke-width="1.7"/></svg></a></div><a class="tab"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><rect x="3.5" y="8.5" width="17" height="4" rx="1.2" stroke="currentColor" stroke-width="1.6"/><path d="M5 12.5v7.5h14v-7.5M12 8.5V20" stroke="currentColor" stroke-width="1.6"/><path d="M12 8.5c-1.2-3.5-5.5-4-5.5-1.5 0 1.5 2.5 1.5 5.5 1.5zM12 8.5c1.2-3.5 5.5-4 5.5-1.5 0 1.5-2.5 1.5-5.5 1.5z" stroke="currentColor" stroke-width="1.6"/></svg>Подарок<i>4</i></a></body></html>
