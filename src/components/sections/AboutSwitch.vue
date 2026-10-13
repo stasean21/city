@@ -1,30 +1,25 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 
-// TODO: фото — плейсхолдеры, файлы в Object Storage загрузит владелец
 const items = [
   {
     word: 'Дизайн',
     note: 'Инфографика, AI-фото и видеообложки для карточек.',
-    photo: 'https://storage.yandexcloud.net/landing-main/about/design.webp',
-    alt: 'Станислав работает над макетом карточки',
   },
   {
     word: 'Реклама',
     note: 'Кабинеты Ozon и Wildberries, SEO, тесты обложек.',
-    photo: 'https://storage.yandexcloud.net/landing-main/about/ads.webp',
-    alt: 'Станислав в рекламном кабинете маркетплейса',
   },
   {
     word: 'Цифры',
     note: 'Смотрю, что сработало, и делаю следующую итерацию.',
-    photo: 'https://storage.yandexcloud.net/landing-main/about/data.webp',
-    alt: 'Станислав разбирает графики продаж',
   },
 ].map((item, i) => ({ ...item, num: String(i + 1).padStart(2, '0') }))
 
-// TODO: аватар — плейсхолдер
-const AVATAR = 'https://storage.yandexcloud.net/landing-main/about/avatar.webp'
+const AVATAR = 'https://storage.yandexcloud.net/landing-main/new-pages/about/avatar.jpg'
+// одно фото на все три слова — меняется только текст слева
+const PHOTO = 'https://storage.yandexcloud.net/landing-main/new-pages/about/my_phtoto.webp'
+const PHOTO_ALT = 'Станислав — дизайнер карточек для маркетплейсов'
 
 // фото 4:5 — реальные размеры задаются при загрузке, соотношение одно
 const PHOTO_W = 800
@@ -186,18 +181,15 @@ onUnmounted(() => {
         tabindex="0"
       >
         <img
-          v-for="(item, i) in items"
-          :key="item.photo"
           class="about__photo"
-          :class="{ 'is-active': active === i, 'is-broken': broken.has(item.photo) }"
-          :src="item.photo"
-          :alt="item.alt"
-          :aria-hidden="active === i ? undefined : 'true'"
+          :class="{ 'is-broken': broken.has(PHOTO) }"
+          :src="PHOTO"
+          :alt="PHOTO_ALT"
           :width="PHOTO_W"
           :height="PHOTO_H"
           loading="lazy"
           decoding="async"
-          @error="markBroken(item.photo)"
+          @error="markBroken(PHOTO)"
         />
 
         <span class="about__chip">
@@ -341,16 +333,6 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transform: scale(1.04);
-  transition:
-    opacity .5s var(--ease-out),
-    transform .9s var(--ease-out);
-}
-
-.about__photo.is-active {
-  opacity: 1;
-  transform: none;
 }
 
 .about__photo.is-broken {
