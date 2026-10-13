@@ -33,10 +33,17 @@ const frameEl = ref(null)
 const scenesEl = ref(null)
 const barEls = ref([])
 
+const CLICK_HOLD_MS = 10000 // сколько держим выбранный кликом этап
+
 let tl = null
 let observer = null
 let mqReduced = null
-const state = { inView: false, hovering: false }
+// пауза — блок вне экрана, вкладка в фоне, клавиатурный фокус на этапе.
+// Наведение мыши сцену не останавливает
+const state = { inView: false, focused: false }
+// после клика этап держится до holdUntil: сцена доигрывает и стоит на последнем кадре
+let holdUntil = 0
+let holdTimer = null
 
 // 1 px макета в px экрана
 const u = () => frameEl.value.clientWidth / BASE_W
@@ -52,7 +59,23 @@ function reset(s) {
   scenesEl.value.reset?.(s)
 }
 
+function next() {
+  go((active.value + 1) % steps.value.length)
+}
+
+// сцена кончилась: если этап выбран кликом и срок не вышел — ждём, потом дальше
+function onSceneEnd() {
+  const wait = holdUntil - Date.now()
+  if (wait > 0) {
+    clearTimeout(holdTimer)
+    holdTimer = setTimeout(next, wait)
+  } else {
+    next()
+  }
+}
+
 function go(i) {
+  clearTimeout(holdTimer)
   tl?.kill()
   const prev = stage(active.value)
   active.value = i
@@ -63,7 +86,7 @@ function go(i) {
 
   // длительность сцены, с — своя у набора
   const dur = scenesEl.value.duration
-  tl = gsap.timeline({ paused: true, onComplete: () => go((active.value + 1) % steps.value.length) })
+  tl = gsap.timeline({ paused: true, onComplete: onSceneEnd })
   tl.add(scenesEl.value.scenes[i](s, { u, cssVar, dur }), 0)
   const bar = barEls.value.find((el) => Number(el.dataset.index) === i)
   tl.to(bar, { scaleX: 1, duration: dur, ease: 'none' }, 0)
@@ -79,17 +102,26 @@ function go(i) {
 // играет, только когда блок в экране, вкладка видна и не наведено
 function sync() {
   if (!tl || reducedMotion()) return
-  if (state.inView && !state.hovering && !document.hidden) tl.play()
+  if (state.inView && !state.focused && !document.hidden) tl.play()
   else tl.pause()
 }
 
-function onEnter() {
-  state.hovering = true
+// клик: сразу этот этап и держим CLICK_HOLD_MS; повторный клик перезапускает срок
+function onClick(i) {
+  holdUntil = Date.now() + CLICK_HOLD_MS
+  go(i)
+}
+
+// фокус с клавиатуры — пауза, иначе этап уезжает из-под фокуса; от мыши — нет
+function onFocus(event) {
+  if (!event.target.matches(':focus-visible')) return
+  state.focused = true
   sync()
 }
 
-function onLeave() {
-  state.hovering = false
+function onBlur() {
+  if (!state.focused) return
+  state.focused = false
   sync()
 }
 
@@ -107,6 +139,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   tl?.kill()
+  clearTimeout(holdTimer)
   observer?.disconnect()
   document.removeEventListener('visibilitychange', sync)
 })
@@ -117,7 +150,7 @@ onUnmounted(() => {
     <div class="container">
       <SectionHead pill="Процесс" :title="process.title" :lead="process.lead" />
 
-      <div ref="blockEl" class="stories__layout" @pointerenter="onEnter" @pointerleave="onLeave">
+      <div ref="blockEl" class="stories__layout">
         <!-- кадр со сценой: иллюстрация, смысл несёт список этапов -->
         <div ref="frameEl" class="stories__frame" aria-hidden="true">
           <component :is="sceneSet" ref="scenesEl" :active="active" />
@@ -127,7 +160,7 @@ onUnmounted(() => {
 
         <ol class="stories__steps">
           <li v-for="(step, i) in steps" :key="step.num" class="stories__step" :class="{ 'is-active': active === i }">
-            <button type="button" class="stories__btn" :aria-current="active === i ? 'step' : undefined" @click="go(i)">
+            <button type="button" class="stories__btn" :aria-current="active === i ? 'step' : undefined" @click="onClick(i)" @focus="onFocus" @blur="onBlur">
               <span class="caption stories__num">{{ step.num }}</span>
               <span class="h3 stories__title">{{ step.title }}</span>
               <span class="small stories__text">{{ step.text }}</span>

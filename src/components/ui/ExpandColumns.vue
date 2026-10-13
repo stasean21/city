@@ -18,17 +18,17 @@ const items = computed(() => props.items.map((item, i) => ({
 })))
 
 const AUTOPLAY_MS = 3000
-const CLICK_PAUSE_MS = 8000
+const CLICK_HOLD_MS = 10000 // сколько держим выбранный кликом этап
 
 const active = ref(0)
 const rowEl = ref(null)
 
 // автоплей идёт, только когда ничто ему не мешает: блок в экране,
-// вкладка видна, не наведено, не в фокусе, не пауза после клика,
-// не мобилка и не reduced motion
-const state = { inView: false, hovering: false, focused: false, clickPaused: false }
+// вкладка видна, нет клавиатурного фокуса, не удержание после клика,
+// не мобилка и не reduced motion. Наведение мыши автоплей не трогает
+const state = { inView: false, focused: false, holding: false }
 let interval = null
-let clickTimer = null
+let holdTimer = null
 let observer = null
 let mqMobile = null
 let mqReduced = null
@@ -36,9 +36,8 @@ let mqReduced = null
 function canPlay() {
   return state.inView
     && !document.hidden
-    && !state.hovering
     && !state.focused
-    && !state.clickPaused
+    && !state.holding
     && !mqMobile?.matches
     && !mqReduced?.matches
 }
@@ -56,21 +55,10 @@ function sync() {
   }
 }
 
-// тач-устройства тоже шлют pointerenter при тапе — ховером считаем только мышь
-function onEnter(i, event) {
-  if (event.pointerType !== 'mouse') return
-  state.hovering = true
-  active.value = i
-  sync()
-}
-
-function onRowLeave(event) {
-  if (event.pointerType !== 'mouse') return
-  state.hovering = false
-  sync()
-}
-
-function onFocus(i) {
+// пауза — только от фокуса с клавиатуры: иначе раскрытая колонка уезжает
+// из-под фокуса. Фокус от клика мышью паузу не ставит
+function onFocus(i, event) {
+  if (!event.target.matches(':focus-visible')) return
   state.focused = true
   active.value = i
   sync()
@@ -81,14 +69,17 @@ function onBlur() {
   sync()
 }
 
+// клик держит этап CLICK_HOLD_MS, потом автоплей — со следующего этапа;
+// повторный клик перезапускает удержание
 function onClick(i) {
   active.value = i
-  state.clickPaused = true
-  clearTimeout(clickTimer)
-  clickTimer = setTimeout(() => {
-    state.clickPaused = false
+  state.holding = true
+  clearTimeout(holdTimer)
+  holdTimer = setTimeout(() => {
+    state.holding = false
+    if (canPlay()) active.value = (active.value + 1) % items.value.length
     sync()
-  }, CLICK_PAUSE_MS)
+  }, CLICK_HOLD_MS)
   sync()
 }
 
@@ -108,7 +99,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(interval)
-  clearTimeout(clickTimer)
+  clearTimeout(holdTimer)
   observer?.disconnect()
   document.removeEventListener('visibilitychange', sync)
   mqMobile?.removeEventListener('change', sync)
@@ -117,13 +108,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ol ref="rowEl" class="expand__row" :aria-label="ariaLabel" @pointerleave="onRowLeave">
+  <ol ref="rowEl" class="expand__row" :aria-label="ariaLabel">
     <li
       v-for="(item, i) in items"
       :key="item.num"
       class="expand__col"
       :class="{ 'is-active': active === i }"
-      @pointerenter="onEnter(i, $event)"
     >
       <!-- огромный номер раскрытой колонки — фон под текстом;
            для скринридера номер уже есть в подписи кнопки -->
@@ -137,7 +127,7 @@ onUnmounted(() => {
         :aria-expanded="active === i"
         :aria-controls="`${uid}-step-${i}`"
         :aria-label="`${item.num}. ${item.title}`"
-        @focus="onFocus(i)"
+        @focus="onFocus(i, $event)"
         @blur="onBlur"
         @click="onClick(i)"
       >

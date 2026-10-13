@@ -31,6 +31,7 @@ const PHOTO_W = 800
 const PHOTO_H = 1000
 
 const AUTOPLAY_MS = 2600
+const CLICK_HOLD_MS = 10000 // сколько держим выбранное кликом слово
 
 const active = ref(0)
 const sectionEl = ref(null)
@@ -38,15 +39,16 @@ const tabEls = ref([])
 // картинки, которых ещё нет в хранилище: прячем, остаётся фон сцены
 const broken = ref(new Set())
 
-// автолистание — пока секция в экране и вкладка видна; любое действие
-// пользователя выключает его насовсем
-const state = { inView: false, stopped: false }
+// автолистание — пока секция в экране и вкладка видна; клик держит слово
+// CLICK_HOLD_MS, клавиатурный фокус — пауза. Наведение мыши ничего не трогает
+const state = { inView: false, focused: false, holding: false }
 let interval = null
+let holdTimer = null
 let observer = null
 let mqReduced = null
 
 function canPlay() {
-  return state.inView && !state.stopped && !document.hidden && !mqReduced?.matches
+  return state.inView && !state.focused && !state.holding && !document.hidden && !mqReduced?.matches
 }
 
 function sync() {
@@ -62,15 +64,33 @@ function sync() {
   }
 }
 
-function select(i) {
+// клик: сразу это слово и держим; потом автолистание — со следующего.
+// Повторный клик перезапускает удержание
+function onClick(i) {
   active.value = i
-  state.stopped = true
+  state.holding = true
+  clearTimeout(holdTimer)
+  holdTimer = setTimeout(() => {
+    state.holding = false
+    if (canPlay()) active.value = (active.value + 1) % items.length
+    sync()
+  }, CLICK_HOLD_MS)
   sync()
 }
 
-// тач-устройства тоже шлют pointerenter при тапе — ховером считаем только мышь
-function onEnter(i, event) {
-  if (event.pointerType === 'mouse') select(i)
+// фокус с клавиатуры выбирает слово и ставит паузу, пока фокус на табах;
+// фокус от клика мышью паузу не ставит
+function onFocus(i, event) {
+  if (!event.target.matches(':focus-visible')) return
+  state.focused = true
+  active.value = i
+  sync()
+}
+
+function onBlur() {
+  if (!state.focused) return
+  state.focused = false
+  sync()
 }
 
 // стрелки — как у табов: по кругу, фокус переезжает вместе с выбором
@@ -81,7 +101,7 @@ function onKeydown(event) {
   if (!step) return
   event.preventDefault()
   const next = (active.value + step + items.length) % items.length
-  select(next)
+  active.value = next
   tabEls.value[next]?.focus()
 }
 
@@ -108,6 +128,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(interval)
+  clearTimeout(holdTimer)
   observer?.disconnect()
   document.removeEventListener('visibilitychange', sync)
   mqReduced?.removeEventListener('change', sync)
@@ -135,9 +156,9 @@ onUnmounted(() => {
             :aria-selected="active === i"
             aria-controls="about-stage"
             :tabindex="active === i ? 0 : -1"
-            @pointerenter="onEnter(i, $event)"
-            @focus="select(i)"
-            @click="select(i)"
+            @focus="onFocus(i, $event)"
+            @blur="onBlur"
+            @click="onClick(i)"
           >
             {{ item.word }}
             <span class="small about__num" aria-hidden="true">{{ item.num }}</span>
