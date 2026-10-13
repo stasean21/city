@@ -306,17 +306,15 @@ html {
   --story-w:        26.25rem; /* 420 — ширина кадра 3:4 */
   --story-bar:      .125rem;  /* 2 — полоска прогресса этапа */
   /* цвета иллюстрации: «товар» и «студия» в тёплой гамме фона */
-  --story-product:  #EBE7E2;
   --story-cap:      #9D968C;
   --story-warm:     #E3D6C6;
   --story-warm-2:   #D9D4CD;
   --story-feed:     #E6E3DE;
-  --story-studio:   #CFCAC3;
-  --story-table:    #B9B2A8;
   --story-scene:    #EFE7DD;
   --story-glass:    rgba(255, 255, 255, .25);
-  --story-dot:      rgba(29, 30, 34, .2);
   --story-bn-shape: rgba(255, 255, 255, .6); /* «товар» на баннере-схеме в сторис баннеров */
+  --story-swim:      #D3262B; /* образец ткани в брифе купальника */
+  --story-swim-trim: #F4EEE6; /* кант на образце */
 
   /* бегущая строка стека */
   --stack-icon:       1.125rem; /* 18 */

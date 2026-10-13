@@ -153,7 +153,7 @@ onUnmounted(() => {
       <div ref="blockEl" class="stories__layout">
         <!-- кадр со сценой: иллюстрация, смысл несёт список этапов -->
         <div ref="frameEl" class="stories__frame" aria-hidden="true">
-          <component :is="sceneSet" ref="scenesEl" :active="active" />
+          <component :is="sceneSet" ref="scenesEl" :active="active" v-bind="process.media ? { media: process.media } : {}" />
 
           <span class="caption stories__cap">этап {{ active + 1 }} из {{ steps.length }}</span>
         </div>
