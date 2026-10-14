@@ -1,0 +1,97 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --ink-soft:#2C2D32; --text:#717171; --text-3:#A1A09F; --dark-text:#B8B6B2; --accent:#F59958; --white:#fff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; height: 900px; overflow: hidden; position: relative; background: var(--bg); font-family: Inter, sans-serif; color: var(--ink); }
+header { position: absolute; z-index: 20; left: 96px; right: 96px; top: 46px; height: 64px; background: #fff; border-radius: 23px; display: flex; align-items: center; padding: 0 8px 0 28px; }
+header img { height: 28px; }
+header nav { margin-left: auto; display: flex; gap: 48px; font: 500 17px Inter; color: var(--text); margin-right: 40px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; height: 48px; padding: 0 22px; border-radius: 15px; background: var(--ink); color: #fff; font: 500 17px Inter; white-space: nowrap; }
+.btn.sec { background: transparent; color: var(--ink); border: 1px solid #E2DFDA; }
+h1 { font: 700 58px/1.12 Gilroy; letter-spacing: -1.5px; }
+.sub { font: 400 20px/34px Inter; color: var(--text); }
+.acts { display: flex; gap: 14px; }
+.card { position: absolute; background: #fff; border-radius: 20px; padding: 14px; }
+.ph { display: block; object-fit: cover; }
+
+/* 1 — вставки в заголовке */
+.v1 { position: absolute; left: 0; right: 0; top: 170px; text-align: center; }
+.v1 h1 { font-size: 66px; line-height: 1.2; letter-spacing: -1.8px; }
+.chipimg { display: inline-block; vertical-align: middle; height: 72px; border-radius: 999px; overflow: hidden; margin: -10px 6px 0; }
+.chipimg img { height: 72px; width: 128px; object-fit: cover; display: block; }
+.chipdark { display: inline-flex; vertical-align: middle; align-items: flex-end; gap: 6px; height: 72px; padding: 16px 22px; border-radius: 999px; background: var(--ink); margin: -10px 6px 0; }
+.chipdark i { width: 10px; border-radius: 3px; background: #4A4B50; display: block; }
+.chipdark i:last-child { background: var(--accent); }
+.chipbub { display: inline-flex; vertical-align: middle; align-items: center; gap: 8px; height: 72px; padding: 0 22px; border-radius: 999px; background: #fff; margin: -10px 6px 0; }
+.chipbub span { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); opacity: .25; }
+.chipbub span:nth-child(2) { opacity: .5 } .chipbub span:nth-child(3) { opacity: 1; background: var(--accent) }
+
+/* 2 — коллаж вокруг */
+.v2 { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+.chat { width: 300px; font: 400 14px/20px Inter; }
+.chat b { display: flex; align-items: center; gap: 8px; font: 600 15px Gilroy; margin: 2px 4px 12px; }
+.chat b i { width: 8px; height: 8px; border-radius: 50%; background: #3BB273; }
+.bub { padding: 10px 14px; border-radius: 14px; background: var(--bg); margin-bottom: 8px; width: max-content; max-width: 240px; }
+.bub.me { margin-left: auto; background: var(--ink); color: #fff; }
+.browser { width: 280px; padding: 10px; }
+.browser .dots { display: flex; gap: 6px; margin: 2px 4px 10px; } .browser .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--bg-3); }
+.spark { width: 240px; }
+.spark b { font: 600 15px Gilroy; display: block; margin: 2px 4px 10px; }
+
+/* 3 — до/после */
+.v3 { position: absolute; left: 96px; top: 230px; width: 600px; }
+.v3 h1 { font-size: 56px; }
+.ba { position: absolute; right: 96px; top: 150px; width: 540px; height: 700px; border-radius: 27px; overflow: hidden; }
+.ba img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ba .after { clip-path: polygon(52% 0, 100% 0, 100% 100%, 34% 100%); }
+.ba .line { position: absolute; top: 0; bottom: 0; left: 43%; width: 8px; background: var(--accent); transform: skewX(-14.6deg); }
+.ba .knob { position: absolute; left: 43%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -24px; border-radius: 50%; background: #fff; display: grid; place-items: center; font: 600 18px Inter; }
+.ba .tag { position: absolute; bottom: 18px; padding: 7px 14px; border-radius: 999px; background: #fff; font: 500 14px Inter; }
+
+/* 4 — шоурил */
+.v4 { position: absolute; left: 0; right: 0; top: 176px; text-align: center; }
+.v4 h1 { font-size: 52px; }
+.reel { position: absolute; left: 96px; right: 96px; top: 560px; height: 700px; border-radius: 27px; overflow: hidden; }
+.reel img { width: 100%; height: 100%; object-fit: cover; }
+.reel .play { position: absolute; left: 24px; top: 24px; display: flex; align-items: center; gap: 12px; padding: 8px 18px 8px 8px; border-radius: 999px; background: #fff; font: 500 15px Inter; }
+.reel .play i { width: 40px; height: 40px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; color: #fff; font-style: normal; font-size: 13px; }
+
+/* 5 — диагональ */
+.v5img { position: absolute; right: 0; top: 0; width: 760px; height: 900px; clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%); }
+.v5img img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 30%; }
+.v5band { position: absolute; top: -40px; height: 980px; left: 664px; width: 30px; background: var(--accent); transform: skewX(-14.6deg); }
+.v5 { position: absolute; left: 96px; top: 250px; width: 560px; }
+.v5 h1 { font-size: 54px; }
+.v5chip { position: absolute; right: 60px; bottom: 60px; display: flex; gap: 12px; align-items: center; padding: 8px 18px 8px 8px; border-radius: 999px; background: #fff; font: 500 15px Inter; }
+.v5chip img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+</style></head><body>
+<header><img src="img/logo-light.svg"><nav><span>Услуги</span><span>Этапы работы</span><span>Отзывы</span><span>Обо мне</span><span>FAQ</span></nav><span class="btn">Обсудить задачу ↗</span></header>
+<script>
+const v = new URLSearchParams(location.search).get('v') || '1'
+const sub = 'Собираю визуал, сайты и автоматизацию так, чтобы всё работало вместе — от первого показа в выдаче до первого заказа.'
+const acts = `<div class="acts"><span class="btn">Услуги и решения ↗</span><span class="btn sec">Обсудить задачу ↗</span></div>`
+const H = {
+  '1': `<div class="v1"><h1>Дизайн <span class="chipimg"><img src="img/final.webp" style="object-position:50% 20%"></span>, аналитика <span class="chipdark"><i style="height:16px"></i><i style="height:26px"></i><i style="height:20px"></i><i style="height:34px"></i><i style="height:40px"></i></span><br>и ИИ-разработка <span class="chipbub"><span></span><span></span><span></span></span> для малого<br>и среднего бизнеса</h1>
+    <p class="sub" style="max-width:700px;margin:34px auto 40px">${sub}</p><div class="acts" style="justify-content:center"><span class="btn">Услуги и решения ↗</span><span class="btn sec">Обсудить задачу ↗</span></div></div>`,
+  '2': `<div class="card" style="left:56px;top:170px;transform:rotate(-7deg);padding:8px"><img class="ph" src="img/final.webp" style="width:150px;height:200px;border-radius:12px"></div>
+    <div class="card chat" style="left:120px;top:560px;transform:rotate(3deg)"><b><i></i>ИИ-агент магазина</b><div class="bub">Подойдёт ли размер 44 на рост 168?</div><div class="bub me">Да, 44 — ваш. Оформить заказ?</div></div>
+    <div class="card browser" style="right:50px;top:150px;transform:rotate(6deg);width:250px"><div class="dots"><i></i><i></i><i></i></div><img class="ph" src="img/model-scene.webp" style="width:230px;height:130px;border-radius:10px;object-position:50% 25%"></div>
+    <div class="card spark" style="right:150px;top:600px;transform:rotate(-4deg)"><b>Показы карточки</b><svg width="212" height="70" viewBox="0 0 212 70"><path d="M2 62 C40 60 60 52 84 46 S130 40 150 24 190 10 210 6" fill="none" stroke="#1D1E22" stroke-width="3" stroke-linecap="round"/><circle cx="210" cy="6" r="5" fill="#F59958"/></svg></div>
+    <div class="v2"><h1>Дизайн, аналитика и ИИ-разработка<br>для малого и среднего бизнеса</h1><p class="sub" style="max-width:640px;margin:28px auto 36px">${sub}</p><div class="acts" style="justify-content:center"><span class="btn">Услуги и решения ↗</span><span class="btn sec">Обсудить задачу ↗</span></div></div>`,
+  '3': `<div class="v3"><h1>Дизайн, аналитика<br>и ИИ-разработка для малого и среднего бизнеса</h1><p class="sub" style="margin:28px 0 36px;max-width:520px">${sub}</p>${acts}</div>
+    <div class="ba"><img src="img/source-white.webp"><img class="after" src="img/final.webp"><div class="line"></div><div class="knob">‹ ›</div><span class="tag" style="left:18px">Было: фото товара</span><span class="tag" style="right:18px">Стало: главный слайд</span></div>`,
+  '4': `<div class="v4"><h1>Дизайн, аналитика и ИИ-разработка<br>для малого и среднего бизнеса</h1><p class="sub" style="max-width:680px;margin:22px auto 30px">${sub}</p><div class="acts" style="justify-content:center"><span class="btn">Услуги и решения ↗</span><span class="btn sec">Обсудить задачу ↗</span></div></div>
+    <div class="reel"><img src="img/reel.jpg"><span class="play"><i>▶</i>Шоурил · 15 секунд</span></div>`,
+  '5': `<div class="v5img"><img src="img/model-scene.webp"></div><div class="v5band"></div>
+    <div class="v5"><h1>Дизайн, аналитика<br>и ИИ-разработка<br>для малого и среднего бизнеса</h1><p class="sub" style="margin:28px 0 36px;max-width:500px">${sub}</p>${acts}</div>
+    <span class="v5chip"><img src="img/final.webp">Кейс: купальник для Ozon</span>`,
+}
+document.write(H[v])
+</script>
+</body></html>
