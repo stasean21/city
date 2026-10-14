@@ -1,0 +1,108 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --ink-soft:#2C2D32; --text:#717171; --text-3:#A1A09F; --dark-text:#B8B6B2; --accent:#F59958; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; height: 900px; overflow: hidden; position: relative; background: var(--bg); font-family: Inter, sans-serif; color: var(--ink); }
+header { position: absolute; z-index: 20; left: 96px; right: 96px; top: 46px; height: 64px; background: #fff; border-radius: 23px; display: flex; align-items: center; padding: 0 8px 0 28px; }
+header img { height: 28px; }
+header nav { margin-left: auto; display: flex; gap: 48px; font: 500 17px Inter; color: var(--text); margin-right: 40px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; height: 48px; padding: 0 22px; border-radius: 15px; background: var(--ink); color: #fff; font: 500 17px Inter; white-space: nowrap; }
+.btn.sec { background: #fff; color: var(--ink); }
+h1 { font: 700 58px/1.12 Gilroy; letter-spacing: -1.5px; }
+.sub { font: 400 20px/34px Inter; color: var(--text); }
+.acts { display: flex; gap: 14px; justify-content: center; }
+.center { position: absolute; left: 0; right: 0; text-align: center; z-index: 5; }
+.cursor { position: absolute; z-index: 30; width: 22px; }
+
+/* 1 поле слэшей */
+#field { position: absolute; inset: 0; }
+#field i { position: absolute; width: 4px; height: 22px; border-radius: 2px; background: #D9D5CF; }
+
+/* 2 физика */
+.pillf { position: absolute; padding: 0 34px; height: 92px; border-radius: 999px; font: 600 40px/92px Gilroy; letter-spacing: -1px; white-space: nowrap; background: #fff; }
+.pillf.d { background: var(--ink); color: #fff; }
+.pillf.a { background: var(--accent); color: var(--ink); }
+
+/* 3 строка ИИ */
+.prompt { width: 860px; margin: 0 auto; background: #fff; border-radius: 27px; padding: 12px; text-align: left; }
+.prompt .in { display: flex; align-items: center; gap: 14px; padding: 18px 12px 18px 22px; font: 500 26px Gilroy; }
+.prompt .in .caret { width: 3px; height: 32px; background: var(--accent); margin-left: -10px; }
+.prompt .in .go { margin-left: auto; width: 56px; height: 56px; border-radius: 15px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 22px; }
+.prompt .sug { display: flex; gap: 8px; padding: 6px 10px 10px; flex-wrap: wrap; }
+.prompt .sug span { padding: 9px 16px; border-radius: 999px; background: var(--bg); font: 500 15px Inter; color: var(--text); }
+.prompt .sug span.on { background: var(--ink); color: #fff; }
+
+/* 4 гигантская строка */
+.mq { position: absolute; left: -200px; white-space: nowrap; font: 700 230px/1 Gilroy; letter-spacing: -9px; }
+.mq b { color: var(--accent); font-weight: 700; }
+.mq.o { color: transparent; -webkit-text-stroke: 2px #CFCBC4; }
+
+/* 5 табло */
+.flap { display: inline-flex; gap: 6px; vertical-align: middle; }
+.flap span { position: relative; width: 74px; height: 104px; border-radius: 12px; background: var(--ink); color: #fff; font: 700 76px/104px Gilroy; text-align: center; overflow: hidden; }
+.flap span::after { content: ""; position: absolute; left: 0; right: 0; top: 51px; height: 2px; background: var(--bg); }
+.flap span.mid { color: var(--accent); }
+.flap span.turn { transform: perspective(300px) rotateX(-28deg); transform-origin: 50% 100%; }
+</style></head><body>
+<header><img src="img/logo-light.svg"><nav><span>Услуги</span><span>Этапы работы</span><span>Отзывы</span><span>Обо мне</span><span>FAQ</span></nav><span class="btn">Обсудить задачу ↗</span></header>
+<svg class="cursor" id="cur" viewBox="-2 -2 28 40" style="display:none"><path d="M0 0V30L8 23 13 34 18 32 13 21H23Z" fill="#1D1E22" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+<script>
+const v = new URLSearchParams(location.search).get('v') || '1'
+const sub = 'Собираю визуал, сайты и автоматизацию так, чтобы всё работало вместе — от первого показа в выдаче до первого заказа.'
+const acts = `<div class="acts"><span class="btn">Услуги и решения ↗</span><span class="btn sec">Обсудить задачу ↗</span></div>`
+const H1 = `<h1>Дизайн, аналитика и ИИ-разработка<br>для малого и среднего бизнеса</h1>`
+const cur = (x, y) => { const c = document.getElementById('cur'); c.style.display = 'block'; c.style.left = x + 'px'; c.style.top = y + 'px' }
+let html = ''
+if (v === '1') {
+  // поле слэшей: каждый поворачивается к курсору, рядом — оранжевые и длиннее
+  const cx = 1110, cy = 640
+  let f = '<div id="field">'
+  for (let y = 150; y < 900; y += 44) for (let x = 30; x < 1440; x += 44) {
+    const dx = cx - x, dy = cy - y, d = Math.hypot(dx, dy)
+    if (y > 250 && y < 560 && x > 220 && x < 1220) continue
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI + 90
+    const near = d < 170, len = near ? 34 - d / 10 : 22
+    f += `<i style="left:${x}px;top:${y}px;height:${len}px;transform:rotate(${ang}deg);${near ? 'background:#F59958' : d < 320 ? 'background:#BDB7AF' : ''}"></i>`
+  }
+  html = f + `</div><div class="center" style="top:270px">${H1}<p class="sub" style="max-width:660px;margin:26px auto 34px">${sub}</p>${acts}</div>`
+  cur(1110, 640)
+}
+if (v === '2') {
+  html = `<div class="center" style="top:200px">${H1}<p class="sub" style="max-width:660px;margin:26px auto 34px">${sub}</p>${acts}</div>
+  <div class="pillf" style="left:60px;top:800px;transform:rotate(4deg)">Инфографика</div>
+  <div class="pillf d" style="left:380px;top:770px;transform:rotate(-9deg)">ИИ-агенты</div>
+  <div class="pillf" style="left:640px;top:808px;transform:rotate(2deg)">Видеообложки</div>
+  <div class="pillf a" style="left:1000px;top:790px;transform:rotate(-14deg)">Сайты</div>
+  <div class="pillf" style="left:1180px;top:812px;transform:rotate(6deg)">Баннеры</div>
+  <div class="pillf d" style="left:250px;top:700px;transform:rotate(12deg)">Аналитика</div>
+  <div class="pillf" style="left:820px;top:690px;transform:rotate(-24deg)">ИИ-фото</div>
+  <div class="pillf" style="left:1090px;top:610px;transform:rotate(28deg)">Реклама</div>`
+  cur(1180, 640)
+}
+if (v === '3') {
+  html = `<div class="center" style="top:190px"><h1 style="font-size:52px">Дизайн, аналитика и ИИ-разработка<br>для малого и среднего бизнеса</h1>
+  <div class="prompt" style="margin-top:44px"><div class="in"><span style="color:#A1A09F">→</span>Сделать карточку товара для Ozon, чтобы<span class="caret"></span><span class="go">↑</span></div>
+  <div class="sug"><span class="on">Карточка для Ozon</span><span>ИИ-агент для заказов</span><span>Сайт за неделю</span><span>Видеообложка</span><span>Разбор конкурентов</span></div></div>
+  <p class="sub" style="max-width:660px;margin:30px auto 0;font-size:17px">Напишите задачу своими словами — подскажу, с чего начать, и пришлю смету.</p></div>`
+}
+if (v === '4') {
+  html = `<div class="mq o" style="top:560px">дизайн <b>/</b> аналитика <b>/</b> ИИ-разработка <b>/</b> дизайн</div>
+  <div class="mq" style="top:150px;left:-560px;color:#E9E5E0">ИИ-разработка / дизайн / аналитика</div>
+  <div class="center" style="top:300px">${H1}<p class="sub" style="max-width:660px;margin:26px auto 34px">${sub}</p>${acts}</div>`
+}
+if (v === '5') {
+  const word = 'ДИЗАЙН'.split('')
+  html = `<div class="center" style="top:190px"><div style="font:600 30px Gilroy;color:#717171;margin-bottom:22px">Для малого и среднего бизнеса делаю</div>
+  <div class="flap">${word.map((c, i) => `<span class="${i === 3 ? 'turn' : ''}">${c}</span>`).join('')}</div>
+  <div style="margin-top:26px;font:500 20px Inter;color:#A1A09F">дизайн <span style="color:#1D1E22">→</span> аналитику <span style="color:#1D1E22">→</span> ИИ-разработку <span style="color:#1D1E22">→</span> сайты <span style="color:#1D1E22">→</span> …</div>
+  <p class="sub" style="max-width:660px;margin:30px auto 34px">${sub}</p>${acts}</div>`
+}
+document.write(html)
+</script>
+</body></html>
