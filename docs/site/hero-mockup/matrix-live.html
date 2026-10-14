@@ -25,13 +25,12 @@ h1 { font: 700 56px/1.12 Gilroy; letter-spacing: -1.5px; color: #fff; margin: 26
 .btn.acc { background: var(--accent); color: var(--ink); }
 @media (max-width: 767px) {
   header { margin: 12px 12px 0; height: 56px; padding: 0 8px 0 18px; } header nav, .hbtn { display: none; }
-  .cap { margin: 12px; height: auto; min-height: 0; border-radius: 27px; }
-  .content { padding: 28px 20px 300px; }
+  .cap { margin: 12px; height: calc(100svh - 92px); min-height: 600px; border-radius: 27px; display: flex; align-items: flex-end; }
+  .content { padding: 32px 20px 28px; }
   h1 { font-size: 34px; margin: 18px 0 24px; letter-spacing: -.8px; }
   .input { font-size: 17px; padding-left: 18px; } .go { width: 46px; height: 46px; }
   .acts { flex-direction: column; }
   .btn { justify-content: center; height: 50px; font-size: 16px; }
-  .content { padding-bottom: 260px; }
 }
 </style></head><body>
 <header><img src="img/logo-light.svg"><nav><span>Услуги</span><span>Этапы работы</span><span>Отзывы</span><span>Обо мне</span><span>FAQ</span></nav><span class="hbtn">Обсудить задачу ↗</span></header>
@@ -61,13 +60,8 @@ function layout() {
   step = mobile ? 16 : 22
   dots = []
   // на ПК матрица справа от текста, на телефоне — полосой внизу
-  const x0 = mobile ? 0 : W * 0.48, y0 = mobile ? H - 290 : 0
-  const cx0 = mobile ? W * 0.55 : W * 0.72, cy0 = mobile ? H - 145 : H / 2
-  for (let y = y0 + step / 2; y < H; y += step) for (let x = x0 + step / 2; x < W; x += step) {
-    const sx = cx0 + (cy0 - y) * TAN, d = Math.abs(x - sx)
-    const band = mobile ? 34 : 64
-    dots.push({ x, y, s: d < band ? 1 - d / band * 0.6 : 0 })
-  }
+  // поле на всю капсулу, и под текстом тоже
+  for (let y = step / 2; y < H; y += step) for (let x = step / 2; x < W; x += step) dots.push({ x, y })
 }
 function frame(t) {
   t /= 1000
@@ -75,11 +69,10 @@ function frame(t) {
   // на телефоне или без мыши — точка «гуляет» сама по восьмёрке
   let px = ptr.x, py = ptr.y
   if (!ptr.active) {
-    const bx = mobile ? W * 0.5 : W * 0.72, by = mobile ? H - 145 : H / 2
-    px = bx + Math.sin(t * 0.6) * (mobile ? W * 0.35 : W * 0.18)
-    py = by + Math.sin(t * 1.2) * (mobile ? 90 : H * 0.28)
+    px = W * 0.5 + Math.sin(t * 0.5) * W * 0.4
+    py = H * 0.5 + Math.sin(t * 0.9) * H * 0.38
   }
-  const R = mobile ? 70 : 130
+  const R = mobile ? 90 : 140
   for (const d of dots) {
     const dx = d.x - px, dy = d.y - py, dist = Math.hypot(dx, dy)
     const near = Math.max(0, 1 - dist / R)
@@ -87,7 +80,7 @@ function frame(t) {
     const push = near * near * (mobile ? 14 : 22)
     const x = d.x + (dist ? dx / dist * push : 0), y = d.y + (dist ? dy / dist * push : 0)
     const r = 1.6 + near * 3.4
-    ctx.fillStyle = near > 0.04 ? `rgba(245,153,88,${0.25 + near * 0.75})` : '#34353A'
+    ctx.fillStyle = near > 0.04 ? `rgba(245,153,88,${0.25 + near * 0.75})` : '#303136'
     ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill()
   }
   requestAnimationFrame(frame)
