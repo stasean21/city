@@ -66,7 +66,11 @@ async function shoot(browser, name) {
 
   // загрузчик снимает блокировку прокрутки, когда закончил; сам слой прячем
   await page.waitForFunction(() => document.documentElement.style.overflow !== 'hidden', null, { timeout: 15000 })
-  await page.addStyleTag({ content: '.the-loader { display: none !important; }' })
+  // фиксированные слои в снимке всей страницы висели бы посреди неё:
+  // нижняя панель и закрытая шторка меню телефона, подарок
+  await page.addStyleTag({
+    content: '.the-loader, .dock, .menu-sheet, .menu-overlay, .gift, .gift-dim, .gift-tab { display: none !important; }',
+  })
 
   // проходим страницу: ленивые картинки и наблюдатели срабатывают
   const total = await page.evaluate(() => document.documentElement.scrollHeight)
@@ -90,8 +94,10 @@ async function shoot(browser, name) {
       const padBottom = parseFloat(getComputedStyle(el).paddingBottom)
       return { top: r.top + window.scrollY, bottom: r.bottom + window.scrollY - padBottom, gap: padBottom }
     }
-    const container = document.querySelector('#hero .container').getBoundingClientRect()
-    const gutter = parseFloat(getComputedStyle(document.querySelector('#hero .container')).paddingLeft)
+    // контейнер — по блоку услуг: в hero капсула вместо .container
+    const containerEl = document.querySelector('#services .container')
+    const container = containerEl.getBoundingClientRect()
+    const gutter = parseFloat(getComputedStyle(containerEl).paddingLeft)
     return {
       pageH,
       pageW,

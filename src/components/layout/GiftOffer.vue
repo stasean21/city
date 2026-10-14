@@ -91,6 +91,41 @@ async function measureLabel() {
   if (measureEl.value) labelW.value = measureEl.value.offsetWidth
 }
 
+// ---------- ярлык над тёмным блоком ----------
+// тёмный ярлык сливается с тёмными блоками — капсулой hero и любыми другими
+// с атрибутом data-dark-zone: над ними он светлый. «Над блоком» — значит, его
+// середина внутри блока: краем ярлык может задеть скруглённый угол капсулы
+// и при этом висеть на светлом фоне
+const onDark = ref(false)
+let darkFrame = 0
+let tabObserver = null
+
+function checkDark() {
+  darkFrame = 0
+  const tab = tabEl.value
+  if (!tab) return
+  const r = tab.getBoundingClientRect()
+  const x = r.left + r.width / 2
+  const y = r.top + r.height / 2
+  onDark.value = [...document.querySelectorAll('[data-dark-zone]')].some((zone) => {
+    const z = zone.getBoundingClientRect()
+    return x >= z.left && x <= z.right && y >= z.top && y <= z.bottom
+  })
+}
+
+function queueDark() {
+  if (!darkFrame) darkFrame = requestAnimationFrame(checkDark)
+}
+
+// ярлык появился (state === 'tab') или сменил ширину вместе с подписью —
+// ResizeObserver присылает и первый замер, и каждое изменение
+watch(tabEl, (el, prev) => {
+  if (prev) tabObserver?.unobserve(prev)
+  if (el) tabObserver?.observe(el)
+}, { flush: 'post' })
+// другая страница — другие тёмные блоки
+watch(() => route.fullPath, queueDark, { flush: 'post' })
+
 watch(label, measureLabel)
 watch(state, (value) => {
   if (value === 'tab') {
@@ -182,6 +217,12 @@ function onKeydown(event) {
 onMounted(() => {
   ready.value = true
   window.addEventListener('keydown', onKeydown)
+  window.addEventListener('scroll', queueDark, { passive: true })
+  window.addEventListener('resize', queueDark, { passive: true })
+  tabObserver = new ResizeObserver(queueDark)
+  // ярлык виден сразу (повторный визит) — подпись замерена запасным шрифтом,
+  // с Inter она шире и обрезалась бы: перемеряем, когда шрифты загрузятся
+  document.fonts?.ready.then(measureLabel)
   if (read('localStorage', STATE_KEY) === 'tab') {
     state.value = 'tab'
     return
@@ -197,6 +238,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('scroll', queueDark)
+  window.removeEventListener('resize', queueDark)
+  tabObserver?.disconnect()
+  cancelAnimationFrame(darkFrame)
   clearTimeout(timer)
   clearTimeout(busyTimer)
   stopRotate()
@@ -252,7 +297,8 @@ onUnmounted(() => {
       </div>
     </Transition>
 
-    <Transition name="gift-tab">
+    <!-- после въезда — ещё замер: пока ярлык въезжает, он сдвинут -->
+    <Transition name="gift-tab" @after-enter="queueDark">
       <button
         v-if="state === 'tab'"
         ref="tabEl"
@@ -260,7 +306,7 @@ onUnmounted(() => {
         class="ui gift-tab"
         aria-label="Ваш подарок: открыть"
         aria-haspopup="dialog"
-        :class="{ 'is-shaking': shaking }"
+        :class="{ 'is-shaking': shaking, 'is-on-dark': onDark }"
         @click="open(true)"
         @mouseenter="holdTab"
         @mouseleave="releaseTab"
@@ -430,6 +476,13 @@ onUnmounted(() => {
   background: var(--ink);
   color: var(--white);
   cursor: pointer;
+  transition: background-color var(--ease), color var(--ease);
+}
+
+/* над тёмным блоком ([data-dark-zone]) — светлый; счётчик остаётся акцентным */
+.gift-tab.is-on-dark {
+  background: var(--white);
+  color: var(--ink);
 }
 
 .gift-tab__count {
@@ -442,12 +495,16 @@ onUnmounted(() => {
 /* наведение: плашка чуть приподнимается, без тени */
 @media (hover: hover) {
   .gift-tab {
-    transition: transform var(--ease), background-color var(--ease);
+    transition: transform var(--ease), background-color var(--ease), color var(--ease);
   }
 
   .gift-tab:hover {
     background: var(--ink-hover);
     transform: translateY(calc(-1 * var(--s-4) / 2));
+  }
+
+  .gift-tab.is-on-dark:hover {
+    background: var(--bg-3);
   }
 }
 
@@ -515,9 +572,14 @@ onUnmounted(() => {
   50% { transform: scale(1.18); }
 }
 
+/* кольцо — цвета, контрастного фону под ярлыком */
 .gift-tab:focus-visible {
-  outline: var(--focus-ring) solid var(--white);
+  outline: var(--focus-ring) solid var(--ink);
   outline-offset: var(--focus-ring);
+}
+
+.gift-tab.is-on-dark:focus-visible {
+  outline-color: var(--white);
 }
 
 /* ---------- анимации: появление, сворачивание в угол, ярлык ---------- */

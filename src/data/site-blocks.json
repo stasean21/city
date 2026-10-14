@@ -1,7 +1,7 @@
 {
   "desktop": {
     "width": 1440,
-    "height": 6443,
+    "height": 6752,
     "container": {
       "left": 13.611,
       "width": 72.778,
@@ -10,45 +10,45 @@
     "blocks": [
       {
         "id": "hero",
-        "top": 1.707,
-        "height": 6.202,
+        "top": 1.422,
+        "height": 10.96,
         "gap": 120
       },
       {
         "id": "services",
-        "top": 9.772,
-        "height": 17.054,
+        "top": 14.159,
+        "height": 16.274,
         "gap": 120
       },
       {
         "id": "process",
-        "top": 28.688,
-        "height": 9.868,
+        "top": 32.21,
+        "height": 9.416,
         "gap": 120
       },
       {
         "id": "reviews",
-        "top": 40.419,
-        "height": 18.625,
+        "top": 43.403,
+        "height": 17.773,
         "gap": 120
       },
       {
         "id": "about",
-        "top": 60.906,
-        "height": 9.584,
+        "top": 62.953,
+        "height": 9.145,
         "gap": 120
       },
       {
         "id": "faq",
-        "top": 72.353,
-        "height": 22.766,
+        "top": 73.876,
+        "height": 21.724,
         "gap": 120
       }
     ]
   },
   "mobile": {
     "width": 390,
-    "height": 6827,
+    "height": 7197,
     "container": {
       "left": 6.154,
       "width": 87.692,
@@ -57,38 +57,38 @@
     "blocks": [
       {
         "id": "hero",
-        "top": 1.055,
-        "height": 6.404,
+        "top": 1,
+        "height": 9.504,
         "gap": 80
       },
       {
         "id": "services",
-        "top": 8.63,
-        "height": 27.526,
+        "top": 11.616,
+        "height": 26.111,
         "gap": 50
       },
       {
         "id": "process",
-        "top": 36.889,
-        "height": 10.78,
+        "top": 38.422,
+        "height": 10.226,
         "gap": 50
       },
       {
         "id": "reviews",
-        "top": 48.401,
-        "height": 10.393,
+        "top": 49.342,
+        "height": 9.859,
         "gap": 50
       },
       {
         "id": "about",
-        "top": 59.527,
-        "height": 11.385,
+        "top": 59.896,
+        "height": 10.8,
         "gap": 50
       },
       {
         "id": "faq",
-        "top": 71.644,
-        "height": 22.541,
+        "top": 71.39,
+        "height": 21.382,
         "gap": 50
       }
     ]

@@ -95,6 +95,20 @@ html {
   --hero-top:    var(--s-80);
   --hero-bottom: var(--s-120);
 
+  /* главная, первый экран — тёмная капсула с точечной матрицей (HeroDots) */
+  --hero-stage-bg:  var(--ink);
+  --hero-dot:       #303136;          /* точка в покое — чуть светлее фона капсулы */
+  --hero-dot-hot:   var(--accent);    /* точка у курсора */
+  --r-hero:         2.5rem;           /* 40 — радиус капсулы */
+  --hero-gap:       var(--s-20);      /* от шапки до капсулы; столько же остаётся под ней */
+  --hero-stage-h:   45rem;            /* 720 — высота капсулы, если экран позволяет */
+  --hero-stage-min: 35rem;            /* 560 */
+  --hero-bar-w:     47.5rem;          /* 760 — строка задачи */
+  --hero-send:      2.875rem;         /* 46 — кнопка-стрелка в строке на телефоне */
+  --hero-send-icon: 1.125rem;         /* 18 — стрелка в ней */
+  --hero-outline:   #4A4B50;          /* обводка вторичной кнопки на капсуле */
+  --hero-outline-w: 1.5px;            /* её толщина — линия, в px намеренно */
+
   /* сетка и геометрия */
   --container: 65.5rem;   /* 1048 */
   --gutter:    1.5rem;    /* 24 */
@@ -426,6 +440,9 @@ html {
     --sec-content: var(--s-32);
     --hero-top:    var(--s-40);
     --hero-bottom: var(--s-80);
+    --r-hero:         var(--r-stage); /* 27 */
+    --hero-gap:       var(--s-12);
+    --hero-stage-min: 32.5rem;        /* 520 */
 
     --header-top: var(--s-16);
     --header-h:   3.5rem;   /* 56 */
