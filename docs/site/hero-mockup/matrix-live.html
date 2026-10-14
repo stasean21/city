@@ -45,8 +45,8 @@ h1 { font: 700 56px/1.12 Gilroy; letter-spacing: -1.5px; color: #fff; margin: 26
   </div>
 </section>
 <script>
-// Точечная матрица: из ярких точек сложен слэш логотипа.
-// ПК — точки у курсора вырастают и вспыхивают оранжевым, слэш переливается волной.
+// Точечная матрица: спокойное поле точек.
+// ПК — точки у курсора расходятся, вырастают и вспыхивают оранжевым.
 // Телефон — курсора нет: «невидимый палец» сам медленно гуляет по матрице,
 // касание пальцем работает как курсор.
 const cv = document.getElementById('cv'), cap = document.getElementById('cap'), ctx = cv.getContext('2d')
@@ -81,16 +81,14 @@ function frame(t) {
   }
   const R = mobile ? 70 : 130
   for (const d of dots) {
-    const dist = Math.hypot(d.x - px, d.y - py)
+    const dx = d.x - px, dy = d.y - py, dist = Math.hypot(dx, dy)
     const near = Math.max(0, 1 - dist / R)
-    // волна вдоль слэша
-    const wave = d.s ? 0.55 + 0.45 * Math.sin(t * 2.2 - d.y * 0.02) : 0
-    const r = 1.6 + d.s * 2.2 * wave + near * 3.2
-    let col
-    if (d.s) col = `rgba(245,153,88,${0.35 + 0.65 * Math.max(wave, near)})`
-    else col = near > 0.05 ? `rgba(245,153,88,${near * 0.9})` : '#34353A'
-    ctx.fillStyle = col
-    ctx.beginPath(); ctx.arc(d.x, d.y, r, 0, 6.283); ctx.fill()
+    // точки у курсора расходятся в стороны, вырастают и загораются оранжевым
+    const push = near * near * (mobile ? 14 : 22)
+    const x = d.x + (dist ? dx / dist * push : 0), y = d.y + (dist ? dy / dist * push : 0)
+    const r = 1.6 + near * 3.4
+    ctx.fillStyle = near > 0.04 ? `rgba(245,153,88,${0.25 + near * 0.75})` : '#34353A'
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill()
   }
   requestAnimationFrame(frame)
 }
