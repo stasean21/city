@@ -1,0 +1,64 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+:root { --bg:#F6F4F2; --ink:#1D1E22; --ink-soft:#2C2D32; --text:#717171; --text-3:#A1A09F; --dt:#B8B6B2; --accent:#F59958; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; height: 900px; overflow: hidden; position: relative; background: var(--bg); font-family: Inter, sans-serif; color: var(--ink); }
+header { position: absolute; z-index: 20; left: 96px; right: 96px; top: 46px; height: 64px; background: #fff; border-radius: 23px; display: flex; align-items: center; padding: 0 8px 0 28px; }
+header img { height: 28px; }
+header nav { margin-left: auto; display: flex; gap: 48px; font: 500 17px Inter; color: var(--text); margin-right: 40px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 24px; border-radius: 15px; background: var(--ink-soft); color: #fff; font: 500 17px Inter; white-space: nowrap; }
+.btn.acc { background: var(--accent); color: var(--ink); }
+h1 { font: 700 56px/1.12 Gilroy; letter-spacing: -1.5px; color: #fff; }
+.abs { position: absolute; }
+.cap { position: absolute; left: 96px; right: 96px; top: 140px; height: 720px; border-radius: 40px; background: var(--ink); overflow: hidden; }
+.input { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 27px; padding: 12px 12px 12px 26px; font: 500 21px Gilroy; color: var(--ink); width: 640px; }
+.input .ar { color: var(--text-3); }
+.input .go { margin-left: auto; width: 54px; height: 54px; border-radius: 15px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 22px; flex: none; }
+.caret { display: inline-block; width: 3px; height: 26px; background: var(--accent); vertical-align: -5px; margin-left: 2px; }
+.pill { display: inline-flex; gap: 10px; align-items: center; padding: 8px 16px; border-radius: 999px; background: var(--ink-soft); color: var(--dt); font: 500 15px Inter; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #3BB273; }
+.acts { display: flex; gap: 12px; margin-top: 20px; }
+.feed { position: absolute; right: 48px; top: 0; bottom: 0; width: 420px; padding-top: 24px; -webkit-mask: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+.row { display: flex; gap: 14px; align-items: center; padding: 18px 20px; margin-bottom: 12px; border-radius: 20px; background: var(--ink-soft); color: #fff; font: 500 17px/24px Gilroy; }
+.row i { font-style: normal; color: var(--accent); }
+.row small { margin-left: auto; font: 400 13px Inter; color: var(--text-3); white-space: nowrap; }
+</style></head><body>
+<header><img src="img/logo-light.svg"><nav><span>Услуги</span><span>Этапы работы</span><span>Отзывы</span><span>Обо мне</span><span>FAQ</span></nav><span class="btn" style="height:48px;background:var(--ink)">Обсудить задачу ↗</span></header>
+<script>
+const v = new URLSearchParams(location.search).get('v') || '1'
+const pill = `<span class="pill"><span class="dot"></span>Отвечаю лично — без менеджеров</span>`
+const input = `<div class="input"><span class="ar">→</span>Конкуренты дороже, а покупают у них<span class="caret"></span><span class="go">↑</span></div>`
+const acts = `<div class="acts"><span class="btn acc">Услуги и решения ↗</span><span class="btn">Обсудить задачу ↗</span></div>`
+let html = ''
+if (v === '1') {
+  // наклонные полосы-слэши справа, как след движения
+  let lines = ''
+  for (let i = 0; i < 9; i++) lines += `<div class="abs" style="left:${760 + i * 62}px;top:-60px;width:${i === 4 ? 26 : 6}px;height:860px;border-radius:4px;background:${i === 4 ? 'var(--accent)' : '#2C2D32'};transform:skewX(-18deg)"></div>`
+  html = `<div class="cap">${lines}<div class="abs" style="left:72px;top:110px;width:820px">${pill}<h1 style="margin:26px 0 40px">Дизайн, аналитика<br>и ИИ-разработка<br>для малого и среднего бизнеса</h1>${input}${acts}</div></div>`
+}
+if (v === '2') {
+  // справа бесконечная лента реальных типов задач
+  const rows = [['Продажи упали после смены обложки', 'карточка'], ['Нужен сайт, но нет времени разбираться', 'сайт'], ['Хочу, чтобы заказы принимал бот', 'ИИ-агент'], ['Товар есть, фото нет', 'ИИ-фото'], ['Карточку не видно в выдаче', 'карточка'], ['Нужен ролик на обложку', 'видео'], ['Реклама крутится, а продаж нет', 'аналитика'], ['Запускаю новый товар на Ozon', 'карточка']]
+  html = `<div class="cap"><div class="feed" style="padding-top:0;margin-top:-40px">${rows.map(([t, k]) => `<div class="row"><i>→</i>${t}<small>${k}</small></div>`).join('')}</div>
+    <div class="abs" style="left:72px;top:110px;width:820px">${pill}<h1 style="margin:26px 0 40px">Дизайн, аналитика<br>и ИИ-разработка<br>для малого и среднего бизнеса</h1>${input}${acts}</div></div>`
+}
+if (v === '3') {
+  // точечная матрица: из более ярких точек складывается знак «/»
+  let dots = ''
+  const TAN = 0.33
+  for (let y = 20; y < 720; y += 22) for (let x = 640; x < 1240; x += 22) {
+    const cx = 960 + (360 - y) * TAN, d = Math.abs(x - cx)
+    const on = d < 70
+    dots += `<i class="abs" style="left:${x}px;top:${y}px;width:${on ? 7 : 4}px;height:${on ? 7 : 4}px;border-radius:50%;background:${on ? (d < 40 ? '#F59958' : '#8A5A3C') : '#34353A'}"></i>`
+  }
+  html = `<div class="cap">${dots}<div class="abs" style="left:72px;top:110px;width:820px">${pill}<h1 style="margin:26px 0 40px">Дизайн, аналитика<br>и ИИ-разработка<br>для малого и среднего бизнеса</h1>${input}${acts}</div></div>`
+}
+document.write(html)
+</script>
+</body></html>
