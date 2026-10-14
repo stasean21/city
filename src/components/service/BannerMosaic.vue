@@ -8,6 +8,7 @@ import WorksGallery from './WorksGallery.vue'
 import { useWorksGallery } from '../../composables/useWorksGallery.js'
 import { dims, sizeAlt, sizeTag } from '../../utils/banners.js'
 import { plural } from '../../utils/plural.js'
+import { typo } from '../../utils/typo.js'
 
 // «Любой размер»: мозаика из всех размеров всех кампаний, ряды выровнены по высоте.
 // клик открывает все размеры кампании одной лентой
@@ -21,7 +22,7 @@ const props = defineProps({
 const { galleryOpen, openGallery, closeGallery } = useWorksGallery()
 const galleryItems = computed(() => props.campaigns.map((campaign) => ({
   title: campaign.title,
-  niche: `${campaign.sizes.length} ${plural(campaign.sizes.length, ['размер', 'размера', 'размеров'])}`,
+  niche: typo(`${campaign.sizes.length} ${plural(campaign.sizes.length, ['размер', 'размера', 'размеров'])}`),
   cover: campaign.sizes[0].src,
   slides: campaign.sizes.map((size) => ({ src: size.src, note: `${size.label} · ${dims(size)}` })),
   fit: 'contain',
@@ -46,7 +47,7 @@ function openSet(campaign, event) {
   <div class="mosaic-block">
     <SectionHead
       title="Любой размер"
-      lead="Квадрат, вертикальный, горизонтальный и широкие форматы. Нажмите на баннер — откроются все размеры кампании."
+      lead="Квадрат, вертикальный, горизонтальный и широкие форматы. Нажмите на баннер — откроются все размеры кампании."
     />
 
     <ul class="mosaic">

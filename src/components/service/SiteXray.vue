@@ -51,8 +51,8 @@ const blocks = computed(() => shot.value.blocks.map((b, i, all) => {
         <p class="lead">{{ xray.lead }}</p>
       </div>
       <div class="xray__seg" role="group" aria-label="Режим просмотра">
-        <button type="button" class="ui xray__mode" :aria-pressed="!xrayOn" @click="xrayOn = false">Как видит клиент</button>
-        <button type="button" class="ui xray__mode" :aria-pressed="xrayOn" @click="xrayOn = true">Как сделано</button>
+        <button type="button" class="ui xray__mode" :aria-pressed="!xrayOn" @click="xrayOn = false">Как видит клиент</button>
+        <button type="button" class="ui xray__mode" :aria-pressed="xrayOn" @click="xrayOn = true">Как сделано</button>
       </div>
     </div>
 

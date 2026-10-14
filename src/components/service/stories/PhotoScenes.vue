@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 
 // сцены сторис «Как проходит съёмка» — макет docs/mockups/service-photo.html.
 // механику (кадр, список, таймлайн) даёт CardStories, здесь — картинка этапов.
-// съёмка — с помощью AI по фото клиента: кадр товара схематичный
+// съёмка — с помощью ИИ по фото клиента: кадр товара схематичный
 // (коробка и баночка на столе), без картинок из хранилища
 defineProps({
   active: { type: Number, required: true },
@@ -119,7 +119,7 @@ defineExpose({ scenes, reset, duration: 7 })
     <div class="shot"><span class="table"></span><span class="pack"></span><span class="jar"><i>AURA</i></span></div>
     <div class="dim"></div>
     <span class="lamp l1"></span><span class="lamp l2"></span>
-    <span class="note">фон, интерьер и свет</span>
+    <span class="note">фон, интерьер и свет</span>
   </div>
 
   <!-- 4 генерация -->
@@ -135,7 +135,7 @@ defineExpose({ scenes, reset, duration: 7 })
     <div class="shot raw"><span class="table"></span><span class="pack"></span><span class="jar"><i>AURA</i></span></div>
     <div class="shot clean"><span class="table"></span><span class="pack"></span><span class="jar"><i>AURA</i></span></div>
     <div class="wipe"></div>
-    <span class="note">сверка с оригиналом · артефакты</span>
+    <span class="note">сверка с оригиналом · артефакты</span>
   </div>
 
   <!-- 6 сдача -->

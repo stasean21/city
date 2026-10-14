@@ -125,7 +125,7 @@ defineExpose({ scenes, duration: 7 })
         <div v-for="(d, i) in docs" :key="d" class="kb" :class="`kb${i + 1}`"><b>{{ d }}</b><i></i><i></i><i></i></div>
       </div>
     </div>
-    <span class="note">из ваших материалов</span>
+    <span class="note">из ваших материалов</span>
   </div>
 
   <!-- 4 сборка -->
@@ -151,9 +151,9 @@ defineExpose({ scenes, duration: 7 })
   <div data-index="5" class="stage s6" :class="{ on: active === 5 }">
     <div class="center">
       <div class="launch">
-        <span class="live"><i></i>агент на связи</span>
+        <span class="live"><i></i>агент на связи</span>
         <span class="stat">заявки → таблица</span>
-        <span class="stat">важное → вам в Telegram</span>
+        <span class="stat">важное → вам в Telegram</span>
         <span class="stat">отчёт → каждое утро</span>
       </div>
     </div>

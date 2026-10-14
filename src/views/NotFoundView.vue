@@ -142,7 +142,7 @@ onUnmounted(() => {
   <div class="nf">
     <div class="nf__page">
       <div class="nf__top">
-        <RouterLink to="/" class="nf__brand" aria-label="m/design — на главную">
+        <RouterLink to="/" class="nf__brand" aria-label="m/design — на главную">
           m<span class="nf__slash-char">/</span><span class="nf__word">{{ word }}</span>
         </RouterLink>
         <span class="small nf__status" :class="{ 'is-done': ready }">
@@ -186,17 +186,17 @@ onUnmounted(() => {
 
         <div class="nf__msg" :class="{ 'is-ready': ready }">
           <h1 class="nf__title">Такой страницы нет</h1>
-          <p class="nf__text">Ссылка устарела или в ней опечатка. Всё остальное на месте.</p>
+          <p class="nf__text">Ссылка устарела или в ней опечатка. Всё остальное на месте.</p>
           <div class="nf__acts on-dark">
-            <BaseButton to="/" variant="primary" arrow>На главную</BaseButton>
+            <BaseButton to="/" variant="primary" arrow>На главную</BaseButton>
             <BaseButton to="/#services" variant="secondary" class="nf__secondary">Все услуги</BaseButton>
           </div>
-          <p v-if="interactive" class="small nf__hint">Нажмите на цифры — крутанём ещё раз</p>
+          <p v-if="interactive" class="small nf__hint">Нажмите на цифры — крутанём ещё раз</p>
         </div>
       </main>
 
       <nav class="nf__links" :class="{ 'is-ready': ready }" aria-label="Услуги">
-        <span class="nf__links-label">Возможно, вы искали</span>
+        <span class="nf__links-label">Возможно, вы искали</span>
         <ul class="nf__list">
           <li v-for="service in services" :key="service.slug">
             <RouterLink :to="`/services/${service.slug}`" class="nf__link">{{ service.title }}</RouterLink>

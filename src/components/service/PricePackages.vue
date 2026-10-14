@@ -149,12 +149,12 @@ defineProps({
   container-type: inline-size;
 }
 
-/* шапка — как у секций (SectionHead): заголовок слева, lead справа, по низу */
+/* заголовок здесь мельче секционного (card-title) — lead под ним, а не справа:
+   справа короткая строка выглядела бы оторванной */
 .addons__head {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--s-24);
-  align-items: end;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-8);
   margin-bottom: var(--s-24);
 }
 
@@ -223,11 +223,6 @@ defineProps({
 @media (max-width: 991px) {
   .prices__grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .addons__head {
-    grid-template-columns: 1fr;
-    gap: var(--sec-lead);
   }
 }
 

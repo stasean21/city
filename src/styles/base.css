@@ -164,6 +164,7 @@ h1,
 h2,
 h3,
 .display,
+.h1,
 .h2,
 .card-title,
 .h3,
@@ -172,6 +173,16 @@ h3,
   word-break: normal;
   hyphens: manual;
   text-wrap: balance;
+}
+
+/* абзацы и подписи без одного слова в последней строке. Длинное свойство —
+   оно не трогает режим переноса, white-space: nowrap у подписей остаётся в силе */
+p,
+li,
+.lead,
+.small,
+.caption {
+  text-wrap-style: pretty;
 }
 
 /* утилиты */

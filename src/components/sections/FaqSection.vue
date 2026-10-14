@@ -5,6 +5,7 @@ import AccordionItem from '../ui/AccordionItem.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import faq from '../../data/faq.json'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
+import { typo } from '../../utils/typo.js'
 
 // по умолчанию — блок главной; страница услуги передаёт свои вопросы
 const props = defineProps({
@@ -50,8 +51,8 @@ const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJs
            колонка растянется на высоту сетки и прилипать будет нечему -->
       <div class="faq__intro">
         <span class="pill faq__pill">Вопросы</span>
-        <h2 class="display faq__title">{{ title }}</h2>
-        <p class="lead">{{ lead }}</p>
+        <h2 class="display faq__title">{{ typo(title) }}</h2>
+        <p class="lead">{{ typo(lead) }}</p>
         <div class="faq__cta">
           <BaseButton
             :to="{ hash: '#contact' }"

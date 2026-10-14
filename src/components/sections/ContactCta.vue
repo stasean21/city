@@ -1,18 +1,13 @@
 <script setup>
 import RicochetArrow from '../ui/RicochetArrow.vue'
+import SectionHead from '../ui/SectionHead.vue'
 import { messengers as items } from '../../utils/messengers.js'
 </script>
 
 <template>
   <section id="contact" class="contact">
     <div class="container">
-      <div class="contact__head">
-        <div class="contact__intro">
-          <span class="pill">Связаться</span>
-          <h2 class="display">Обсудим задачу?</h2>
-        </div>
-        <p class="lead">Расскажите, что продаёте и где, — предложу, с чего начать.</p>
-      </div>
+      <SectionHead class="contact__head" pill="Связаться" title="Обсудим задачу?" lead="Расскажите, что продаёте и где, — предложу, с чего начать." />
 
       <ul class="contact__list">
         <li v-for="item in items" :key="item.id">
@@ -37,20 +32,9 @@ import { messengers as items } from '../../utils/messengers.js'
 </template>
 
 <style scoped>
-/* шапка — как в ProcessColumns: слева pill и заголовок, справа лид по низу */
-.contact__head {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--s-24);
-  align-items: end;
+/* шапка — SectionHead, до списка ближе, чем до сетки в других блоках */
+.contact .contact__head {
   margin-bottom: var(--s-40);
-}
-
-.contact__intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--sec-pill);
 }
 
 /* список: линия сверху у списка и снизу у каждой строки */
@@ -190,9 +174,5 @@ import { messengers as items } from '../../utils/messengers.js'
 }
 
 @media (max-width: 767px) {
-  .contact__head {
-    grid-template-columns: 1fr;
-    gap: var(--sec-lead);
-  }
 }
 </style>

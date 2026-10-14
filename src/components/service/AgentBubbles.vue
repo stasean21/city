@@ -1,4 +1,6 @@
 <script setup>
+import { typo } from '../../utils/typo.js'
+
 // первый экран страницы ИИ-агентов: обрывок переписки — клиент, агент,
 // служебная отметка. Пузыри медленно плавают со сдвигом фаз. Иллюстрация, aria-hidden
 const BUBBLES = [
@@ -6,7 +8,7 @@ const BUBBLES = [
   { kind: 'agent', text: 'Зависит от товара — пришлите ссылку, посчитаю и передам заявку.' },
   { kind: 'system', text: '● заявка добавлена в таблицу' },
   { kind: 'user', text: 'Отлично, вот ссылка' },
-]
+].map((bubble) => ({ ...bubble, text: typo(bubble.text) }))
 </script>
 
 <template>

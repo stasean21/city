@@ -85,10 +85,12 @@ function releaseTab() {
   if (state.value === 'tab') scheduleRotate()
 }
 
-// ширина подписи — по скрытому измерителю, чтобы ярлык менял ширину плавно
+// ширина подписи — по скрытому измерителю, чтобы ярлык менял ширину плавно.
+// Дробную ширину округляем вверх и даём 1px запаса: offsetWidth округлял вниз,
+// и последняя буква обрезалась
 async function measureLabel() {
   await nextTick()
-  if (measureEl.value) labelW.value = measureEl.value.offsetWidth
+  if (measureEl.value) labelW.value = Math.ceil(measureEl.value.getBoundingClientRect().width) + 1
 }
 
 // ---------- ярлык над тёмным блоком ----------
@@ -219,6 +221,8 @@ onMounted(() => {
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('scroll', queueDark, { passive: true })
   window.addEventListener('resize', queueDark, { passive: true })
+  // выше 1440 кегль растёт с экраном — и подпись вместе с ним
+  window.addEventListener('resize', measureLabel, { passive: true })
   tabObserver = new ResizeObserver(queueDark)
   // ярлык виден сразу (повторный визит) — подпись замерена запасным шрифтом,
   // с Inter она шире и обрезалась бы: перемеряем, когда шрифты загрузятся
@@ -240,6 +244,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('scroll', queueDark)
   window.removeEventListener('resize', queueDark)
+  window.removeEventListener('resize', measureLabel)
   tabObserver?.disconnect()
   cancelAnimationFrame(darkFrame)
   clearTimeout(timer)
@@ -321,10 +326,10 @@ onUnmounted(() => {
         <!-- подпись меняется («подсмотр выгоды») — скринридеру хватает aria-label -->
         <span class="gift-tab__label" :style="labelW ? { width: `${labelW}px` } : null" aria-hidden="true">
           <Transition name="gift-roll">
-            <span :key="label" class="gift-tab__text">{{ label }}</span>
+            <span :key="label" class="gift-tab__type gift-tab__text">{{ label }}</span>
           </Transition>
         </span>
-        <span ref="measureEl" class="gift-tab__measure" aria-hidden="true">{{ label }}</span>
+        <span ref="measureEl" class="gift-tab__type gift-tab__measure" aria-hidden="true">{{ label }}</span>
         <span class="caption gift-tab__count" aria-hidden="true">{{ gift.items.length }}</span>
       </button>
     </Transition>
@@ -516,6 +521,13 @@ onUnmounted(() => {
   overflow: hidden;
   white-space: nowrap;
   transition: width var(--ease);
+}
+
+/* текст и измеритель — один набор шрифта, иначе ширины расходятся */
+.gift-tab__type {
+  font: 500 var(--t-ui)/1.375 var(--f-body);
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 .gift-tab__text {

@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
+import { typo } from '../../utils/typo.js'
 
 const items = [
   {
     word: 'Дизайн',
-    note: 'Инфографика, AI-фото и видеообложки для карточек.',
+    note: 'Инфографика, ИИ-фото и видеообложки для карточек.',
   },
   {
     word: 'Реклама',
@@ -14,7 +15,7 @@ const items = [
     word: 'Цифры',
     note: 'Смотрю, что сработало, и делаю следующую итерацию.',
   },
-].map((item, i) => ({ ...item, num: String(i + 1).padStart(2, '0') }))
+].map((item, i) => ({ ...item, note: typo(item.note), num: String(i + 1).padStart(2, '0') }))
 
 const AVATAR = 'https://storage.yandexcloud.net/landing-main/new-pages/about/avatar.jpg'
 // одно фото на все три слова — меняется только текст слева
@@ -168,8 +169,8 @@ onUnmounted(() => {
         </div>
 
         <ul class="small about__terms">
-          <li><i class="about__dot"></i>по всей России</li>
-          <li><i class="about__dot"></i>физлица и юрлица, договор</li>
+          <li><i class="about__dot"></i>по всей России</li>
+          <li><i class="about__dot"></i>физлица и юрлица, договор</li>
         </ul>
       </div>
 

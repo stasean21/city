@@ -1,5 +1,6 @@
 <script setup>
-// шапка блока, как в ProcessColumns: слева pill и Display, справа lead по низу.
+// шапка блока: слева pill и Display, справа lead — его последняя строка стоит
+// на базовой линии последней строки заголовка. Все шапки секций — через неё.
 // без pill — второй заголовок внутри той же секции
 defineProps({
   pill: { type: String, default: '' },
@@ -23,7 +24,9 @@ defineProps({
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--s-24);
-  align-items: end;
+  /* по низу, но точнее: по базовой линии последних строк — у Display и lead
+     разный интерлиньяж, при выравнивании по краю блоков строки разъезжаются */
+  align-items: last baseline;
   margin-bottom: var(--sec-content);
 }
 

@@ -209,7 +209,7 @@ onUnmounted(() => {
 
       <!-- что делает агент -->
       <div class="back" aria-live="polite">
-        <p class="small back__title">За кулисами<span>сейчас</span></p>
+        <p class="small back__title">За кулисами<span>сейчас</span></p>
         <ul class="small back__log">
           <!-- в тексте событий только <b> — данные свои, не пользовательские -->
           <li v-for="item in log" :key="item.id"><i aria-hidden="true"></i><span v-html="item.text"></span></li>

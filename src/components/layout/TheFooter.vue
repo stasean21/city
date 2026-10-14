@@ -29,7 +29,7 @@ function toTop() {
         </RouterLink>
 
         <!-- пункты — те же, что в шапке (data/nav.json) -->
-        <nav class="site-footer__nav" aria-label="Навигация в подвале">
+        <nav class="site-footer__nav" aria-label="Навигация в подвале">
           <RouterLink
             v-for="link in navLinks"
             :key="link.hash"
@@ -69,7 +69,7 @@ function toTop() {
       </div>
 
       <div class="site-footer__bottom">
-        <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266</span>
+        <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266</span>
         <div class="site-footer__meta">
           <RouterLink to="/privacy" class="caption site-footer__privacy">Политика конфиденциальности</RouterLink>
           <button type="button" class="caption site-footer__up" @click="toTop">

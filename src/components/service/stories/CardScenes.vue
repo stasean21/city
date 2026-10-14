@@ -161,7 +161,7 @@ const layers = ['layer-0.webp', 'layer-1.webp', 'layer-2.webp', 'layer-3.webp', 
     </div>
     <div class="clip">
       <img :src="src('source-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
-      <span>фото от клиента</span>
+      <span>фото от клиента</span>
     </div>
   </div>
 
@@ -183,7 +183,7 @@ const layers = ['layer-0.webp', 'layer-1.webp', 'layer-2.webp', 'layer-3.webp', 
     <img class="full shot is-first" :src="src('source-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
     <img v-for="f in ai" :key="f" class="full shot" :src="src(f)" width="840" height="1120" alt="" loading="lazy" decoding="async">
     <div class="flash"></div>
-    <span class="rec"><b class="lbl">исходник на белом</b></span>
+    <span class="rec"><b class="lbl">исходник на белом</b></span>
     <div class="strip">
       <img :src="src('source-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
       <img v-for="f in ai" :key="f" :src="src(f)" width="840" height="1120" alt="" loading="lazy" decoding="async">
@@ -195,7 +195,7 @@ const layers = ['layer-0.webp', 'layer-1.webp', 'layer-2.webp', 'layer-3.webp', 
     <img class="full" :src="src('model-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
     <img class="full after" :src="src('model-scene.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
     <div class="wipe"></div>
-    <span class="chip done">свет и цвет под сцену</span>
+    <span class="chip done">свет и цвет под сцену</span>
   </div>
 
   <!-- 5 инфографика -->

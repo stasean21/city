@@ -16,7 +16,7 @@ const items = computed(() => props.related.slugs
 <template>
   <section id="related" class="related">
     <div class="container">
-      <SectionHead pill="Вместе с этим" :title="related.title" :lead="related.lead" />
+      <SectionHead pill="Вместе с этим" :title="related.title" :lead="related.lead" />
       <ul class="related__grid">
         <li v-for="service in items" :key="service.slug">
           <ServiceCard :service="service" />

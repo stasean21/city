@@ -79,7 +79,7 @@ onUnmounted(() => {
 
     <section>
       <div class="container">
-        <div class="sg-divider"><span>1 · Типографика — все роли текста на сайте</span></div>
+        <div class="sg-divider"><span>1 · Типографика — все роли текста на сайте</span></div>
         <div class="sg-roles">
           <div v-for="role in roles" :key="role.name" class="sg-role">
             <div class="sg-role__meta">
@@ -91,10 +91,10 @@ onUnmounted(() => {
 
           <div class="sg-role">
             <div class="sg-role__meta">
-              <b>UI — кнопки</b>
+              <b>UI — кнопки</b>
               <span>16 / 500 · мобилка 15</span>
-              <span>как в шапке: поля 8×16, скругление 15</span>
-              <span>стрелка-рикошет при наведении</span>
+              <span>как в шапке: поля 8×16, скругление 15</span>
+              <span>стрелка-рикошет при наведении</span>
             </div>
             <div class="sg-buttons">
               <div class="sg-row">
@@ -104,10 +104,10 @@ onUnmounted(() => {
                 <BaseButton variant="secondary">Все услуги</BaseButton>
               </div>
               <div class="sg-row sg-dark on-dark">
-                <BaseButton variant="primary" arrow>Написать в Telegram</BaseButton>
+                <BaseButton variant="primary" arrow>Написать в Telegram</BaseButton>
                 <BaseButton variant="secondary" arrow>VK</BaseButton>
               </div>
-              <span class="caption">наведите на кнопку со стрелкой · слева основная, справа второстепенная · ниже — на тёмном фоне</span>
+              <span class="caption">наведите на кнопку со стрелкой · слева основная, справа второстепенная · ниже — на тёмном фоне</span>
             </div>
           </div>
 
@@ -124,7 +124,7 @@ onUnmounted(() => {
             <div class="sg-role__meta">
               <b>Number small</b>
               <span>48 / 500 · мобилка 24</span>
-              <span>номера в узких колонках</span>
+              <span>номера в узких колонках</span>
             </div>
             <div class="num-sm">01 &nbsp;02 &nbsp;03</div>
           </div>
@@ -133,7 +133,7 @@ onUnmounted(() => {
             <div class="sg-role__meta">
               <b>Word</b>
               <span>88 / 700, −2.5 · ≤991 64 · мобилка 44</span>
-              <span>только переключаемые слова в «Обо мне»</span>
+              <span>только переключаемые слова в «Обо мне»</span>
             </div>
             <div class="sg-words">
               <span class="word">Дизайн</span>
@@ -144,8 +144,8 @@ onUnmounted(() => {
           <div class="sg-role">
             <div class="sg-role__meta">
               <b>Number XL</b>
-              <span>200 / 500 · ≤991 160</span>
-              <span>только номер в раскрытой колонке процесса</span>
+              <span>200 / 500 · ≤991 160</span>
+              <span>только номер в раскрытой колонке процесса</span>
             </div>
             <div class="sg-dark"><span class="num-xl">04</span></div>
           </div>
@@ -155,7 +155,7 @@ onUnmounted(() => {
 
     <section>
       <div class="container">
-        <div class="sg-divider"><span>2 · Цвет — роли важнее значений</span></div>
+        <div class="sg-divider"><span>2 · Цвет — роли важнее значений</span></div>
         <div class="sg-palette">
           <div v-for="[token, role] in palette" :key="token" class="sg-swatch">
             <i :style="{ background: `var(${token})` }"></i>
@@ -168,7 +168,7 @@ onUnmounted(() => {
 
     <section>
       <div class="container">
-        <div class="sg-divider"><span>3 · Отступы — одна шкала на всё</span></div>
+        <div class="sg-divider"><span>3 · Отступы — одна шкала на всё</span></div>
         <div class="sg-scale">
           <div v-for="n in spaceScale" :key="n">
             <i :style="{ width: `var(--s-${n})`, height: `var(--s-${n})` }"></i>
@@ -190,8 +190,8 @@ onUnmounted(() => {
       <div class="container">
         <div class="sg-divider"><span>4 · Так собирается любая секция</span></div>
         <span class="pill sg-demo__pill">Процесс</span>
-        <h2 class="display sg-demo__title">Как работаем</h2>
-        <p class="lead sg-demo__lead">Шесть шагов от первого сообщения до готовых файлов. На каждом этапе вы знаете, что происходит.</p>
+        <h2 class="display sg-demo__title">Как работаем</h2>
+        <p class="lead sg-demo__lead">Шесть шагов от первого сообщения до готовых файлов. На каждом этапе вы знаете, что происходит.</p>
         <div class="sg-steps">
           <div v-for="[num, title, text, result] in steps" :key="num" class="sg-step">
             <span class="num sg-step__num">{{ num }}</span>
@@ -200,13 +200,13 @@ onUnmounted(() => {
             <span class="small sg-step__result">→ {{ result }}</span>
           </div>
         </div>
-        <p class="sg-note">pill → 24 → Display → 20 → lead · → 80 → карточки 350: поля 32 · номер 80 → 24 → название Display 58 → 12 → текст · результат прижат к низу · секция заканчивается отступом 120</p>
+        <p class="sg-note">pill → 24 → Display → 20 → lead · → 80 → карточки 350: поля 32 · номер 80 → 24 → название Display 58 → 12 → текст · результат прижат к низу · секция заканчивается отступом 120</p>
       </div>
     </section>
 
     <div class="sg-switch" role="group" aria-label="Режим масштаба">
-      <button type="button" :aria-pressed="!scaleOff" @click="setScaleOff(false)">с масштабом</button>
-      <button type="button" :aria-pressed="scaleOff" @click="setScaleOff(true)">без масштаба (как сейчас)</button>
+      <button type="button" :aria-pressed="!scaleOff" @click="setScaleOff(false)">с масштабом</button>
+      <button type="button" :aria-pressed="scaleOff" @click="setScaleOff(true)">без масштаба (как сейчас)</button>
     </div>
     <span class="sg-vw">ширина экрана {{ width }}px · масштаб {{ scale }}×</span>
   </main>

@@ -130,7 +130,7 @@ onUnmounted(() => {
 
 <template>
   <div class="adapt-block">
-    <SectionHead pill="Примеры" title="Одна идея — все площадки" lead="Выберите кампанию и размер — баннер перестроится." />
+    <SectionHead pill="Примеры" title="Одна идея — все площадки" lead="Выберите кампанию и размер — баннер перестроится." />
 
     <div ref="blockEl" class="adapt">
       <div class="adapt__stage">

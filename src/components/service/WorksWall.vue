@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
 <template>
   <section id="works" ref="sectionEl" class="wall">
     <div class="container">
-      <SectionHead pill="Примеры" title="Работы" lead="Нажмите на карточку, чтобы посмотреть все слайды." />
+      <SectionHead pill="Примеры" title="Работы" lead="Нажмите на карточку, чтобы посмотреть все слайды." />
 
       <!-- мобилка: сетка первых работ без параллакса -->
       <ul v-if="isMobile" class="wall__grid">

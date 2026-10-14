@@ -36,7 +36,7 @@ const fanWorks = computed(() => {
         <p v-if="service.page?.lead" class="lead service-hero__lead once-in">{{ service.page.lead }}</p>
 
         <div class="service-hero__actions once-in">
-          <BaseButton to="#contact" variant="primary" arrow>Обсудим задачу?</BaseButton>
+          <BaseButton to="#contact" variant="primary" arrow>Обсудить задачу</BaseButton>
           <BaseButton v-if="examples" to="#works" variant="secondary">Смотреть примеры</BaseButton>
         </div>
       </div>

@@ -11,7 +11,7 @@ defineProps({
 <template>
   <section id="parts" class="parts">
     <div class="container">
-      <SectionHead pill="Что входит" :title="parts.title" :lead="parts.lead" />
+      <SectionHead pill="Что входит" :title="parts.title" :lead="parts.lead" />
       <ExpandColumns :items="parts.items" :aria-label="parts.title" />
     </div>
   </section>

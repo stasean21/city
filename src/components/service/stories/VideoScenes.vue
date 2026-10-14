@@ -103,7 +103,7 @@ defineExpose({ scenes, duration: 7 })
   <div data-index="1" class="stage s2" :class="{ on: active === 1 }">
     <div class="center">
       <div class="board">
-        <b>Сценарий · 6 с</b>
+        <b>Сценарий · 6 с</b>
         <div v-for="row in board" :key="row.name" class="board-row">
           <span class="thumb"></span>
           <span class="txt"><i>{{ row.time }}</i>{{ row.name }}</span>
@@ -126,17 +126,17 @@ defineExpose({ scenes, duration: 7 })
     <span class="table"></span>
     <div class="center"><div class="hp"><span class="band"></span><span class="cup l"></span><span class="cup r"></span></div></div>
     <span class="motion"><i></i><i></i><i></i></span>
-    <span class="rec">AI · оживляю сцену</span>
+    <span class="rec">ИИ · оживляю сцену</span>
   </div>
 
   <!-- 5 монтаж -->
   <div data-index="4" class="stage s5" :class="{ on: active === 4 }">
     <span class="table"></span>
     <div class="center"><div class="hp"><span class="band"></span><span class="cup l"></span><span class="cup r"></span></div></div>
-    <p class="ttl">Тишина в метро</p>
+    <p class="ttl">Тишина в метро</p>
     <p class="sub">шумоподавление</p>
     <span class="badge">хит</span>
-    <span class="cta">В корзину</span>
+    <span class="cta">В корзину</span>
   </div>
 
   <!-- 6 сдача -->

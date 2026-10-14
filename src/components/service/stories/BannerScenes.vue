@@ -98,7 +98,7 @@ defineExpose({ scenes, duration: 7 })
         <span v-if="n !== 3" class="x"></span>
       </div>
     </div>
-    <span class="idea">идея: один крупный оффер и кнопка</span>
+    <span class="idea">идея: один крупный оффер и кнопка</span>
   </div>
 
   <!-- 3 ключевой визуал -->

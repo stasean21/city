@@ -42,7 +42,7 @@ useAutoScroll(mobileEl, { speed: SPEED })
           class="devices__shot"
           :style="{ aspectRatio: `${shots.mobile.width} / ${shots.mobile.height}` }"
           :src="site.mobile"
-          alt="Главная страница сайта m/design на телефоне"
+          alt="Главная страница сайта m/design на телефоне"
           :width="shots.mobile.width"
           :height="shots.mobile.height"
           :lazy="false"

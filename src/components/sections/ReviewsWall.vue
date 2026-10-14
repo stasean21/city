@@ -160,8 +160,8 @@ onBeforeUnmount(() => {
            колонка растянется на высоту сетки и прилипать будет нечему -->
       <div class="reviews__text">
         <span class="pill reviews__pill">Отзывы</span>
-        <h2 class="display reviews__title">Что говорят клиенты</h2>
-        <p class="lead">Лучшее подтверждение — слова тех, кто уже получил результат.</p>
+        <h2 class="display reviews__title">Что говорят клиенты</h2>
+        <p class="lead">Лучшее подтверждение — слова тех, кто уже получил результат.</p>
 
         <div class="reviews__summary">
           <!-- стопка аватаров — графика; смысл дублирует легенда -->

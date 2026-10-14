@@ -126,7 +126,7 @@ defineExpose({ scenes, reset, duration: 7 })
   <div data-index="4" class="stage s5" :class="{ on: active === 4 }">
     <div class="center">
       <div class="chart">
-        <b>Заявки за неделю</b>
+        <b>Заявки за неделю</b>
         <div class="bars"><span v-for="(h, i) in bars" :key="i" class="bar" :style="{ height: `calc(${h} * var(--u))` }"></span></div>
         <div class="goal"><i></i>цель: кнопка Telegram</div>
         <div class="goal"><i></i>цель: отправка формы</div>

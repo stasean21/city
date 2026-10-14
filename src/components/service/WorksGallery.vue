@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { gsap } from 'gsap'
 import CoverImage from '../ui/CoverImage.vue'
 import { plural } from '../../utils/plural.js'
+import { typo } from '../../utils/typo.js'
 
 // бесконечная галерея всех работ услуги: полотно тянется в любую сторону,
 // клик по работе — просмотр поверх. Макет — docs/mockups/works-gallery.html.
@@ -54,7 +55,7 @@ const cells = computed(() => {
   return list
 })
 
-const countLabel = computed(() => `${n.value} ${plural(n.value, ['работа', 'работы', 'работ'])}`)
+const countLabel = computed(() => typo(`${n.value} ${plural(n.value, ['работа', 'работы', 'работ'])}`))
 
 const rootEl = ref(null)
 const wrapEl = ref(null)
@@ -423,7 +424,7 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <p class="small ig__hint" :class="{ 'is-hidden': !hint }" aria-hidden="true"><i></i>тяните в любую сторону</p>
+    <p class="small ig__hint" :class="{ 'is-hidden': !hint }" aria-hidden="true"><i></i>тяните в любую сторону</p>
 
     <!-- просмотр одной работы -->
     <div
@@ -435,7 +436,7 @@ onUnmounted(() => {
       :aria-label="viewItem.title"
     >
       <div class="ig-view__back" @click="closeView"></div>
-      <span class="small ig-view__esc">esc — закрыть</span>
+      <span class="small ig-view__esc">esc — закрыть</span>
       <button type="button" class="ig__close ig-view__x" aria-label="Закрыть работу" @click="closeView">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" /></svg>
       </button>
