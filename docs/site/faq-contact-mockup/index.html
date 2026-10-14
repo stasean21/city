@@ -1,0 +1,95 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --ink-soft:#2C2D32; --text:#717171; --text-3:#A1A09F; --dark-text:#B8B6B2; --accent:#F59958; --white:#fff; --line:rgba(0,0,0,.12); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; background: var(--bg); font-family: Inter, sans-serif; color: var(--ink); }
+.c { width: 1048px; margin: 0 auto; position: relative; }
+.pill { display: inline-block; padding: 5px 14px; border-radius: 999px; background: var(--bg-3); font: 400 13px/18px Inter; color: var(--text); }
+h2 { font: 600 58px/1.12 Gilroy; letter-spacing: -1.6px; margin-top: 18px; }
+.lead { font: 400 18px/30px Inter; color: var(--text); }
+.btn { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 18px; border-radius: 15px; background: var(--ink); color: #fff; font: 500 15px Inter; }
+
+/* FAQ */
+.faq { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding: 80px 0 160px; }
+.faq .lead { margin: 28px 0 28px; max-width: 420px; }
+.q { display: flex; justify-content: space-between; align-items: center; padding: 26px 28px; background: #fff; border-radius: 20px; margin-bottom: 12px; font: 500 21px Gilroy; }
+.q i { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-3); display: grid; place-items: center; font: 400 22px Inter; font-style: normal; }
+.q.open { background: var(--ink); color: #fff; flex-wrap: wrap; }
+.q.open i { background: var(--ink-soft); color: var(--accent); font-size: 18px; }
+.q.open p { width: 100%; margin-top: 18px; font: 400 15px/26px Inter; color: var(--dark-text); }
+
+/* контакты */
+.contact { padding: 0 0 140px; }
+.chead { display: flex; justify-content: space-between; align-items: flex-end; margin: 18px 0 44px; }
+.chead h2 { margin: 0; }
+.rows { border-top: 1px solid var(--line); }
+.row { position: relative; display: flex; align-items: center; gap: 22px; height: 138px; border-bottom: 1px solid var(--line); font: 600 84px/1 Gilroy; letter-spacing: -2.5px; }
+.row img.ic { width: 50px; height: 50px; }
+.row .ar { margin-left: auto; font: 400 56px Inter; }
+.row small { font: 400 16px Inter; color: var(--text-3); letter-spacing: 0; margin-left: 24px; align-self: center; }
+
+footer { margin: 0 20px 20px; height: 184px; background: var(--ink); border-radius: 27px; }
+
+/* ---------- вариант 1: лента работ ---------- */
+.band { position: relative; height: 380px; margin: -40px 0 120px; overflow: hidden; }
+.band .track { position: absolute; left: -80px; top: 60px; display: flex; gap: 16px; transform: rotate(-4deg); }
+.band .track img { width: 192px; height: 256px; object-fit: cover; border-radius: 10px; flex: none; }
+.band .track .tx { flex: none; display: grid; place-items: center; width: 256px; height: 256px; border-radius: 10px; background: var(--ink); color: #fff; font: 600 28px/1.15 Gilroy; letter-spacing: -.6px; text-align: center; padding: 20px; }
+.band .track .tx b { color: var(--accent); font-weight: 600; }
+
+/* ---------- вариант 2: веер + фото ---------- */
+.me { margin-top: 56px; width: 100%; max-width: 440px; position: relative; aspect-ratio: 4/5; border-radius: 27px; overflow: hidden; }
+.me img { width: 100%; height: 100%; object-fit: cover; }
+.me .chip { position: absolute; left: 16px; bottom: 16px; display: flex; gap: 10px; align-items: center; padding: 8px 16px 8px 8px; border-radius: 999px; background: #fff; font: 500 15px Inter; }
+.me .chip span { width: 10px; height: 10px; border-radius: 50%; background: #3BB273; margin-left: 6px; }
+.fan { position: relative; width: 420px; height: 260px; }
+.fan img { position: absolute; bottom: 0; width: 170px; height: 226px; object-fit: cover; border-radius: 12px; border: 6px solid #fff; }
+
+/* ---------- вариант 3: живые строки ---------- */
+.row.hot { margin: 0 -28px; padding: 0 28px; border-radius: 27px; background: var(--ink); color: #fff; border-color: transparent; }
+.row.hot .ar { color: var(--accent); }
+.row.hot small { color: var(--dark-text); }
+.row .thumbs { position: absolute; right: 120px; top: 50%; display: flex; gap: 10px; transform: translateY(-50%); }
+.row .thumbs img { width: 84px; height: 112px; object-fit: cover; border-radius: 10px; }
+.row .thumbs img:nth-child(1) { transform: rotate(-6deg); } .row .thumbs img:nth-child(3) { transform: rotate(6deg); }
+.mini { margin-top: 56px; display: flex; gap: 14px; align-items: center; padding: 14px 22px 14px 14px; background: #fff; border-radius: 20px; width: max-content; }
+.mini img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+.mini b { display: block; font: 600 18px Gilroy; }
+.mini span { font: 400 14px Inter; color: var(--text); }
+</style></head><body>
+<script>
+const v = new URLSearchParams(location.search).get('v') || '1'
+const works = ['final', 'model-scene', 'ai-2', 'layer-2', 'ai-4', 'source-white', 'ai-1', 'model-white', 'final', 'model-scene']
+const faqLeft = {
+  '1': '',
+  '2': `<div class="me"><img src="img/photo.webp"><div class="chip"><span></span>Станислав · отвечаю лично</div></div>`,
+  '3': `<div class="mini"><img src="img/photo.webp"><div><b>Станислав</b><span>отвечаю лично, без менеджеров</span></div></div>`,
+}[v]
+const band = v === '1' ? `<div class="band"><div class="track">${works.slice(0, 4).map(w => `<img src="img/${w}.webp">`).join('')}<div class="tx"><span>Так выглядят <b>карточки</b>, которые я делаю</span></div>${works.slice(4).map(w => `<img src="img/${w}.webp">`).join('')}</div></div>` : ''
+const head2 = v === '2'
+  ? `<div class="fan"><img src="img/ai-2.webp" style="left:20px;transform:rotate(-9deg)"><img src="img/model-scene.webp" style="left:230px;transform:rotate(8deg)"><img src="img/final.webp" style="left:125px;bottom:16px;z-index:2"></div>`
+  : `<p class="lead" style="max-width:520px">Расскажите, что продаёте и где, — предложу, с чего начать.</p>`
+const rows = [['telegram', 'Telegram', '@muntyanu_design'], ['whatsapp', 'WhatsApp', '+7 920 429-91-13'], ['vk', 'VK', 'vk.ru/muntyanu_design'], ['max', 'Max', '']]
+document.write(`
+<section class="c faq">
+  <div><span class="pill">Вопросы</span><h2>Частые<br>вопросы</h2><p class="lead">Не нашли ответ — напишите, отвечу лично.</p><span class="btn">Обсудить задачу ↗</span>${faqLeft}</div>
+  <div>
+    <div class="q open">Сколько стоит работа?<i>×</i><p>Зависит от задачи и объёма. После короткого брифа присылаю смету с фиксированной суммой — в процессе она не меняется.</p></div>
+    ${['Сколько времени займёт?', 'Работаете с юрлицами?', 'Что нужно от меня для старта?', 'Сколько правок входит?', 'Можно без съёмки товара?', 'Для каких площадок делаете?'].map(q => `<div class="q">${q}<i>+</i></div>`).join('')}
+  </div>
+</section>
+${band}
+<section class="c contact">
+  <span class="pill">Связаться</span>
+  <div class="chead"><h2>Обсудим задачу?</h2>${head2}</div>
+  <div class="rows">${rows.map(([ic, name, hint], i) => `<div class="row ${v === '3' && i === 0 ? 'hot' : ''}"><img class="ic" src="img/${ic}.svg">${name}${v === '3' && hint ? `<small>${hint}</small>` : ''}${v === '3' && i === 0 ? `<div class="thumbs"><img src="img/ai-2.webp"><img src="img/final.webp"><img src="img/model-scene.webp"></div>` : ''}<span class="ar">↗</span></div>`).join('')}</div>
+</section>
+<footer></footer>`)
+</script>
+</body></html>
