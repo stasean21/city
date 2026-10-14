@@ -43,7 +43,10 @@ h1 { font-size: 60px; }
 .v2 h1 { font-size: 66px; letter-spacing: -2px; margin-bottom: 44px; white-space: nowrap; }
 .bar { display: flex; align-items: center; gap: 14px; width: 760px; max-width: 100%; background: #fff; border-radius: 27px; padding: 10px 10px 10px 24px; font: 500 20px Gilroy; text-align: left; }
 .bar input { flex: 1; border: 0; outline: 0; font: inherit; background: none; min-width: 0; }
-.link { margin-top: 22px; color: #B8B6B2; font: 500 17px Gilroy; border-bottom: 1px solid #4A4B50; padding-bottom: 2px; }
+.link { margin-top: 18px; display: inline-flex; align-items: center; height: 52px; padding: 0 24px; border-radius: 15px; border: 1.5px solid #4A4B50; color: #fff; font: 500 17px Gilroy; }
+.only-mob { display: none; }
+/* мобильный «хром» сайта: логотип сверху без панели, нижняя панель Меню/Обсудить, ярлык подарка */
+.dock, .gift { display: none; }
 /* 3 — разнесено по высоте */
 .v3 .content { justify-content: space-between; padding: 44px 40px 40px; }
 .v3 h1 { margin-top: 0; }
@@ -54,7 +57,17 @@ h1 { font-size: 60px; }
   .v2 h1 { font-size: 34px; white-space: normal; }
   .bar { flex-wrap: wrap; padding: 10px; font-size: 17px; }
   .bar input { padding: 10px 8px; }
-  .bar .btn { width: 100%; justify-content: center; }
+  .only-pc { display: none !important; } .only-mob { display: grid; }
+  .bar { flex-wrap: nowrap; padding: 8px 8px 8px 16px; }
+  .link { width: 100%; justify-content: center; height: 50px; }
+  header { background: none; margin: 0; padding: 26px 24px 0; height: auto; }
+  header img { height: 26px; }
+  .v2 .cap { height: calc(100svh - 74px - 104px); min-height: 520px; margin: 14px 12px 0; }
+  .dock { display: flex; position: fixed; left: 12px; right: 12px; bottom: 12px; height: 68px; padding: 7px; gap: 7px; border-radius: 30px; background: #1D1E22; z-index: 30; }
+  .dock span { display: flex; align-items: center; justify-content: center; border-radius: 23px; font: 500 17px Gilroy; }
+  .dock .m { width: 112px; background: #2C2D32; color: #fff; } .dock .d { flex: 1; background: #fff; color: #1D1E22; }
+  .gift { display: flex; position: fixed; right: 12px; bottom: 92px; z-index: 30; align-items: center; gap: 10px; height: 48px; padding: 0 16px; border-radius: 15px; background: #1D1E22; color: #fff; font: 500 15px Gilroy; }
+  .gift b { background: #F59958; color: #1D1E22; border-radius: 999px; padding: 1px 8px; font: 500 13px Gilroy; }
   .v3 .content { padding: 22px 18px 18px; }
   .cap { align-items: stretch; }
   .acts { width: 100%; }
@@ -67,6 +80,7 @@ h1 { font-size: 60px; }
   <canvas id="cv"></canvas>
   <div class="content" id="content"></div>
 </section>
+<div class="dock"><span class="m">☰ Меню</span><span class="d">Обсудить задачу ↗</span></div><div class="gift"><span style="color:#F59958">🎁</span>Ваш подарок <b>4</b></div>
 <script>
 const V = new URLSearchParams(location.search).get('v') || '1'
 document.body.classList.add('v' + V)
@@ -76,7 +90,7 @@ const inp = (extra = '') => `<div class="input"><span class="ar">→</span><inpu
 const acts = '<div class="acts"><span class="btn acc">Услуги и решения ↗</span><span class="btn">Обсудить задачу ↗</span></div>'
 document.getElementById('content').innerHTML = {
   '1': pill + h1 + inp() + acts,
-  '2': h1 + `<div class="bar"><span class="ar">→</span><input placeholder="Конкуренты дороже, а покупают у них"><span class="btn acc">Обсудить задачу ↗</span></div><a class="link">Услуги и решения ↓</a>`,
+  '2': h1 + `<div class="bar"><span class="ar">→</span><input placeholder="Конкуренты дороже, а покупают у них"><span class="btn acc only-pc">Обсудить задачу ↗</span><span class="go only-mob">↑</span></div><a class="link">Услуги и решения ↓</a>`,
   '3': `<div class="top">${pill}</div><div class="mid">${h1}${inp()}</div><div class="bottom">${acts}</div>`,
 }[V]
 </script>
