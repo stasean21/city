@@ -1,0 +1,66 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Semibold.woff2); font-weight: 600; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+:root { --bg:#F6F4F2; --bg-3:#EAE8E4; --ink:#1D1E22; --ink-soft:#2C2D32; --text:#717171; --text-3:#A1A09F; --accent:#F59958; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; height: 900px; overflow: hidden; position: relative; background: var(--bg); font-family: Inter, sans-serif; color: var(--ink); }
+header { position: absolute; z-index: 20; left: 96px; right: 96px; top: 46px; height: 64px; background: #fff; border-radius: 23px; display: flex; align-items: center; padding: 0 8px 0 28px; }
+header img { height: 28px; }
+header nav { margin-left: auto; display: flex; gap: 48px; font: 500 17px Inter; color: var(--text); margin-right: 40px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; height: 48px; padding: 0 22px; border-radius: 15px; background: var(--ink); color: #fff; font: 500 17px Inter; white-space: nowrap; }
+h1 { font: 700 58px/1.12 Gilroy; letter-spacing: -1.5px; }
+.wrap { position: absolute; left: 50%; transform: translateX(-50%); width: 860px; }
+.input { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 27px; padding: 12px 12px 12px 28px; font: 500 22px Gilroy; color: var(--text-3); }
+.input .go { margin-left: auto; width: 56px; height: 56px; border-radius: 15px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 22px; flex: none; }
+.caret { display: inline-block; width: 3px; height: 28px; background: var(--accent); vertical-align: -5px; margin-left: 2px; }
+.note { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 18px; font: 400 15px Inter; color: var(--text); }
+.note img { width: 22px; height: 22px; }
+.msg { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+.msg.me { justify-content: flex-end; }
+.bub { max-width: 600px; padding: 16px 22px; border-radius: 22px; font: 400 19px/29px Inter; background: #fff; }
+.msg.me .bub { background: var(--ink); color: #fff; border-bottom-right-radius: 8px; }
+.msg.him .bub { border-top-left-radius: 8px; }
+.av { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; }
+.who { font: 500 13px Inter; color: var(--text-3); margin: 0 0 6px 58px; }
+.dots { display: inline-flex; gap: 6px; padding: 20px 22px; background: #fff; border-radius: 22px; border-top-left-radius: 8px; }
+.dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); opacity: .25; } .dots i:nth-child(2) { opacity: .5 } .dots i:nth-child(3) { opacity: .9 }
+.stream { font: 700 64px/1.1 Gilroy; letter-spacing: -1.8px; }
+.stream .dim { color: #D7D3CD; }
+.blk { display: inline-block; width: 22px; height: 56px; background: var(--accent); vertical-align: -6px; margin-left: 6px; border-radius: 3px; }
+</style></head><body>
+<header><img src="img/logo-light.svg"><nav><span>Услуги</span><span>Этапы работы</span><span>Отзывы</span><span>Обо мне</span><span>FAQ</span></nav><span class="btn">Обсудить задачу ↗</span></header>
+<script>
+const v = new URLSearchParams(location.search).get('v') || '1'
+const tg = `<img src="img/telegram.svg">`
+const H = {
+  // 1 — переписка: клиент пишет боль, Станислав отвечает
+  '1': `<div class="wrap" style="top:190px">
+    <h1 style="font-size:46px;text-align:center;margin-bottom:40px">Дизайн, аналитика и ИИ-разработка<br>для малого и среднего бизнеса</h1>
+    <div class="msg me"><div class="bub">Товар хороший, а карточку в выдаче никто не открывает. Что делать?</div></div>
+    <div class="who">Станислав</div>
+    <div class="msg him"><img class="av" src="img/photo.webp"><div class="bub">Сначала посмотрю выдачу и конкурентов, потом предложу главный слайд, который заметят. Пришлите ссылку на товар<span class="caret"></span></div></div>
+    <div class="input" style="margin-top:26px">Опишите свою задачу…<span class="go">↑</span></div>
+  </div>`,
+  // 2 — заголовок «стримится» как ответ нейросети
+  '2': `<div class="wrap" style="top:180px;width:1000px">
+    <div class="msg me" style="justify-content:flex-start"><div class="bub" style="background:var(--ink);color:#fff;border-radius:22px;border-bottom-left-radius:8px">Кто поможет, чтобы товар заметили и купили?</div></div>
+    <div class="stream" style="margin-top:34px">Дизайн, аналитика и ИИ-разработка для малого <span class="dim">и среднего бизнеса</span><span class="blk"></span></div>
+    <div class="input" style="margin-top:46px;width:760px">Задайте свой вопрос — отвечу лично<span class="go">↑</span></div>
+    <div class="note" style="justify-content:flex-start">${tg}Ответ придёт в Telegram от Станислава</div>
+  </div>`,
+  // 3 — поле ввода с перебором болей клиента вместо услуг
+  '3': `<div class="wrap" style="top:200px;text-align:center;width:1100px">
+    <h1>Дизайн, аналитика и ИИ-разработка<br>для малого и среднего бизнеса</h1>
+    <div class="input" style="margin:48px auto 0;width:860px;text-align:left;color:var(--ink)"><span style="color:#A1A09F">→</span>Конкуренты дороже, а покупают у них<span class="caret"></span><span class="go">↑</span></div>
+    <div style="margin-top:16px;font:400 15px Inter;color:#A1A09F">подсказки сменяют друг друга: «Продажи упали после смены обложки…» · «Нужен сайт, но нет времени разбираться…»</div>
+    <div class="note" style="margin-top:44px">${tg}Отвечаю лично — в Telegram, без менеджеров</div>
+  </div>`,
+}
+document.write(H[v])
+</script>
+</body></html>
