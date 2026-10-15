@@ -1,18 +1,24 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import HeroDots from './HeroDots.vue'
 import contacts from '../../data/contacts.json'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
 
-// строка задачи: подсказки сменяются по кругу, пока поле пустое и не в фокусе
+// строка задачи: подсказка сама печатается и стирается, пока поле пустое и не в фокусе.
+// placeholder курсор не умеет — поверх поля «призрак» с текстом и оранжевым курсором
 const PLACEHOLDERS = [
   'Конкуренты дороже, а покупают у них',
   'Продажи упали после смены обложки',
   'Нужен сайт, но нет времени разбираться',
 ]
-const PLACEHOLDER_MS = 4000
+const TYPE_MS = 55        // на букву при наборе (+ случайно до TYPE_JITTER — живее)
+const TYPE_JITTER = 35
+const SPACE_MS = 40       // после пробела — чуть дольше, как при настоящем наборе
+const ERASE_MS = 22       // на букву при стирании
+const HOLD_MS = 1600      // сколько держим готовую фразу
+const GAP_MS = 350        // пауза между фразами
 const NOTE_MS = 3000 // сколько видна подпись «Текст скопирован»
 
 // адрес — из общего списка мессенджеров, как у кнопок в FAQ и футере
@@ -23,17 +29,80 @@ const route = useRoute()
 const router = useRouter()
 
 const task = ref('')
-const inputEl = ref(null)
-const placeholderIndex = ref(0)
-const placeholder = computed(() => PLACEHOLDERS[placeholderIndex.value])
+const stageEl = ref(null)
 const noted = ref(false)
-let placeholderTimer = 0
 let noteTimer = 0
 
-function nextPlaceholder() {
-  if (task.value || document.activeElement === inputEl.value) return
-  placeholderIndex.value = (placeholderIndex.value + 1) % PLACEHOLDERS.length
+// ---------- печать подсказки ----------
+const phraseIndex = ref(0)
+// в пререндере — первая фраза целиком: поле не пустое, при гидрации ничего не прыгает
+const typed = ref(PLACEHOLDERS[0])
+const typing = ref(false) // буквы идут — курсор горит ровно, не мигает
+const focused = ref(false)
+const ghostOn = computed(() => !task.value && !focused.value)
+// в фокусе «призрака» нет — пример виден обычной подсказкой, пока человек пишет своё
+const placeholder = computed(() => (ghostOn.value ? '' : PLACEHOLDERS[phraseIndex.value]))
+
+let typeTimer = 0
+let inView = false
+let reduced = false
+let fresh = true // первый запуск — со стирания фразы из пререндера
+
+function later(fn, ms) {
+  typeTimer = window.setTimeout(fn, ms)
 }
+
+function typeStep(i) {
+  const phrase = PLACEHOLDERS[phraseIndex.value]
+  typed.value = phrase.slice(0, i)
+  if (i >= phrase.length) {
+    typing.value = false
+    later(eraseStep, HOLD_MS)
+    return
+  }
+  typing.value = true
+  later(() => typeStep(i + 1), TYPE_MS + Math.random() * TYPE_JITTER + (phrase[i - 1] === ' ' ? SPACE_MS : 0))
+}
+
+function eraseStep() {
+  typing.value = true
+  typed.value = typed.value.slice(0, -1)
+  if (typed.value) {
+    later(eraseStep, ERASE_MS)
+    return
+  }
+  typing.value = false
+  phraseIndex.value = (phraseIndex.value + 1) % PLACEHOLDERS.length
+  later(() => typeStep(1), GAP_MS)
+}
+
+function stopTyping() {
+  clearTimeout(typeTimer)
+  typeTimer = 0
+  typing.value = false
+}
+
+// одна цепочка setTimeout; стоит, пока hero вне экрана, вкладка скрыта,
+// поле в фокусе или в нём текст. Продолжает с новой фразы
+function syncTyping() {
+  const run = !reduced && inView && !document.hidden && ghostOn.value
+  if (!run) {
+    stopTyping()
+    return
+  }
+  if (typeTimer) return
+  if (fresh) {
+    fresh = false
+    eraseStep()
+    return
+  }
+  phraseIndex.value = (phraseIndex.value + 1) % PLACEHOLDERS.length
+  typed.value = ''
+  typeStep(1)
+}
+
+watch(ghostOn, syncTyping)
+let stageObserver = null
 
 function send() {
   const text = task.value.trim()
@@ -60,20 +129,31 @@ async function copy(text) {
 }
 
 onMounted(() => {
-  // reduced motion — стоит первая подсказка
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-  placeholderTimer = window.setInterval(nextPlaceholder, PLACEHOLDER_MS)
+  // reduced motion — без печати: первая фраза целиком, курсор не мигает
+  reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduced) {
+    typing.value = true
+    return
+  }
+  stageObserver = new IntersectionObserver(([entry]) => {
+    inView = entry.isIntersecting
+    syncTyping()
+  })
+  stageObserver.observe(stageEl.value)
+  document.addEventListener('visibilitychange', syncTyping)
 })
 
 onUnmounted(() => {
-  clearInterval(placeholderTimer)
+  stopTyping()
+  stageObserver?.disconnect()
+  document.removeEventListener('visibilitychange', syncTyping)
   clearTimeout(noteTimer)
 })
 </script>
 
 <template>
   <section id="hero" class="hero">
-    <div class="hero__stage" data-dark-zone>
+    <div ref="stageEl" class="hero__stage" data-dark-zone>
       <HeroDots />
       <div class="hero__content" :class="{ 'is-noted': noted }">
         <!-- две строки — два блока, а не <br>: Chrome выравнивает (text-wrap: balance)
@@ -86,16 +166,20 @@ onUnmounted(() => {
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <label class="visually-hidden" for="hero-task">Опишите задачу</label>
-          <input
-            id="hero-task"
-            ref="inputEl"
-            v-model="task"
-            class="lead hero__input"
-            type="text"
-            :placeholder="placeholder"
-            autocomplete="off"
-            enterkeyhint="send"
-          >
+          <span class="hero__field">
+            <input
+              id="hero-task"
+              v-model="task"
+              class="lead hero__input"
+              type="text"
+              :placeholder="placeholder"
+              autocomplete="off"
+              enterkeyhint="send"
+              @focus="focused = true"
+              @blur="focused = false"
+            >
+            <span v-if="ghostOn" class="lead hero__ghost" :class="{ 'is-typing': typing }" aria-hidden="true">{{ typed }}<i class="hero__caret"></i></span>
+          </span>
           <BaseButton class="hero__send-pc" variant="primary" arrow type="submit">Обсудить задачу</BaseButton>
           <button class="hero__send-mobile" type="submit" aria-label="Отправить задачу">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -196,9 +280,16 @@ onUnmounted(() => {
 }
 
 /* .lead задаёт шрифт (16 на телефоне — iOS не увеличивает страницу при фокусе) */
-.hero__input {
+/* поле и «призрак» поверх него — в одной ячейке строки */
+.hero__field {
+  position: relative;
   flex: 1;
   min-width: 0;
+}
+
+.hero__input {
+  display: block;
+  width: 100%;
   padding: 0;
   border: 0;
   outline: 0;
@@ -210,6 +301,39 @@ onUnmounted(() => {
 .hero__input::placeholder {
   color: var(--text);
   opacity: 1;
+}
+
+/* печатающаяся подсказка: шрифт поля (.lead), длинная строка обрезается справа */
+.hero__ghost {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* курсор — линия, в px намеренно, как --hairline */
+.hero__caret {
+  display: inline-block;
+  flex: none;
+  width: 2px;
+  height: 1.1em;
+  margin-left: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  animation: hero-caret 1s steps(1) infinite;
+}
+
+.is-typing .hero__caret {
+  animation: none;
+  opacity: 1;
+}
+
+@keyframes hero-caret {
+  50% { opacity: 0; }
 }
 
 /* «Обсудить задачу» в строке — акцентная: исключение, согласованное владельцем
