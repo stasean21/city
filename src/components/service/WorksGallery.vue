@@ -731,11 +731,11 @@ onUnmounted(() => {
   border-radius: var(--r-card);
 }
 
-/* вертикальный ролик 9:16 — по высоте экрана */
+/* ролик 3:4, как обложка карточки — в той же рамке, что и картинка */
 .ig-view__img.is-video {
   width: auto;
   height: var(--gallery-video-h);
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   background: var(--ink-soft);
 }

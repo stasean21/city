@@ -6,8 +6,9 @@ import VideoLoop from '../ui/VideoLoop.vue'
 import WorksGallery from './WorksGallery.vue'
 import { useWorksGallery } from '../../composables/useWorksGallery.js'
 
-// «Работы» на странице видеообложек: стена вертикальных роликов шахматкой,
+// «Работы» на странице видеообложек: стена роликов 3:4, как обложка карточки, шахматкой,
 // играют сами и без звука. Клик — ролик крупно в галерее, кнопка — вся галерея.
+// На стене не больше REEL_MAX роликов, в галерею — все: индексы стены и галереи совпадают.
 // макет — docs/mockups/service-video-examples.html (B)
 const props = defineProps({
   works: { type: Array, required: true }, // { slug, title, niche, video, poster, duration }
@@ -15,6 +16,9 @@ const props = defineProps({
   lead: { type: String, default: '' },
   serviceTitle: { type: String, default: '' },
 })
+
+const REEL_MAX = 8
+const reelWorks = computed(() => props.works.slice(0, REEL_MAX))
 
 // «0:07»
 const time = (sec = 0) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`
@@ -34,7 +38,7 @@ const galleryItems = computed(() => props.works.map(({ title, niche, poster, vid
     <SectionHead :title="title" :lead="lead" />
 
     <ul class="reel">
-      <li v-for="(work, i) in works" :key="work.slug" class="reel__item">
+      <li v-for="(work, i) in reelWorks" :key="work.slug" class="reel__item">
         <button
           type="button"
           class="reel__btn"
@@ -86,7 +90,7 @@ const galleryItems = computed(() => props.works.map(({ title, niche, poster, vid
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 3 / 4;
   padding: 0;
   overflow: hidden;
   background: none;

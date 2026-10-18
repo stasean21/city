@@ -1,10 +1,10 @@
 <script setup>
 import VideoLoop from '../ui/VideoLoop.vue'
 
-// веер первого экрана страницы видеообложек: три ролика 3:4 из первых работ —
+// веер первого экрана страницы видеообложек: три ролика 3:4 (page.fan или первые работы) —
 // левый и правый повёрнуты, центральный сверху (геометрия как у PhotoFan)
 defineProps({
-  works: { type: Array, required: true }, // работы с video и poster, по order
+  works: { type: Array, required: true }, // работы с video и poster, слева направо
 })
 
 const POSITIONS = ['left', 'center', 'right']

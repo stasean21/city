@@ -41,6 +41,12 @@ const banners = computed(() => (page.value.examples === 'banners' ? campaigns : 
 const photo = computed(() => page.value.examples === 'photo' && works.value.length > 0)
 // video — лента в телефоне и стена роликов из работ с полем video
 const video = computed(() => page.value.examples === 'video' && works.value.length > 0)
+// веер первого экрана: page.fan — слаги работ слева направо, без него — первые по order
+const fanWorks = computed(() => {
+  const slugs = page.value.fan || []
+  const picked = slugs.map((slug) => works.value.find((work) => work.slug === slug)).filter(Boolean)
+  return picked.length ? picked : works.value
+})
 // site — сам этот сайт: скриншоты главной и разметка её блоков
 const site = computed(() => page.value.examples === 'site' && page.value.site && page.value.xray)
 // agent — демо-переписка и «как агент думает», работ нет
@@ -63,7 +69,7 @@ useHead(() => ({
         <PhotoFan :works="works" />
       </template>
       <template v-else-if="video" #fan>
-        <VideoFan :works="works" />
+        <VideoFan :works="fanWorks" />
       </template>
       <template v-else-if="site" #fan>
         <SiteDevices :site="page.site" />
