@@ -5,4 +5,7 @@ export const redirects = [
   { path: '/services/ai-fotosessii', redirect: '/services/predmetnaya-syomka' },
   // инфографика переехала на короткий адрес
   { path: '/services/infografika-dlya-marketpleysov', redirect: '/services/infographics' },
+  // отдельных страниц «Обо мне» и «Контакты» нет — это блоки главной
+  { path: '/about', redirect: { path: '/', hash: '#about' } },
+  { path: '/contacts', redirect: { path: '/', hash: '#contact' } },
 ]

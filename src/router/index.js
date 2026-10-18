@@ -13,8 +13,6 @@ export const routes = [
   { path: '/', name: 'home', component: () => import('../views/HomeView.vue') },
   ...redirects,
   { path: '/services/:slug', name: 'service-detail', component: () => import('../views/ServiceDetailView.vue'), beforeEnter: serviceExists },
-  { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
-  { path: '/contacts', name: 'contacts', component: () => import('../views/ContactsView.vue') },
   { path: '/privacy', name: 'privacy', component: () => import('../views/PrivacyView.vue') },
   // всё остальное — 404; пререндерится как /404 → dist/404.html
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue') },
