@@ -159,6 +159,57 @@ if (v === '5') {
   </div>`
 }
 
+/* ---------- 6. 404 огромное, ноль перечёркнут слэшем из логотипа ---------- */
+if (v === '6') {
+  document.body.style.background = 'var(--bg)'
+  css = `.big { font: 700 520px/0.8 Gilroy; letter-spacing: -26px; justify-content: center; color: var(--ink); display: flex; align-items: center; }
+  .zero { position: relative; display: inline-block; }
+  .zero::after { content: ""; position: absolute; left: 50%; top: -6%; width: 40px; height: 112%; background: var(--accent); border-radius: 20px; transform: translateX(-50%) rotate(26deg); }`
+  html = `<div class="top"><img src="img/logo-light.svg"><span class="cap" style="color:var(--text-3)">ошибка 404</span></div>
+  <div class="abs big" style="left:0;right:0;top:130px"><span>4</span><span class="zero">0</span><span>4</span></div>
+  <div class="abs" style="left:96px;top:620px;right:96px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end">
+    <h1>${TITLE}</h1>
+    <div><p class="lead" style="margin-bottom:28px">${LEAD}</p><div class="acts"><span class="btn dark">На главную ↗</span><span class="btn sec">Все услуги</span></div></div>
+  </div>`
+}
+
+/* ---------- 7. Цифры-окна: внутри 404 видны работы ---------- */
+if (v === '7') {
+  document.body.style.background = '#1D1E22'
+  css = `.mask { font: 700 500px/0.82 Gilroy; letter-spacing: -24px; text-align: center; color: transparent;
+    background: url(img/fen.webp) 0% 40%/34% auto no-repeat, url(img/final.webp) 50% 30%/34% auto no-repeat, url(img/vacuum.webp) 100% 40%/34% auto no-repeat;
+    -webkit-background-clip: text; background-clip: text; animation: pan 12s ease-in-out infinite alternate; }
+  @keyframes pan { to { background-position: 0% 70%, 50% 60%, 100% 70% } }`
+  html = `<div class="top"><img src="img/logo-dark.svg"><span class="cap" style="color:#6E6F75">ошибка 404</span></div>
+  <div class="abs mask" style="left:0;right:0;top:120px">404</div>
+  <div class="abs" style="left:96px;top:600px;width:640px">
+    <h1 style="color:#fff">${TITLE}</h1>
+  </div>
+  <div class="abs" style="left:800px;top:600px;width:544px">
+    <p class="lead" style="color:#A1A09F;margin-bottom:28px">${LEAD}</p>
+    <div class="acts"><span class="btn light">На главную ↗</span><span class="btn sec-d">Все услуги</span></div>
+  </div>`
+}
+
+/* ---------- 8. 404 в работе: чертёж, цифры собираются ---------- */
+if (v === '8') {
+  document.body.style.background = 'var(--bg)'
+  css = `.d { font: 700 460px/0.8 Gilroy; letter-spacing: -18px; display: flex; justify-content: center; } .d > span { position: relative; display: inline-block; } .d .lbl { top: -30px; left: 12px; letter-spacing: 0; white-space: nowrap; -webkit-text-stroke: 0; }
+  .d .a { color: var(--ink); }
+  .d .b { color: transparent; -webkit-text-stroke: 2px var(--ink); background: repeating-linear-gradient(135deg, #D9D5CF 0 6px, transparent 6px 14px); -webkit-background-clip: text; background-clip: text; }
+  .d .c { color: transparent; -webkit-text-stroke: 2px #B8B4AE; }
+  .guide { position: absolute; background: var(--blue); opacity: .55; }
+  .lbl { position: absolute; font: 500 12px/20px Inter; padding: 0 8px; border-radius: 4px; }`
+  html = `<div class="top"><img src="img/logo-light.svg"><span class="cap" style="color:var(--text-3)">ошибка 404</span></div>
+  <div class="guide" style="left:0;right:0;top:160px;height:1px"></div>
+  <div class="guide" style="left:0;right:0;top:528px;height:1px"></div>
+  <div class="abs d" style="left:0;right:0;top:160px"><span class="a">4<span class="lbl" style="background:var(--blue);color:#fff">готово</span></span><span class="b">0<span class="lbl" style="background:var(--accent);color:#fff">в работе</span></span><span class="c">4<span class="lbl" style="background:var(--bg-3);color:var(--text)">в планах</span><svg style="position:absolute;right:30px;top:140px" width="26" height="26" viewBox="0 0 22 22"><path d="M2 2 L20 9 L11 11 L9 20 Z" fill="#F59958" stroke="#fff" stroke-width="1.5"/></svg></span></div>
+  <div class="abs" style="left:96px;top:620px;right:96px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end">
+    <h1>${TITLE}</h1>
+    <div><p class="lead" style="margin-bottom:28px">${LEAD}</p><div class="acts"><span class="btn dark">На главную ↗</span><span class="btn sec">Все услуги</span></div></div>
+  </div>`
+}
+
 document.head.insertAdjacentHTML('beforeend', `<style>${css}</style>`)
 document.getElementById('root').innerHTML = html
 
