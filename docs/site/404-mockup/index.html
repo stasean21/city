@@ -236,5 +236,59 @@ if (v === '1') {
   }
   document.fonts.ready.then(() => { o.clearRect(0, 0, W, H); o.fillText('404', W - 80, 560); const dd = o.getImageData(0, 0, W, H).data; dots.forEach(d => d.on = dd[(Math.floor(d.y) * W + Math.floor(d.x)) * 4 + 3] > 128); requestAnimationFrame(frame) })
 }
+
+// v8: анимация «страница в работе»
+if (v === '8') {
+  const st = document.createElement('style'); st.textContent = `
+  .guide { transform-origin: left; animation: gx .9s cubic-bezier(.65,0,.35,1) both; }
+  .guide.v { transform-origin: top; animation-name: gy; }
+  @keyframes gx { from { transform: scaleX(0) } } @keyframes gy { from { transform: scaleY(0) } }
+  .d .a { padding: 40px 40px 10px 0; margin: -40px -40px -10px 0; color: transparent; -webkit-text-stroke: 2px var(--ink); background: linear-gradient(var(--ink), var(--ink)) bottom / 100% 0% no-repeat; -webkit-background-clip: text; background-clip: text; animation: fillA 1.2s cubic-bezier(.65,0,.35,1) .5s forwards; }
+  .d .a .lbl { -webkit-text-stroke: 0; top: 10px; }
+  @keyframes fillA { to { background-size: 100% 100% } }
+  .d .b { background-size: 28px 28px; animation: hatch 1.2s linear infinite; }
+  @keyframes hatch { to { background-position: 28px 0 } }
+  .d .b .fill { position: absolute; left: 0; top: 0; color: var(--ink); -webkit-text-stroke: 0; clip-path: inset(100% 0 0 0); animation: rise 6s ease-in-out 1.4s infinite; }
+  @keyframes rise { 0% { clip-path: inset(100% 0 0 0) } 45%, 70% { clip-path: inset(58% 0 0 0) } 100% { clip-path: inset(100% 0 0 0) } }
+  .lbl { opacity: 0; transform: translateY(6px); animation: pop .4s ease-out forwards; }
+  @keyframes pop { to { opacity: 1; transform: none } }
+  .rise { opacity: 0; transform: translateY(24px); animation: up .6s cubic-bezier(.22,1,.36,1) forwards; }
+  @keyframes up { to { opacity: 1; transform: none } }
+  #pen { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+  #pen polyline { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linejoin: round; }
+  #cur { position: absolute; width: 26px; height: 26px; margin: -3px 0 0 -3px; transition: opacity .3s; }
+  #curname { position: absolute; font: 500 12px/20px Inter; color: #fff; background: var(--accent); border-radius: 6px; padding: 0 8px; white-space: nowrap; transition: opacity .3s; }`
+  document.head.appendChild(st)
+  document.querySelectorAll('.guide').forEach((g, i) => g.style.animationDelay = i * .15 + 's')
+  const lbls = document.querySelectorAll('.d .lbl'); lbls.forEach((l, i) => l.style.animationDelay = 1.2 + i * .25 + 's')
+  // в нуле — слой заливки, который поднимается и опускается: «работа идёт»
+  const b = document.querySelector('.d .b'); const f = document.createElement('span'); f.className = 'fill'; f.textContent = '0'; b.prepend(f)
+  const last = document.querySelector('.d').nextElementSibling; last.querySelectorAll('h1, p, .acts').forEach((el, i) => { el.classList.add('rise'); el.style.animationDelay = 1.4 + i * .1 + 's' })
+  // старый курсор в цифре убираем, рисуем свой: он обводит вторую «4»
+  document.querySelector('.d .c svg')?.remove()
+  const P = [[1041,148],[935,355],[1017,355],[1017,280],[1082,280],[1082,355],[1117,355],[1117,414],[1082,414],[1082,470],[1017,470],[1017,414],[865,414],[865,355],[970,148],[1041,148]]
+  document.body.insertAdjacentHTML('beforeend', `<svg id="pen" width="1440" height="900"><polyline points=""/></svg>
+    <svg id="cur" viewBox="0 0 22 22"><path d="M2 2 L20 9 L11 11 L9 20 Z" fill="#F59958" stroke="#fff" stroke-width="1.5"/></svg><span id="curname">Станислав</span>`)
+  const line = document.querySelector('#pen polyline'), cur = document.getElementById('cur'), nm = document.getElementById('curname'), lab = lbls[2]
+  const seg = P.slice(1).map((p, i) => Math.hypot(p[0] - P[i][0], p[1] - P[i][1])), total = seg.reduce((a, b) => a + b)
+  const DRAW = 4200, HOLD = 1600, START = 2200
+  function at(d) { let k = 0; while (k < seg.length - 1 && d > seg[k]) { d -= seg[k]; k++ } const t = Math.min(1, d / seg[k]); return { k, x: P[k][0] + (P[k + 1][0] - P[k][0]) * t, y: P[k][1] + (P[k + 1][1] - P[k][1]) * t } }
+  let t0 = null
+  function tick(now) {
+    if (t0 === null) t0 = now + START
+    const t = now - t0, cyc = DRAW + HOLD
+    if (t >= 0) {
+      const c = t % cyc, done = c >= DRAW, d = Math.min(1, c / DRAW) * total, pt = at(d)
+      line.setAttribute('points', [...P.slice(0, pt.k + 1), [pt.x, pt.y]].map(q => q.join(',')).join(' '))
+      cur.style.left = pt.x + 'px'; cur.style.top = pt.y + 'px'; nm.style.left = pt.x + 22 + 'px'; nm.style.top = pt.y + 18 + 'px'
+      cur.style.opacity = nm.style.opacity = done ? 0 : 1
+      line.style.opacity = c > cyc - 300 ? 0 : 1
+      lab.textContent = done ? 'почти готово' : 'в работе'
+      lab.style.background = 'var(--accent)'; lab.style.color = '#fff'
+    } else { cur.style.opacity = nm.style.opacity = 0 }
+    requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+}
 </script>
 </body></html>
