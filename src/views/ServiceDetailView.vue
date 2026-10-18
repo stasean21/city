@@ -39,8 +39,12 @@ const works = computed(() => worksData
 // (banners — кампании из banners.json, photo — ряды кадров из работ)
 const banners = computed(() => (page.value.examples === 'banners' ? campaigns : []))
 const photo = computed(() => page.value.examples === 'photo' && works.value.length > 0)
-// video — лента в телефоне и стена роликов из работ с полем video
+// video — лента в выдаче и стена роликов из работ с полем video
 const video = computed(() => page.value.examples === 'video' && works.value.length > 0)
+// соседи в ленте «Заметна в выдаче» — обложки инфографики
+const feedCovers = worksData
+  .filter((work) => work.services.includes('infographics'))
+  .sort((a, b) => a.order - b.order)
 // веер первого экрана: page.fan — слаги работ слева направо, без него — первые по order
 const fanWorks = computed(() => {
   const slugs = page.value.fan || []
@@ -85,6 +89,7 @@ useHead(() => ({
     <VideoExamples
       v-else-if="video"
       :works="works"
+      :covers="feedCovers"
       :feed="page.feed"
       :reel="page.works"
       :service-title="service.title"

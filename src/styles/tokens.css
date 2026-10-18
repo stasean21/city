@@ -234,16 +234,18 @@ html {
   --set-h:     min(26.25rem, 60vh); /* 420 */
   --set-max-w: min(var(--container), calc(100vw - 2 * var(--gutter)));
 
-  /* страница видеообложек — телефон с выдачей маркетплейса (VideoFeed) */
-  --phone-col-min:  17.5rem;   /* 280 — колонка телефона */
-  --phone-col-max:  23.75rem;  /* 380 */
-  --phone-r:        2.5rem;    /* 40 — корпус: экран 30 + отступ 12 → вложенное скругление */
-  --phone-screen-r: 1.875rem;  /* 30 — экран */
-  --phone-screen-h: 38.75rem;  /* 620 — высота экрана */
-  --phone-w-mobile: 20rem;     /* 320 — телефон на мобилке */
-  --feed-mark:      2px;       /* обводка карточки с видеообложкой — линия, в px намеренно */
-  --legend-swatch-w: 1rem;     /* 16 — квадратик легенды */
-  --legend-swatch-h: .75rem;   /* 12 */
+  /* страница видеообложек — «Заметна в выдаче» (VideoFeed): тёмная плашка с лентой */
+  --feed-pad:        4.5rem;    /* 72 — поля плашки */
+  --feed-gap:        4rem;      /* 64 — между текстом и лентой */
+  --feed-wall-h:     35rem;     /* 560 — окно ленты */
+  --feed-wall-dur:   22s;       /* полный круг ленты */
+  --feed-track-gap:  .875rem;   /* 14 — между карточками ленты */
+  --feed-card-r:     .5rem;     /* 8 — карточка как на маркетплейсе, мельче --r-card */
+  --feed-dim-filter: grayscale(1) blur(.1875rem) brightness(.55); /* статичные соседи: серые, размытые (blur 3) */
+  --feed-dim-swatch: #3A3B40;   /* квадратик «статичные карточки» в легенде */
+  --feed-swatch-w:   1.375rem;  /* 22 — квадратик легенды */
+  --feed-swatch-h:   .875rem;   /* 14 */
+  --feed-mark:       2px;       /* обводка карточки с видеообложкой — линия, в px намеренно */
 
   /* страница видеообложек — стена роликов (VideoReel) */
   --reel-shift: var(--s-40);   /* сдвиг каждой второй колонки вниз — шахматка */
@@ -418,7 +420,10 @@ html {
     --bfan-h:         21.25rem; /* 340 */
     --pfan-h:         21.25rem; /* 340 */
     --photo-row-h:    15rem;    /* 240 */
-    --phone-screen-h: 32.5rem;  /* 520 */
+    --feed-pad:        2.25rem 1.25rem 1.25rem; /* 36 20 20 */
+    --feed-gap:        1.75rem;  /* 28 */
+    --feed-wall-h:     28.75rem; /* 460 */
+    --feed-track-gap:  var(--s-8);
     --bubbles-h:      21.25rem; /* 340 */
     --bubble-max:     14.375rem; /* 230 */
     --agent-demo-h:   30rem;    /* 480 */
