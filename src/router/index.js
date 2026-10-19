@@ -1,9 +1,9 @@
 import { redirects } from './redirects.js'
-import services from '../data/services.json'
+import { publishedServices } from '../data/published.js'
 
 // несуществующая услуга — та же 404, адрес в строке остаётся как был
 function serviceExists(to) {
-  if (services.some((service) => service.slug === to.params.slug)) return true
+  if (publishedServices.some((service) => service.slug === to.params.slug)) return true
   return { name: 'not-found', params: { pathMatch: to.path.slice(1).split('/') }, query: to.query, hash: to.hash }
 }
 

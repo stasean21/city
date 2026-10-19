@@ -2,7 +2,7 @@
 import SectionHead from '../ui/SectionHead.vue'
 import ServiceCard from '../ui/ServiceCard.vue'
 import StackMarquee from '../ui/StackMarquee.vue'
-import services from '../../data/services.json'
+import { publishedServices as services } from '../../data/published.js'
 import homeStack from '../../data/stack-home.json'
 </script>
 
@@ -30,8 +30,11 @@ import homeStack from '../../data/stack-home.json'
 </template>
 
 <style scoped>
-/* три колонки, поток автоматический. шесть карточек зигзагом —
-   в каждом ряду одна широкая: 1 + 2, 3 + 4, 5 + 6 */
+/* три колонки, поток автоматический, в каждом ряду одна широкая — зигзаг.
+   шесть карточек: 1 + 2, 3 + 4, 5 + 6; четыре (пока баннеры и сайты
+   в черновиках): 1 + 2, 3 + 4 — правило для 5-й просто не срабатывает.
+   ≤991 две колонки: 1 широкая, дальше парами, последняя широкая —
+   6-я из шести или 4-я из четырёх (li:last-child:nth-child(4)) */
 .services__grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -66,7 +69,8 @@ import homeStack from '../../data/stack-home.json'
     grid-column: auto;
   }
 
-  .services__grid li:nth-child(6) {
+  .services__grid li:nth-child(6),
+  .services__grid li:last-child:nth-child(4) {
     grid-column: span 2;
   }
 }
@@ -77,7 +81,8 @@ import homeStack from '../../data/stack-home.json'
     grid-template-columns: 1fr;
   }
 
-  .services__grid li:nth-child(n) {
+  .services__grid li:nth-child(n),
+  .services__grid li:last-child:nth-child(4) {
     grid-column: auto;
   }
 }

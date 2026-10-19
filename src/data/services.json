@@ -452,6 +452,7 @@
   },
   {
     "slug": "reklamnye-bannery",
+    "draft": true,
     "title": "Рекламные баннеры",
     "description": "Креативы для рекламы на маркетплейсах и в соцсетях",
     "stack": ["figma", "photoshop", "nano-banana", "midjourney"],
@@ -592,6 +593,7 @@
   },
   {
     "slug": "lendingi-i-sayty",
+    "draft": true,
     "title": "Лендинги и сайты",
     "description": "Сайты с понятной структурой и аналитикой, которые приводят заявки",
     "stack": ["figma", "vue", "vite", "tilda", "github", "timeweb", "yandex-metrika", "google-analytics"],
