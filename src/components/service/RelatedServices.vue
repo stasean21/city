@@ -2,21 +2,19 @@
 import { computed } from 'vue'
 import SectionHead from '../ui/SectionHead.vue'
 import ServiceCard from '../ui/ServiceCard.vue'
-import { publishedServices } from '../../data/published.js'
+import services from '../../data/services.json'
 
 const props = defineProps({
   related: { type: Object, required: true }, // { title, lead, slugs }
 })
 
-// черновики (draft) и несуществующие слаги пропускаются
 const items = computed(() => props.related.slugs
-  .map((slug) => publishedServices.find((s) => s.slug === slug))
+  .map((slug) => services.find((s) => s.slug === slug))
   .filter(Boolean))
 </script>
 
 <template>
-  <!-- не осталось ни одной опубликованной услуги — блока нет -->
-  <section v-if="items.length" id="related" class="related">
+  <section id="related" class="related">
     <div class="container">
       <SectionHead pill="Вместе с этим" :title="related.title" :lead="related.lead" />
       <ul class="related__grid">

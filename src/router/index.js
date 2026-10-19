@@ -1,9 +1,11 @@
 import { redirects } from './redirects.js'
-import { publishedServices } from '../data/published.js'
+import services from '../data/services.json'
 
 // несуществующая услуга — та же 404, адрес в строке остаётся как был
 function serviceExists(to) {
-  if (publishedServices.some((service) => service.slug === to.params.slug)) return true
+  const service = services.find((s) => s.slug === to.params.slug)
+  // draft — страница ещё в работе: показываем 404 «Этой страницы нет. Или она ещё в работе»
+  if (service && !service.draft) return true
   return { name: 'not-found', params: { pathMatch: to.path.slice(1).split('/') }, query: to.query, hash: to.hash }
 }
 

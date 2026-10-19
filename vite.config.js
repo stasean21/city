@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { publishedServices } from './src/data/published.js'
+import services from './src/data/services.json' with { type: 'json' }
 
 import { redirects } from './src/router/redirects.js'
 
@@ -14,8 +14,8 @@ export default defineConfig({
         // динамические шаблоны, редиректы и служебный /styleguide не пререндерим
         .filter(path => !path.includes(':') && !redirectPaths.has(path) && path !== '/styleguide')
         .concat(
-          // черновики (draft) не пререндерятся
-          publishedServices.map(service => `/services/${service.slug}`),
+          // черновики (draft) не пререндерятся — хостинг отдаёт 404.html
+          services.filter(service => !service.draft).map(service => `/services/${service.slug}`),
           // страница 404 для хостинга: dist/404.html
           '/404',
         )

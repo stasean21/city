@@ -21,13 +21,13 @@ import RelatedServices from '../components/service/RelatedServices.vue'
 import ServiceFaq from '../components/service/ServiceFaq.vue'
 import ContactCta from '../components/sections/ContactCta.vue'
 import StackMarquee from '../components/ui/StackMarquee.vue'
-import { publishedServices } from '../data/published.js'
+import services from '../data/services.json'
 import worksData from '../data/works.json'
 import { campaigns } from '../utils/banners.js'
 
 // шаблон для всех услуг: блок выводится, только если у услуги есть для него данные
 const route = useRoute()
-const service = computed(() => publishedServices.find((s) => s.slug === route.params.slug))
+const service = computed(() => services.find((s) => s.slug === route.params.slug))
 const page = computed(() => service.value?.page ?? {})
 
 // работы этой услуги по порядку показа
