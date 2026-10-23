@@ -5,6 +5,7 @@ import SectionHead from '../ui/SectionHead.vue'
 import VideoLoop from '../ui/VideoLoop.vue'
 import WorksGallery from './WorksGallery.vue'
 import { useWorksGallery } from '../../composables/useWorksGallery.js'
+import { workAlt } from '../../utils/workAlt.js'
 
 // «Работы» на странице видеообложек: стена роликов 3:4, как обложка карточки, шахматкой,
 // играют сами и без звука. Клик — ролик крупно в галерее, кнопка — вся галерея.
@@ -24,12 +25,13 @@ const reelWorks = computed(() => props.works.slice(0, REEL_MAX))
 const time = (sec = 0) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`
 
 const { galleryOpen, galleryStart, openGallery, closeGallery } = useWorksGallery()
-const galleryItems = computed(() => props.works.map(({ title, niche, poster, video }) => ({
-  title,
-  niche,
-  cover: poster,
-  poster,
-  video,
+const galleryItems = computed(() => props.works.map((work) => ({
+  title: work.title,
+  niche: work.niche,
+  cover: work.poster,
+  poster: work.poster,
+  video: work.video,
+  alt: workAlt(work),
 })))
 </script>
 

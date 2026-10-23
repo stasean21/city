@@ -4,12 +4,13 @@ import { gsap } from 'gsap'
 import CoverImage from '../ui/CoverImage.vue'
 import { plural } from '../../utils/plural.js'
 import { typo } from '../../utils/typo.js'
+import { slideAlt } from '../../utils/workAlt.js'
 
 // бесконечная галерея всех работ услуги: полотно тянется в любую сторону,
 // клик по работе — просмотр поверх. Макет — docs/mockups/works-gallery.html.
 // монтируется родителем через <Teleport to="body"> и v-if только на время показа
 const props = defineProps({
-  // [{ title, niche, cover, slides?: [src | { src, note }], fit?: 'contain', video?, poster? }]
+  // [{ title, niche, cover, alt?, slides?: [src | { src, note }], fit?: 'contain', video?, poster? }]
   items: { type: Array, required: true },
   title: { type: String, required: true }, // название услуги
   // открыть сразу просмотр этой работы (клик по ролику на странице);
@@ -188,6 +189,11 @@ const viewImage = computed(() => {
     ? { src: slide, note: viewItem.value.niche }
     : { src: slide.src, note: slide.note ?? viewItem.value.niche }
 })
+
+// alt в просмотре: слайд — «Название — слайд 2 из 6», обложка — alt работы
+const viewAlt = computed(() => (bySlides.value
+  ? slideAlt(viewItem.value.title, view.s + 1, viewSlides.value.length)
+  : viewItem.value.alt ?? `${viewItem.value.title}, ${viewItem.value.niche}`))
 
 const viewCount = computed(() => (bySlides.value
   ? `${view.s + 1} / ${viewSlides.value.length}`
@@ -405,7 +411,7 @@ onUnmounted(() => {
               class="ig__img"
               :class="{ 'is-contain': items[cell.idx].fit === 'contain' }"
               :src="items[cell.idx].cover"
-              :alt="cell.center ? `${items[cell.idx].title}, ${items[cell.idx].niche}` : ''"
+              :alt="cell.center ? (items[cell.idx].alt ?? `${items[cell.idx].title}, ${items[cell.idx].niche}`) : ''"
               :width="600"
               :height="800"
             />
@@ -465,7 +471,7 @@ onUnmounted(() => {
           class="ig-view__img"
           :class="{ 'is-contain': viewItem.fit === 'contain' }"
           :src="viewImage.src"
-          :alt="`${viewItem.title}, ${viewImage.note}`"
+          :alt="viewAlt"
           :width="600"
           :height="800"
           :lazy="false"

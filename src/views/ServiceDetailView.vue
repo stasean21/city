@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
 import { SITE_URL } from '../data/site.js'
+import { plain } from '../utils/typo.js'
+import JsonLd from '../components/ui/JsonLd.vue'
 import ServiceHero from '../components/service/ServiceHero.vue'
 import BannerFan from '../components/service/BannerFan.vue'
 import BannerExamples from '../components/service/BannerExamples.vue'
@@ -58,11 +60,16 @@ const site = computed(() => page.value.examples === 'site' && page.value.site &&
 const agent = computed(() => page.value.examples === 'agent' && page.value.demo && page.value.think)
 const hasExamples = computed(() => banners.value.length > 0 || works.value.length > 0 || Boolean(site.value) || Boolean(agent.value))
 
-// og:image не задаём — берётся общая из App.vue, пока у услуг нет своих картинок
+// заголовок и описание для поиска — page.seo, без него — название и lead.
+// видимые h1 и lead не меняются. og:image не задаём — берётся общая из App.vue
+const head = computed(() => ({
+  title: plain(page.value.seo?.title ?? (service.value ? `${service.value.title} — m/design` : 'm/design')),
+  description: plain(page.value.seo?.description ?? page.value.lead ?? service.value?.description ?? ''),
+  url: `${SITE_URL}/services/${route.params.slug}`,
+}))
+
 useHead(() => {
-  const title = service.value ? `${service.value.title} — m/design` : 'm/design'
-  const description = page.value.lead ?? service.value?.description ?? ''
-  const url = `${SITE_URL}/services/${route.params.slug}`
+  const { title, description, url } = head.value
   return {
     title,
     meta: [
@@ -74,10 +81,22 @@ useHead(() => {
     link: [{ rel: 'canonical', href: url }],
   }
 })
+
+// разметка услуги для поиска — без цен: они только в «Трёх форматах»
+const serviceJsonLd = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: plain(service.value?.title),
+  description: head.value.description,
+  url: head.value.url,
+  provider: { '@type': 'ProfessionalService', name: 'm/design', url: `${SITE_URL}/` },
+  areaServed: { '@type': 'Country', name: 'Россия' },
+}))
 </script>
 
 <template>
   <main v-if="service">
+    <JsonLd :data="serviceJsonLd" />
     <ServiceHero :service="service" :works="works" :examples="hasExamples">
       <template v-if="banners.length" #fan>
         <BannerFan :campaign="banners[0]" />

@@ -155,12 +155,12 @@ const layers = ['layer-0.webp', 'layer-1.webp', 'layer-2.webp', 'layer-3.webp', 
       </div>
       <div class="refs">
         <span class="swatch"></span>
-        <img :src="src('ai-2.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
-        <img :src="src('ai-4.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
+        <img :src="src('ai-2.webp')" width="840" height="1120" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <img :src="src('ai-4.webp')" width="840" height="1120" alt="" aria-hidden="true" loading="lazy" decoding="async">
       </div>
     </div>
     <div class="clip">
-      <img :src="src('source-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
+      <img :src="src('source-white.webp')" width="840" height="1120" alt="Исходное фото купальника на белом фоне" loading="lazy" decoding="async">
       <span>фото от клиента</span>
     </div>
   </div>
@@ -168,7 +168,7 @@ const layers = ['layer-0.webp', 'layer-1.webp', 'layer-2.webp', 'layer-3.webp', 
   <!-- 2 анализ -->
   <div data-index="1" class="stage s2" :class="{ on: active === 1 }">
     <div class="crop crop4">
-      <img :src="src('competitors.webp')" width="2340" height="1774" alt="" loading="lazy" decoding="async">
+      <img :src="src('competitors.webp')" width="2340" height="1774" alt="Выдача Ozon: карточки купальников у конкурентов" loading="lazy" decoding="async">
       <span v-for="n in 4" :key="n" class="mark"></span>
       <span class="lens"></span>
     </div>
@@ -180,35 +180,35 @@ const layers = ['layer-0.webp', 'layer-1.webp', 'layer-2.webp', 'layer-3.webp', 
 
   <!-- 3 ИИ-фотосессия -->
   <div data-index="2" class="stage s3" :class="{ on: active === 2 }">
-    <img class="full shot is-first" :src="src('source-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
-    <img v-for="f in ai" :key="f" class="full shot" :src="src(f)" width="840" height="1120" alt="" loading="lazy" decoding="async">
+    <img class="full shot is-first" :src="src('source-white.webp')" width="840" height="1120" alt="" aria-hidden="true" loading="lazy" decoding="async">
+    <img v-for="(f, i) in ai" :key="f" class="full shot" :src="src(f)" width="840" height="1120" :alt="`Модель в купальнике, сгенерированная ИИ: ракурс ${i + 1} из ${ai.length}`" loading="lazy" decoding="async">
     <div class="flash"></div>
     <span class="rec"><b class="lbl">исходник на белом</b></span>
     <div class="strip">
-      <img :src="src('source-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
-      <img v-for="f in ai" :key="f" :src="src(f)" width="840" height="1120" alt="" loading="lazy" decoding="async">
+      <img :src="src('source-white.webp')" width="840" height="1120" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <img v-for="f in ai" :key="f" :src="src(f)" width="840" height="1120" alt="" aria-hidden="true" loading="lazy" decoding="async">
     </div>
   </div>
 
   <!-- 4 обработка -->
   <div data-index="3" class="stage s4" :class="{ on: active === 3 }">
-    <img class="full" :src="src('model-white.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
-    <img class="full after" :src="src('model-scene.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async">
+    <img class="full" :src="src('model-white.webp')" width="840" height="1120" alt="Модель в купальнике на белом фоне до обработки" loading="lazy" decoding="async">
+    <img class="full after" :src="src('model-scene.webp')" width="840" height="1120" alt="Модель в купальнике в летней сцене после обработки света и цвета" loading="lazy" decoding="async">
     <div class="wipe"></div>
     <span class="chip done">свет и цвет под сцену</span>
   </div>
 
   <!-- 5 инфографика -->
   <div data-index="4" class="stage s5" :class="{ on: active === 4 }">
-    <img v-for="(f, i) in layers" :key="f" class="full layer" :class="{ 'is-first': i === 0 }" :src="src(f)" width="840" height="1120" alt="" loading="lazy" decoding="async">
+    <img v-for="(f, i) in layers" :key="f" class="full layer" :class="{ 'is-first': i === 0 }" :src="src(f)" width="840" height="1120" :alt="f === 'final.webp' ? 'Готовый главный слайд карточки купальника' : ''" :aria-hidden="f === 'final.webp' ? undefined : 'true'" loading="lazy" decoding="async">
     <span class="chip chip--dark add"></span>
   </div>
 
   <!-- 6 выдача: было → стало -->
   <div data-index="5" class="stage s6" :class="{ on: active === 5 }">
-    <div class="crop crop3"><img :src="src('competitors.webp')" width="2340" height="1774" alt="" loading="lazy" decoding="async"></div>
-    <div class="crop crop3 serp"><img :src="src('serp.webp')" width="2340" height="1774" alt="" loading="lazy" decoding="async"></div>
-    <div class="hero-card"><img :src="src('final.webp')" width="840" height="1120" alt="" loading="lazy" decoding="async"></div>
+    <div class="crop crop3"><img :src="src('competitors.webp')" width="2340" height="1774" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
+    <div class="crop crop3 serp"><img :src="src('serp.webp')" width="2340" height="1774" alt="Карточка купальника в выдаче Ozon среди конкурентов" loading="lazy" decoding="async"></div>
+    <div class="hero-card"><img :src="src('final.webp')" width="840" height="1120" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
     <span class="chip chip--accent win">видно сразу</span>
   </div>
 </template>

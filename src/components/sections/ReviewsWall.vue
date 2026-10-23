@@ -179,6 +179,7 @@ onBeforeUnmount(() => {
                 class="reviews__avatar-in"
                 :src="client.photo"
                 alt=""
+                aria-hidden="true"
                 width="48"
                 height="48"
                 loading="lazy"

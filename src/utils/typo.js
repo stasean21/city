@@ -36,3 +36,7 @@ export function typo(text) {
   for (const [re, to] of RULES) out = out.replace(re, to)
   return out
 }
+
+// обратная операция — для <head> и JSON-LD: там переносов строк нет,
+// а &nbsp; в заголовке и описании для поиска ни к чему
+export const plain = (text = '') => text.replace(/\u00A0/g, ' ')

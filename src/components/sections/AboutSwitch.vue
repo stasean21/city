@@ -20,7 +20,7 @@ const items = [
 const AVATAR = 'https://storage.yandexcloud.net/landing-main/new-pages/about/avatar.jpg'
 // одно фото на все три слова — меняется только текст слева
 const PHOTO = 'https://storage.yandexcloud.net/landing-main/new-pages/about/my_phtoto.webp'
-const PHOTO_ALT = 'Станислав — дизайнер карточек для маркетплейсов'
+const PHOTO_ALT = 'Станислав Мунтяну, дизайнер'
 
 // фото 4:5 — реальные размеры задаются при загрузке, соотношение одно
 const PHOTO_W = 800
@@ -199,6 +199,7 @@ onUnmounted(() => {
             class="about__avatar"
             :src="AVATAR"
             alt=""
+            aria-hidden="true"
             width="56"
             height="56"
             loading="lazy"

@@ -5,6 +5,7 @@ import CoverImage from '../ui/CoverImage.vue'
 import SectionHead from '../ui/SectionHead.vue'
 import WorksGallery from './WorksGallery.vue'
 import { useWorksGallery } from '../../composables/useWorksGallery.js'
+import { workAlt } from '../../utils/workAlt.js'
 
 // «Работы» на странице съёмки: два ряда кадров на всю ширину экрана.
 // при прокрутке верхний ряд едет влево, нижний вправо — от скролла,
@@ -18,7 +19,13 @@ const props = defineProps({
 
 // «Смотреть все работы»: все кадры; слайдов у кадров нет — в просмотре листаются работы
 const { galleryOpen, openGallery, closeGallery } = useWorksGallery()
-const galleryItems = computed(() => props.works.map(({ title, niche, cover, slides }) => ({ title, niche, cover, slides })))
+const galleryItems = computed(() => props.works.map((work) => ({
+  title: work.title,
+  niche: work.niche,
+  cover: work.cover,
+  slides: work.slides,
+  alt: workAlt(work),
+})))
 
 // в ряду минимум столько кадров — иначе ряд не шире экрана и ехать ему некуда
 const MIN_PER_ROW = 9
@@ -129,7 +136,7 @@ onBeforeUnmount(() => {
           <CoverImage
             class="photo-rows__img"
             :src="work.cover"
-            :alt="repeat ? '' : work.caption"
+            :alt="repeat ? '' : workAlt(work)"
             :width="size(work).w"
             :height="size(work).h"
           />

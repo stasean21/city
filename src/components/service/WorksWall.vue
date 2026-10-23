@@ -6,6 +6,7 @@ import SectionHead from '../ui/SectionHead.vue'
 import SlidesLightbox from './SlidesLightbox.vue'
 import WorksGallery from './WorksGallery.vue'
 import { useWorksGallery } from '../../composables/useWorksGallery.js'
+import { workAlt } from '../../utils/workAlt.js'
 
 const props = defineProps({
   works: { type: Array, required: true }, // работы услуги, уже отсортированы по order
@@ -14,7 +15,13 @@ const props = defineProps({
 
 // «Смотреть все работы»: все работы услуги, в просмотре листаются слайды работы
 const { galleryOpen, openGallery, closeGallery } = useWorksGallery()
-const galleryItems = computed(() => props.works.map(({ title, niche, cover, slides }) => ({ title, niche, cover, slides })))
+const galleryItems = computed(() => props.works.map((work) => ({
+  title: work.title,
+  niche: work.niche,
+  cover: work.cover,
+  slides: work.slides,
+  alt: workAlt(work),
+})))
 
 const LANES = 4
 // в колонке минимум столько разных работ — иначе при малом числе работ
@@ -141,7 +148,7 @@ onBeforeUnmount(() => {
       <ul v-if="isMobile" class="wall__grid">
         <li v-for="work in mobileWorks" :key="work.slug">
           <button type="button" class="wall__card" aria-haspopup="dialog" @click="openWork(work, $event)">
-            <CoverImage class="wall__cover" :src="work.cover" :alt="work.title" />
+            <CoverImage class="wall__cover" :src="work.cover" :alt="workAlt(work)" />
             <span class="wall__title">{{ work.title }}</span>
             <span class="caption wall__niche">{{ work.niche }}</span>
           </button>
@@ -163,7 +170,7 @@ onBeforeUnmount(() => {
               :tabindex="primary ? undefined : -1"
               @click="openWork(work, $event)"
             >
-              <CoverImage class="wall__cover" :src="work.cover" :alt="primary ? work.title : ''" />
+              <CoverImage class="wall__cover" :src="work.cover" :alt="primary ? workAlt(work) : ''" />
               <span class="wall__title">{{ work.title }}</span>
               <span class="caption wall__niche">{{ work.niche }}</span>
             </button>

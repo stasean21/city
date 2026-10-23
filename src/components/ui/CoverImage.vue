@@ -2,7 +2,8 @@
 import { onMounted, ref } from 'vue'
 
 // картинка из Object Storage с заглушкой: пока файла нет (404), видна
-// подложка --bg-3, а не значок битой картинки
+// подложка --bg-3, а не значок битой картинки.
+// без alt картинка декоративная (дубль ленты, фон, веер) — aria-hidden
 defineProps({
   src: { type: String, required: true },
   alt: { type: String, default: '' },
@@ -29,6 +30,7 @@ onMounted(() => {
       :class="{ 'is-broken': broken }"
       :src="src"
       :alt="alt"
+      :aria-hidden="alt ? undefined : 'true'"
       draggable="false"
       :width="width"
       :height="height"

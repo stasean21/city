@@ -1,8 +1,9 @@
 <script setup>
-import { computed, h, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AccordionItem from '../ui/AccordionItem.vue'
 import BaseButton from '../ui/BaseButton.vue'
+import JsonLd from '../ui/JsonLd.vue'
 import faq from '../../data/faq.json'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
 import { typo } from '../../utils/typo.js'
@@ -25,11 +26,8 @@ function toggle(i) {
   openIndex.value = openIndex.value === i ? -1 : i
 }
 
-// разметка FAQPage для поиска. Не через useHead: vite-ssg 28 рендерит head
-// через @unhead 2, а в проекте @unhead/vue 3 — теги из useHead в пререндер
-// не попадают. JSON-LD валиден и в body, поэтому выводим его в секции.
-// «<» экранируем, чтобы текст не мог закрыть тег script
-const faqJsonLd = computed(() => JSON.stringify({
+// разметка FAQPage для поиска — из тех же вопросов, что видны на странице
+const faqJsonLd = computed(() => ({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: props.items.map((item) => ({
@@ -37,15 +35,12 @@ const faqJsonLd = computed(() => JSON.stringify({
     name: item.question,
     acceptedAnswer: { '@type': 'Answer', text: item.answer },
   })),
-}).replace(/</g, '\\u003c'))
-
-// <script> в шаблоне Vue запрещён — отдаём его render-функцией
-const JsonLd = () => h('script', { type: 'application/ld+json', innerHTML: faqJsonLd.value })
+}))
 </script>
 
 <template>
   <section id="faq" class="faq">
-    <JsonLd />
+    <JsonLd :data="faqJsonLd" />
     <div class="container faq__layout">
       <!-- обычный CSS sticky, как в ReviewsWall: без align-self: start
            колонка растянется на высоту сетки и прилипать будет нечему -->

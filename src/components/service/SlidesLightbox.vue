@@ -4,6 +4,7 @@ import CoverImage from '../ui/CoverImage.vue'
 import { dims, sizeAlt } from '../../utils/banners.js'
 import { plural } from '../../utils/plural.js'
 import { typo } from '../../utils/typo.js'
+import { slideAlt } from '../../utils/workAlt.js'
 
 // просмотр слайдов работы: нативный <dialog> + showModal().
 // открывает родитель: lightbox.open(work, кнопка) — на неё вернётся фокус.
@@ -32,7 +33,7 @@ const slides = computed(() => {
   }
   return item.slides.map((src, i) => ({
     src,
-    alt: `${item.title}, слайд ${i + 1}`,
+    alt: slideAlt(item.title, i + 1, item.slides.length),
     caption: `${i + 1} / ${item.slides.length}`,
   }))
 })
