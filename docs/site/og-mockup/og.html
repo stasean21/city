@@ -1,0 +1,52 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<title>Превью ссылок</title>
+<style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 630px; overflow: hidden; }
+body { background: #1D1E22; position: relative; font-family: Gilroy, sans-serif; }
+body.light { background: #F6F4F2; }
+canvas { position: absolute; inset: 0; }
+.logo { position: absolute; left: 72px; top: 64px; height: 40px; }
+.pill { position: absolute; left: 72px; bottom: 72px; display: inline-flex; gap: 10px; align-items: center; padding: 8px 18px; border-radius: 999px; background: #2C2D32; color: #B8B6B2; font: 500 20px Inter; }
+.light .pill { background: #ECEAE7; color: #1D1E22; }
+.pill i { width: 10px; height: 10px; border-radius: 50%; background: #3BB273; }
+.kicker { position: absolute; left: 72px; top: 170px; font: 500 22px Inter; color: #F59958; }
+h1 { position: absolute; left: 72px; top: 210px; width: 760px; font: 700 64px/1.08 Gilroy; letter-spacing: -1.8px; color: #fff; }
+.light h1 { color: #1D1E22; }
+.home h1 { top: 170px; font-size: 56px; width: 860px; }
+</style></head><body>
+<canvas id="cv" width="2400" height="1260" style="width:1200px;height:630px"></canvas>
+<img class="logo" id="logo" src="img/logo-dark.svg">
+<p class="kicker" id="kicker"></p>
+<h1 id="t"></h1>
+<span class="pill"><i></i>Отвечаю лично — без менеджеров</span>
+<script>
+const q = new URLSearchParams(location.search)
+const light = q.get('theme') === 'light', page = q.get('p') || 'home'
+const PAGES = {
+  home: { k: '', t: 'Дизайн, аналитика<br>и ИИ‑разработка<br>для малого и среднего бизнеса' },
+  infographics: { k: 'Услуга', t: 'Инфографика для маркетплейсов' },
+  'predmetnaya-syomka': { k: 'Услуга', t: 'Предметная съёмка с помощью ИИ' },
+  videooblozhki: { k: 'Услуга', t: 'Видеообложки для карточек товара' },
+  'ii-agenty': { k: 'Услуга', t: 'ИИ-агенты для заявок, ответов и отчётов' },
+}
+const P = PAGES[page]
+document.getElementById('t').innerHTML = P.t.replace(/ (и|для|с|в) /g, ' $1 ')
+document.getElementById('kicker').textContent = P.k
+if (page === 'home') document.body.classList.add('home')
+if (light) { document.body.classList.add('light'); document.getElementById('logo').src = 'img/logo-light.svg' }
+// точечная матрица как в hero: справа «пятно» курсора, точки расходятся и горят оранжевым
+const ctx = document.getElementById('cv').getContext('2d'); ctx.scale(2, 2)
+const W = 1200, H = 630, step = 22, px = 1090, py = 330, R = 210
+for (let y = step / 2; y < H; y += step) for (let x = step / 2; x < W; x += step) {
+  const dx = x - px, dy = y - py, dist = Math.hypot(dx, dy), near = Math.max(0, 1 - dist / R)
+  const push = near * near * 26, X = x + (dist ? dx / dist * push : 0), Y = y + (dist ? dy / dist * push : 0)
+  ctx.fillStyle = near > .04 ? `rgba(245,153,88,${.25 + near * .75})` : (light ? '#E2DFDB' : '#303136')
+  ctx.beginPath(); ctx.arc(X, Y, 1.7 + near * 4, 0, 6.283); ctx.fill()
+}
+</script>
+</body></html>
