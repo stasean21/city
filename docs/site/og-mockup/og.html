@@ -18,6 +18,7 @@ canvas { position: absolute; inset: 0; }
 .pill.gift svg { width: 22px; height: 22px; }
 .pill.q { background: #fff; color: #1D1E22; font-size: 22px; padding: 10px 22px; }
 .pill.q b { color: #F59958; font-weight: 500; }
+.pill.none { display: none; }
 .kicker { position: absolute; left: 72px; top: 170px; font: 500 22px Inter; color: #F59958; }
 h1 { position: absolute; left: 72px; top: 210px; width: 760px; font: 700 64px/1.08 Gilroy; letter-spacing: -1.8px; color: #fff; }
 .light h1 { color: #1D1E22; }
@@ -44,6 +45,9 @@ const GIFT = '<svg viewBox="0 0 24 24" fill="none" stroke="#1D1E22" stroke-width
 const HOOKS = {
   gift: ['gift', GIFT + '−20% на первые 3 заказа + живая обложка за 0 ₽'],
   q: ['q', 'Конкуренты дороже, а покупают у них? <b>Разберёмся →</b>'],
+  task: ['q', 'Расскажите, что продаёте, — предложу, с чего начать <b>→</b>'],
+  list: ['q', 'Инфографика · ИИ-фото · видеообложки · ИИ-агенты'],
+  none: ['none', ''],
   svc: ['q', ({ home: 'Посмотрите, как это выглядит у других →', infographics: 'Карточка, которую открывают из выдачи <b>→</b>', 'predmetnaya-syomka': 'Фото товара без студии и фотографа <b>→</b>', videooblozhki: 'Обложка, которая двигается в выдаче <b>→</b>', 'ii-agenty': 'Заявки обрабатываются, пока вы спите <b>→</b>' })[page]],
 }
 const pill = document.getElementById('pill'); pill.className = 'pill ' + HOOKS[hook][0]; pill.innerHTML = HOOKS[hook][1]
