@@ -1,0 +1,36 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Превью крупно</title>
+<style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Bold.woff2); font-weight: 700; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 630px; overflow: hidden; }
+body { background: #1D1E22; position: relative; font-family: Gilroy, sans-serif; color: #fff; }
+canvas { position: absolute; inset: 0; }
+.logo { position: absolute; left: 64px; top: 56px; height: 48px; }
+h1 { position: absolute; left: 64px; font: 700 78px/1.04 Gilroy; letter-spacing: -2.2px; }
+.hook { position: absolute; left: 64px; font: 600 40px/1.15 Gilroy; letter-spacing: -.6px; }
+.btn { position: absolute; left: 64px; display: inline-flex; align-items: center; gap: 18px; padding: 22px 34px; border-radius: 26px; background: #fff; color: #1D1E22; font: 700 40px/1 Gilroy; letter-spacing: -.6px; }
+.btn i { font-style: normal; color: #F59958; }
+</style></head><body>
+<canvas id="cv" width="2400" height="1260" style="width:1200px;height:630px"></canvas>
+<img class="logo" src="img/logo-dark.svg">
+<div id="root"></div>
+<script>
+const q = new URLSearchParams(location.search), v = q.get('v') || 'a'
+const HOOK = q.get('h') || 'Вы делаете продукт. Остальное — на мне'
+const T = 'Дизайн, аналитика<br>и ИИ‑разработка<br>для бизнеса'
+const root = document.getElementById('root')
+let px = 1080, py = 300, R = 200
+// A: заголовок крупно + большая белая кнопка с фразой
+if (v === 'a') root.innerHTML = `<h1 style="top:150px">${T}</h1><span class="btn" style="top:470px">${HOOK} <i>→</i></span>`
+// B: заголовок + фраза оранжевым крупно, без плашки
+if (v === 'b') root.innerHTML = `<h1 style="top:150px">${T}</h1><p class="hook" style="top:480px;color:#F59958">${HOOK} →</p>`
+// C: фраза главная, заголовок меньше сверху
+if (v === 'c') { root.innerHTML = `<p class="hook" style="top:150px;color:#A1A09F;font-size:36px">Дизайн, аналитика и ИИ‑разработка</p><h1 style="top:220px;width:900px">${HOOK.replace('. ', '.<br>')}<span style="color:#F59958"> →</span></h1>`; }
+const ctx = document.getElementById('cv').getContext('2d'); ctx.scale(2, 2)
+for (let y = 11; y < 630; y += 22) for (let x = 11; x < 1200; x += 22) {
+  const dx = x - px, dy = y - py, d = Math.hypot(dx, dy), n = Math.max(0, 1 - d / R), p = n * n * 26
+  ctx.fillStyle = n > .04 ? `rgba(245,153,88,${.25 + n * .75})` : '#303136'
+  ctx.beginPath(); ctx.arc(x + (d ? dx / d * p : 0), y + (d ? dy / d * p : 0), 1.7 + n * 4, 0, 6.283); ctx.fill()
+}
+</script></body></html>
