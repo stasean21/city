@@ -1,0 +1,37 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>FAQ</title>
+<style>
+@font-face { font-family: Gilroy; src: url(Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { width: 1440px; background: #F6F4F2; font: 400 15px/25px Inter, sans-serif; color: #717171; padding: 80px 196px; }
+.wrap { display: grid; grid-template-columns: 1fr 593px; gap: 60px; align-items: start; }
+.pill { display: inline-block; padding: 2px 14px; border-radius: 999px; background: #ECEAE7; font: 500 13px/24px Inter; color: #1D1E22; }
+h2 { font: 700 52px/1.1 Gilroy; letter-spacing: -1.5px; color: #1D1E22; margin: 16px 0 24px; font-weight: 500; }
+.lead { font-size: 18px; line-height: 30px; }
+.btn { display: inline-flex; margin-top: 28px; height: 44px; align-items: center; padding: 0 18px; border-radius: 15px; background: #1D1E22; color: #fff; font: 500 15px Inter; }
+.q { background: #fff; border-radius: 20px; padding: 24px 24px; margin-bottom: 12px; display: flex; justify-content: space-between; gap: 16px; align-items: center; font: 500 20px/26px Gilroy; color: #1D1E22; position: relative; }
+.q::after { content: "+"; flex: none; width: 32px; height: 32px; border-radius: 50%; background: #ECEAE7; display: grid; place-items: center; font: 400 20px Inter; }
+.q.open { background: #1D1E22; color: #fff; flex-direction: column; align-items: stretch; }
+.q.open::after { content: "×"; position: absolute; right: 24px; top: 22px; background: #2C2D32; color: #F59958; }
+.q.open p { font: 400 15px/25px Inter; color: #B8B6B2; padding-right: 40px; }
+.q.open span { padding-right: 48px; }
+.q .new { position: absolute; left: -64px; top: 50%; transform: translateY(-50%); font: 500 11px/18px Inter; padding: 0 8px; border-radius: 6px; background: #F59958; color: #fff; }
+.q.open .new { top: 30px; transform: none; }
+</style></head><body>
+<div class="wrap">
+  <div><span class="pill">Вопросы</span><h2>Частые<br>вопросы</h2><p class="lead">Не нашли ответ — напишите,<br>отвечу лично.</p><span class="btn">Обсудить задачу ↗</span></div>
+  <div>
+    <div class="q open"><span>Сколько стоит дизайн карточки товара или видеообложка?</span><p>Главный слайд — 750 ₽, каждый следующий — 450 ₽, карточка целиком — от 3 000 ₽. Предметная съёмка с помощью ИИ — от 75 ₽ за фото, видеообложка — 150 ₽ за секунду. Точную сумму фиксирую в смете после брифа — в процессе она не меняется.</p></div>
+    <div class="q">Сколько времени занимает дизайн карточки для маркетплейса?</div>
+    <div class="q">Работаете с ИП и юрлицами по договору?</div>
+    <div class="q">Что нужно, чтобы заказать инфографику или видеообложку?</div>
+    <div class="q">Сколько правок входит в стоимость?</div>
+    <div class="q">Можно сделать фото товара без фотосъёмки?</div>
+    <div class="q">Делаете карточки для Wildberries, Ozon и Авито?</div>
+    <div class="q"><b class="new">новый</b>Работаете удалённо по всей России?</div>
+    <div class="q"><b class="new">новый</b>Можно заказать ИИ-агента для Telegram?</div>
+  </div>
+</div>
+</body></html>
