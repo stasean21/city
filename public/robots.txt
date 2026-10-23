@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /styleguide
+
+Sitemap: https://muntyanu-design.ru/sitemap.xml
