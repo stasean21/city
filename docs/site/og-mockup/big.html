@@ -18,9 +18,11 @@ h1 { position: absolute; left: 64px; font: 700 78px/1.04 Gilroy; letter-spacing:
 <script>
 const q = new URLSearchParams(location.search), v = q.get('v') || 'a'
 const HOOK = q.get('h') || 'Вы делаете продукт. Остальное — на мне'
-const T = 'Дизайн, аналитика<br>и ИИ‑разработка<br>для бизнеса'
+const FULL = q.get('full') === '1'
+const T = FULL ? 'Дизайн, аналитика<br>и ИИ‑разработка<br>для малого и среднего бизнеса' : 'Дизайн, аналитика<br>и ИИ‑разработка<br>для бизнеса'
+if (FULL) document.head.insertAdjacentHTML('beforeend', '<style>h1 { font-size: 66px; letter-spacing: -1.8px; }</style>')
 const root = document.getElementById('root')
-let px = 1080, py = 300, R = 200
+let px = FULL ? 1110 : 1080, py = 300, R = FULL ? 170 : 200
 // A: заголовок крупно + большая белая кнопка с фразой
 if (v === 'a') root.innerHTML = `<h1 style="top:150px">${T}</h1><span class="btn" style="top:470px">${HOOK} <i>→</i></span>`
 // B: заголовок + фраза оранжевым крупно, без плашки
