@@ -2,13 +2,28 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
+import { OG_HOME } from './data/site.js'
 import TheHeader from './components/layout/TheHeader.vue'
 import TheFooter from './components/layout/TheFooter.vue'
 import TheLoader from './components/layout/TheLoader.vue'
 import GiftOffer from './components/layout/GiftOffer.vue'
 
-// без этого vite-ssg ставит в пререндер lang="en" поверх index.html
-useHead({ htmlAttrs: { lang: 'ru' } })
+// без этого vite-ssg ставит в пререндер lang="en" поверх index.html.
+// og-теги — общие для всех страниц; og:image — запасная картинка превью,
+// страница может заменить её своим тегом (unhead заменяет по property, не дублирует)
+useHead({
+  htmlAttrs: { lang: 'ru' },
+  meta: [
+    { property: 'og:type', content: 'website' },
+    { property: 'og:site_name', content: 'm/design' },
+    { property: 'og:locale', content: 'ru_RU' },
+    { property: 'og:image', content: OG_HOME },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { property: 'og:image:alt', content: 'm/design — дизайн, аналитика и ИИ-разработка для малого и среднего бизнеса' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+  ],
+})
 
 // 404 — полноэкранный тёмный экран, как загрузчик: без шапки и футера
 const route = useRoute()

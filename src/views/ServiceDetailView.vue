@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
+import { SITE_URL } from '../data/site.js'
 import ServiceHero from '../components/service/ServiceHero.vue'
 import BannerFan from '../components/service/BannerFan.vue'
 import BannerExamples from '../components/service/BannerExamples.vue'
@@ -57,10 +58,22 @@ const site = computed(() => page.value.examples === 'site' && page.value.site &&
 const agent = computed(() => page.value.examples === 'agent' && page.value.demo && page.value.think)
 const hasExamples = computed(() => banners.value.length > 0 || works.value.length > 0 || Boolean(site.value) || Boolean(agent.value))
 
-useHead(() => ({
-  title: service.value ? `${service.value.title} — m/design` : 'm/design',
-  meta: [{ name: 'description', content: page.value.lead ?? service.value?.description ?? '' }],
-}))
+// og:image не задаём — берётся общая из App.vue, пока у услуг нет своих картинок
+useHead(() => {
+  const title = service.value ? `${service.value.title} — m/design` : 'm/design'
+  const description = page.value.lead ?? service.value?.description ?? ''
+  const url = `${SITE_URL}/services/${route.params.slug}`
+  return {
+    title,
+    meta: [
+      { name: 'description', content: description },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: description },
+      { property: 'og:url', content: url },
+    ],
+    link: [{ rel: 'canonical', href: url }],
+  }
+})
 </script>
 
 <template>
