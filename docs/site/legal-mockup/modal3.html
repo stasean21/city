@@ -1,0 +1,58 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Окно согласия</title>
+<style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font: 400 15px/25px Inter, sans-serif; background: #F6F4F2; }
+.bg { position: fixed; inset: -30px; background: url(img/bg-pc.png) center top / cover no-repeat; filter: blur(18px) saturate(.8); }
+.veil { position: fixed; inset: 0; background: rgba(29,30,34,.35); }
+.modal { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 520px; background: #fff; border-radius: 32px; padding: 36px 36px 28px; }
+.logo { height: 24px; }
+h2 { font: 500 30px/1.15 Gilroy; letter-spacing: -.6px; color: #1D1E22; margin: 24px 0 12px; }
+p { font-size: 15px; line-height: 24px; color: #4A4B50; }
+p a { color: #1D1E22; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #F59958; }
+.acts { display: grid; gap: 8px; margin-top: 28px; }
+.btn { display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 15px; font: 500 16px Inter; }
+.btn.dark { background: #1D1E22; color: #fff; } .btn.sec { background: #ECEAE7; color: #1D1E22; }
+.cb { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; margin-top: 22px; padding: 14px 16px; background: #F6F4F2; border-radius: 15px; font: 400 14px/21px Inter; color: #1D1E22; }
+.cb .box { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #B8B4AE; background: #fff; display: grid; place-items: center; }
+.cb .box.on { background: #1D1E22; border-color: #1D1E22; }
+.cb .box.on::after { content: ""; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px,-1px); }
+.cb a { color: #1D1E22; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #F59958; }
+.cbs { display: grid; gap: 8px; margin-top: 22px; } .cbs .cb { margin-top: 0; }
+.cb em { font-style: normal; font: 500 11px/18px Inter; color: #A1A09F; background: #fff; border-radius: 6px; padding: 0 6px; margin-left: 4px; white-space: nowrap; }
+.cb em.req { color: #F59958; }
+.btn.dis { background: #E4E1DC; color: #A1A09F; }
+.hint { margin-top: 10px; font-size: 13px; line-height: 18px; color: #A1A09F; text-align: center; }
+.small { margin-top: 16px; font-size: 12px; line-height: 18px; color: #A1A09F; text-align: center; }
+@media (max-width: 767px) {
+  .bg { background-image: url(img/bg-mob.png); }
+  .modal { left: 12px; right: 12px; top: auto; bottom: 12px; transform: none; width: auto; padding: 28px 22px 20px; border-radius: 27px; }
+  h2 { font-size: 24px; margin-top: 18px; }
+  p { font-size: 14px; line-height: 22px; }
+}
+</style></head><body>
+<div class="bg"></div><div class="veil"></div>
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="t">
+  <img class="logo" src="img/logo-light.svg" alt="m/design">
+  <h2 id="t">Прежде чем начать</h2>
+  <p>Мы используем файлы cookie и сервис Яндекс.Метрика, чтобы анализировать посещаемость и улучшать сайт. Подробнее — в <a>Политике обработки персональных данных</a>.</p>
+  <div class="cbs">
+  <label class="cb"><span class="box" id="box1"></span><span>Я ознакомлен(а) с <a>Политикой обработки персональных данных</a> <em class="req">обязательно</em></span></label>
+  <label class="cb"><span class="box" id="box2"></span><span>Разрешаю cookie и Яндекс.Метрику для анализа посещаемости <em>по желанию</em></span></label>
+  </div>
+  <div class="acts"><span class="btn" id="b1">Перейти на сайт</span></div>
+  <p class="hint" id="hint">Отметьте первый пункт, чтобы продолжить</p>
+</div>
+<script>
+const st = new URLSearchParams(location.search).get('s') || '0'
+const a = st !== '0', m = st === '2'
+document.getElementById('box1').classList.toggle('on', a); document.getElementById('box2').classList.toggle('on', m)
+document.getElementById('b1').className = 'btn ' + (a ? 'dark' : 'dis')
+document.getElementById('hint').textContent = a ? (m ? 'Метрика подключится после перехода' : 'Метрика не подключится') : 'Отметьте первый пункт, чтобы продолжить'
+
+</script></body></html>
