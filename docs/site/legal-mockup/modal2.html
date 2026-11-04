@@ -1,0 +1,51 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Окно согласия</title>
+<style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font: 400 15px/25px Inter, sans-serif; background: #F6F4F2; }
+.bg { position: fixed; inset: -30px; background: url(img/bg-pc.png) center top / cover no-repeat; filter: blur(18px) saturate(.8); }
+.veil { position: fixed; inset: 0; background: rgba(29,30,34,.35); }
+.modal { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 520px; background: #fff; border-radius: 32px; padding: 36px 36px 28px; }
+.logo { height: 24px; }
+h2 { font: 500 30px/1.15 Gilroy; letter-spacing: -.6px; color: #1D1E22; margin: 24px 0 12px; }
+p { font-size: 15px; line-height: 24px; color: #4A4B50; }
+p a { color: #1D1E22; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #F59958; }
+.acts { display: grid; gap: 8px; margin-top: 28px; }
+.btn { display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 15px; font: 500 16px Inter; }
+.btn.dark { background: #1D1E22; color: #fff; } .btn.sec { background: #ECEAE7; color: #1D1E22; }
+.cb { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; margin-top: 22px; padding: 14px 16px; background: #F6F4F2; border-radius: 15px; font: 400 14px/21px Inter; color: #1D1E22; }
+.cb .box { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #B8B4AE; background: #fff; display: grid; place-items: center; }
+.cb .box.on { background: #1D1E22; border-color: #1D1E22; }
+.cb .box.on::after { content: ""; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px,-1px); }
+.cb a { color: #1D1E22; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #F59958; }
+.btn.dis { background: #E4E1DC; color: #A1A09F; }
+.hint { margin-top: 10px; font-size: 13px; line-height: 18px; color: #A1A09F; text-align: center; }
+.small { margin-top: 16px; font-size: 12px; line-height: 18px; color: #A1A09F; text-align: center; }
+@media (max-width: 767px) {
+  .bg { background-image: url(img/bg-mob.png); }
+  .modal { left: 12px; right: 12px; top: auto; bottom: 12px; transform: none; width: auto; padding: 28px 22px 20px; border-radius: 27px; }
+  h2 { font-size: 24px; margin-top: 18px; }
+  p { font-size: 14px; line-height: 22px; }
+}
+</style></head><body>
+<div class="bg"></div><div class="veil"></div>
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="t">
+  <img class="logo" src="img/logo-light.svg" alt="m/design">
+  <h2 id="t">Прежде чем начать</h2>
+  <p>Мы используем файлы cookie и сервис Яндекс.Метрика, чтобы анализировать посещаемость и улучшать сайт. Подробнее — в <a>Политике обработки персональных данных</a>.</p>
+  <label class="cb"><span class="box" id="box"></span><span>Я ознакомлен(а) с <a>Политикой обработки персональных данных</a></span></label>
+  <div class="acts"><span class="btn" id="b1">Принять и перейти на сайт</span><span class="btn" id="b2">Только необходимые</span></div>
+  <p class="hint" id="hint">Поставьте галочку, чтобы продолжить</p>
+</div>
+<script>
+const on = new URLSearchParams(location.search).get('checked') === '1'
+document.getElementById('box').classList.toggle('on', on)
+document.getElementById('b1').className = 'btn ' + (on ? 'dark' : 'dis')
+document.getElementById('b2').className = 'btn ' + (on ? 'sec' : 'dis')
+document.getElementById('hint').style.visibility = on ? 'hidden' : 'visible'
+</script></body></html>
