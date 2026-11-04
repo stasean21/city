@@ -1,13 +1,20 @@
 <script setup>
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { messengers } from '../../utils/messengers.js'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
-import { openConsent } from '../../utils/consent.js'
+import { consentOpen, isDocumentRoute } from '../../utils/consent.js'
 import navLinks from '../../data/nav.json'
 
 const year = computed(() => new Date().getFullYear())
 const route = useRoute()
+const router = useRouter()
+
+// на документах окна нет — настройки открываются на главной
+function openSettings() {
+  consentOpen.value = true
+  if (isDocumentRoute(route)) router.push('/')
+}
 
 // в футере свой порядок кругов; одноцветные глифы (mono), без них круг не выводим
 const ORDER = ['telegram', 'whatsapp', 'vk', 'max']
@@ -74,7 +81,7 @@ function toTop() {
         <div class="site-footer__meta">
           <RouterLink to="/privacy" class="caption site-footer__doc">Политика обработки персональных данных</RouterLink>
           <RouterLink to="/consent" class="caption site-footer__doc">Согласие на обработку персональных данных</RouterLink>
-          <button type="button" class="caption site-footer__doc site-footer__cookie" @click="openConsent">Настройки cookie</button>
+          <button type="button" class="caption site-footer__doc site-footer__cookie" @click="openSettings">Настройки cookie</button>
           <button type="button" class="caption site-footer__up" @click="toTop">
             Наверх
             <svg class="site-footer__up-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">

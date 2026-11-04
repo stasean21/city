@@ -8,7 +8,7 @@ import TheFooter from './components/layout/TheFooter.vue'
 import TheLoader from './components/layout/TheLoader.vue'
 import GiftOffer from './components/layout/GiftOffer.vue'
 import ConsentGate from './components/layout/ConsentGate.vue'
-import { consentReady } from './utils/consent.js'
+import { consentOpen, consentReady } from './utils/consent.js'
 
 // без этого vite-ssg ставит в пререндер lang="en" поверх index.html.
 // og-теги — общие для всех страниц; og:image — запасная картинка превью,
@@ -31,8 +31,9 @@ useHead({
 const route = useRoute()
 const chrome = computed(() => route.name !== 'not-found')
 // подарок к первому заказу — ни на 404, ни на служебном стайлгайде,
-// и отсчёт его показа начинается только после окна согласия
-const gift = computed(() => chrome.value && route.name !== 'styleguide' && consentReady.value)
+// и отсчёт его показа начинается только после окна согласия. consentOpen — отдельно:
+// на документе без выбора окна на экране нет, но подарку ещё рано
+const gift = computed(() => chrome.value && route.name !== 'styleguide' && consentReady.value && !consentOpen.value)
 </script>
 
 <template>

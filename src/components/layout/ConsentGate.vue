@@ -1,15 +1,21 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import ConsentCheckbox from '../ui/ConsentCheckbox.vue'
-import { closeConsent, consentOpen, consentReady, openConsent, readConsent, writeConsent } from '../../utils/consent.js'
+import { CONSENT_KEY, consentOpen, consentReady, isDocumentRoute, readConsent, writeConsent } from '../../utils/consent.js'
 import { loadMetrika } from '../../utils/metrika.js'
 
 // окно согласия при входе: без первой галочки на сайт не пройти, поэтому ни Esc,
 // ни клик по подложке его не закрывают. Только в браузере: в пререндере окна нет,
-// текст страницы остаётся в HTML
+// текст страницы остаётся в HTML. На /privacy и /consent окна нет: человек должен
+// иметь возможность прочитать документ до выбора. Выбор при этом не сделан — уйдёт
+// с документа без него, и окно появится снова
 const ENTER_MS = 400
 const LEAVE_MS = 300
+
+const route = useRoute()
+const visible = computed(() => consentOpen.value && !isDocumentRoute(route))
 
 const mounted = ref(false)
 const panelEl = ref(null)
@@ -46,48 +52,69 @@ function onKeydown(event) {
   }
 }
 
-// flush: 'sync' — запомнить фокус нужно раньше, чем страница станет inert и сбросит его
-watch(consentOpen, async (open) => {
+// галочки — от текущего выбора, только при открытии: уход на документ и возврат
+// (кнопки браузера) их не сбрасывают
+watch(consentOpen, (open) => {
   if (!open) return
-  returnFocus = document.activeElement
   policy.value = current !== null
   metrika.value = current === 'all'
+}, { flush: 'sync' })
+
+// flush: 'sync' — запомнить фокус нужно раньше, чем страница станет inert и сбросит его
+watch(visible, async (show) => {
+  consentReady.value = !show
+  if (!show) {
+    setInert(false)
+    returnFocus?.focus?.({ preventScroll: true })
+    returnFocus = null
+    return
+  }
+  returnFocus = document.activeElement
   setInert(true)
   await nextTick()
   panelEl.value?.querySelector('input[type="checkbox"]')?.focus({ preventScroll: true })
 }, { flush: 'sync' })
 
-function accept() {
-  if (!policy.value) return
-  const next = metrika.value ? 'all' : 'necessary'
+function applyChoice(next) {
   const previous = current
   current = next
-  writeConsent(next)
   // загруженную Метрику выгрузить нельзя — только перезагрузка
   if (previous === 'all' && next === 'necessary') {
     window.location.reload()
     return
   }
-  setInert(false)
-  closeConsent()
+  consentOpen.value = false
   if (next === 'all') loadMetrika()
-  returnFocus?.focus?.({ preventScroll: true })
-  returnFocus = null
+}
+
+function accept() {
+  if (!policy.value) return
+  const next = metrika.value ? 'all' : 'necessary'
+  writeConsent(next)
+  applyChoice(next)
+}
+
+// выбор сделан в другой вкладке (документ открывается в новой): эта о нём узнаёт,
+// иначе окно появилось бы здесь снова. Очистка хранилища выбор не отменяет до перезагрузки
+function onStorage(event) {
+  if (event.key !== CONSENT_KEY) return
+  const next = readConsent()
+  if (next && next !== current) applyChoice(next)
 }
 
 onMounted(() => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) duration.value = 0
   mounted.value = true
+  window.addEventListener('storage', onStorage)
   current = readConsent()
-  if (current === null) {
-    openConsent()
-    return
-  }
-  consentReady.value = true
+  consentOpen.value = current === null
+  // watch(visible) сработает только на изменение; на документе без выбора его нет
+  consentReady.value = !visible.value
   if (current === 'all') loadMetrika()
 })
 
 onUnmounted(() => {
+  window.removeEventListener('storage', onStorage)
   setInert(false)
 })
 </script>
@@ -95,7 +122,7 @@ onUnmounted(() => {
 <template>
   <Teleport v-if="mounted" to="body">
     <Transition name="consent" appear :duration="duration">
-      <div v-if="consentOpen" class="consent">
+      <div v-if="visible" class="consent">
         <div
           ref="panelEl"
           class="consent__panel"

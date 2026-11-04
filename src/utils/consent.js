@@ -1,17 +1,21 @@
 import { ref } from 'vue'
 
 // согласие на cookie и Метрику: маленький общий стор, без Pinia.
-// consentReady — окно закрыто, можно запускать то, что на него смотрит (видео,
-// анимации hero, подарок). До гидрации и пока окно открыто — false
+// consentOpen — окно нужно: выбора ещё нет или открыты настройки. На документах
+// оно при этом не показывается: их должно быть можно прочитать до выбора.
+// consentReady — окна на экране нет, можно запускать то, что на него смотрит
+// (видео, анимации hero). До гидрации и пока окно на экране — false; ставит ConsentGate.
+// Метрика от них не зависит: она грузится только при сохранённом all
 export const consentReady = ref(false)
 export const consentOpen = ref(false)
 
-const KEY = 'cookie-consent'
+export const CONSENT_KEY = 'cookie-consent'
+const DOCUMENT_ROUTES = ['privacy', 'consent']
 const VALUES = ['all', 'necessary']
 
 export function readConsent() {
   try {
-    const value = window.localStorage.getItem(KEY)
+    const value = window.localStorage.getItem(CONSENT_KEY)
     return VALUES.includes(value) ? value : null
   } catch {
     return null
@@ -20,19 +24,12 @@ export function readConsent() {
 
 export function writeConsent(value) {
   try {
-    window.localStorage.setItem(KEY, value)
+    window.localStorage.setItem(CONSENT_KEY, value)
   } catch {
     // хранилище недоступно — окно покажется и при следующем визите
   }
 }
 
-// снова открыть окно: при первом визите и по «Настройкам cookie» в подвале
-export function openConsent() {
-  consentReady.value = false
-  consentOpen.value = true
-}
-
-export function closeConsent() {
-  consentOpen.value = false
-  consentReady.value = true
+export function isDocumentRoute(route) {
+  return DOCUMENT_ROUTES.includes(route.name)
 }
