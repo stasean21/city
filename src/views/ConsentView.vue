@@ -1,8 +1,8 @@
 <script setup>
 import { useHead } from '@unhead/vue'
-import LegalHead from '../components/legal/LegalHead.vue'
+import LegalDocument from '../components/legal/LegalDocument.vue'
 import { SITE_URL } from '../data/site.js'
-import { CONSENT_PARAGRAPHS, CONSENT_TITLE } from '../data/legal/consent.js'
+import { CONSENT_INTRO, CONSENT_SECTIONS, CONSENT_TITLE } from '../data/legal/consent.js'
 
 const TITLE = 'Согласие на обработку персональных данных — m/design'
 useHead({
@@ -13,28 +13,5 @@ useHead({
 </script>
 
 <template>
-  <main>
-    <section class="legal">
-      <div class="container">
-        <LegalHead :title="CONSENT_TITLE" />
-        <div class="legal__text">
-          <p v-for="paragraph in CONSENT_PARAGRAPHS" :key="paragraph">{{ paragraph }}</p>
-        </div>
-      </div>
-    </section>
-  </main>
+  <LegalDocument :title="CONSENT_TITLE" :intro="CONSENT_INTRO" :sections="CONSENT_SECTIONS" />
 </template>
-
-<style scoped>
-.legal {
-  padding-top: var(--legal-top);
-}
-
-.legal__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-12);
-  max-width: var(--measure-paragraph);
-  margin-top: var(--s-40);
-}
-</style>
