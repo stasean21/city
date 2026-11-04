@@ -139,6 +139,16 @@ const classes = computed(() => ['btn', `btn--${props.variant}`])
   --ricochet-p: 1;
 }
 
+/* неактивная — у любого варианта одна, ховера и стрелки нет */
+.btn:disabled,
+.btn:disabled:hover {
+  --ricochet-p: 0;
+  border-color: transparent;
+  background: var(--bg-4);
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+
 /* буквы катаются внутри RollingText — она свой хук на hover не ставит,
    сдвиг запускает владелец эффекта, здесь :deep() пробивает её scoped-стили */
 .btn:hover :deep(.roll span) {

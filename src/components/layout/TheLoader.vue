@@ -12,7 +12,8 @@ const ROUTE_LABELS = {
   home: 'Главная',
   about: 'Обо мне',
   contacts: 'Контакты',
-  privacy: 'Политика конфиденциальности',
+  privacy: 'Политика обработки данных',
+  consent: 'Согласие на обработку данных',
   styleguide: 'Styleguide',
   'not-found': '404',
 }

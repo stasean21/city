@@ -5,6 +5,7 @@ import BaseButton from '../ui/BaseButton.vue'
 import HeroDots from './HeroDots.vue'
 import contacts from '../../data/contacts.json'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
+import { consentReady } from '../../utils/consent.js'
 
 // строка задачи: подсказка сама печатается и стирается, пока поле пустое и не в фокусе.
 // placeholder курсор не умеет — поверх поля «призрак» с текстом и оранжевым курсором
@@ -82,10 +83,10 @@ function stopTyping() {
   typing.value = false
 }
 
-// одна цепочка setTimeout; стоит, пока hero вне экрана, вкладка скрыта,
-// поле в фокусе или в нём текст. Продолжает с новой фразы
+// одна цепочка setTimeout; стоит, пока hero вне экрана, вкладка скрыта, открыто
+// окно согласия, поле в фокусе или в нём текст. Продолжает с новой фразы
 function syncTyping() {
-  const run = !reduced && inView && !document.hidden && ghostOn.value
+  const run = !reduced && inView && !document.hidden && ghostOn.value && consentReady.value
   if (!run) {
     stopTyping()
     return
@@ -102,6 +103,7 @@ function syncTyping() {
 }
 
 watch(ghostOn, syncTyping)
+watch(consentReady, syncTyping)
 let stageObserver = null
 
 function send() {

@@ -187,6 +187,19 @@ li,
 
 /* утилиты */
 
+/* ссылка внутри текста: подчёркивание акцентом */
+.text-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: .1875rem;
+}
+
+.text-link:focus-visible {
+  outline: var(--focus-ring) solid var(--ink);
+  outline-offset: var(--focus-ring);
+}
+
 /* текст только для скринридера */
 .visually-hidden {
   position: absolute;

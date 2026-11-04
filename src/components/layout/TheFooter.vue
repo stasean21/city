@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { messengers } from '../../utils/messengers.js'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
+import { openConsent } from '../../utils/consent.js'
 import navLinks from '../../data/nav.json'
 
 const year = computed(() => new Date().getFullYear())
@@ -69,9 +70,11 @@ function toTop() {
       </div>
 
       <div class="site-footer__bottom">
-        <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266</span>
+        <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266 · ОГРНИП 324366800118693</span>
         <div class="site-footer__meta">
-          <RouterLink to="/privacy" class="caption site-footer__privacy">Политика конфиденциальности</RouterLink>
+          <RouterLink to="/privacy" class="caption site-footer__doc">Политика обработки персональных данных</RouterLink>
+          <RouterLink to="/consent" class="caption site-footer__doc">Согласие на обработку персональных данных</RouterLink>
+          <button type="button" class="caption site-footer__doc site-footer__cookie" @click="openConsent">Настройки cookie</button>
           <button type="button" class="caption site-footer__up" @click="toTop">
             Наверх
             <svg class="site-footer__up-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -230,7 +233,9 @@ function toTop() {
   height: 100%;
 }
 
-/* строка 2: юрданные · политика · наверх */
+/* строка 2: юрданные; под ними документы и настройки cookie (текст вровень
+   с юрданными — поля плашек уходят за край), справа «Наверх»: в один ряд всё
+   это не помещается ни на какой ширине, размеры растут вместе с экраном */
 .site-footer__bottom {
   display: flex;
   flex-wrap: wrap;
@@ -243,16 +248,20 @@ function toTop() {
 }
 
 .site-footer__legal {
+  flex-basis: 100%;
   color: var(--text-3);
 }
 
 .site-footer__meta {
   display: flex;
+  flex-wrap: wrap;
+  flex-basis: calc(100% + var(--pill-px));
   align-items: center;
   gap: var(--s-8);
+  margin-left: calc(-1 * var(--pill-px));
 }
 
-.site-footer__privacy,
+.site-footer__doc,
 .site-footer__up {
   display: inline-flex;
   align-items: center;
@@ -264,12 +273,19 @@ function toTop() {
   transition: background-color var(--ease);
 }
 
-.site-footer__privacy:hover {
+.site-footer__doc:hover {
   background: var(--ink-soft);
+}
+
+.site-footer__cookie {
+  border: 0;
+  background: none;
+  cursor: pointer;
 }
 
 .site-footer__up {
   gap: var(--s-8);
+  margin-left: auto;
   border: 0;
   background: var(--ink-soft);
   cursor: pointer;
@@ -350,12 +366,24 @@ function toTop() {
     padding: var(--s-20) var(--s-12) var(--s-12);
   }
 
+  /* реквизиты → ссылки столбиком → «Наверх» */
   .site-footer__meta {
-    justify-content: space-between;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-basis: auto;
+    align-items: flex-start;
+    gap: var(--s-4);
+    margin-left: 0;
   }
 
-  .site-footer__privacy {
-    padding-inline: 0;
+  .site-footer__doc {
+    height: auto;
+    padding: var(--s-4) 0;
+    white-space: normal;
+  }
+
+  .site-footer__up {
+    margin: var(--s-12) 0 0;
   }
 }
 </style>

@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { consentReady } from '../../utils/consent.js'
 
 // точечная матрица первого экрана: точки у курсора (пальца) расходятся,
 // растут и загораются акцентом; без курсора «пятно» гуляет само.
@@ -129,7 +130,8 @@ function sync() {
   cancelAnimationFrame(raf)
   raf = 0
   last = 0
-  if (mq.matches) { still(); return } // reduced motion: ровная сетка, курсор не трогает
+  // reduced motion: ровная сетка, курсор не трогает; так же — пока открыто окно согласия
+  if (mq.matches || !consentReady.value) { still(); return }
   if (visible && !document.hidden) raf = requestAnimationFrame(loop)
 }
 
@@ -148,6 +150,8 @@ function onLeave() {
 function onUp(e) {
   if (e.pointerType !== 'mouse') onLeave()
 }
+
+watch(consentReady, sync)
 
 onMounted(() => {
   const el = canvasEl.value

@@ -15,9 +15,9 @@ const servicePaths = services
   .filter(service => !service.draft)
   .map(service => `/services/${service.slug}`)
 
-// настоящие страницы сайта — для sitemap.xml. без 404, /styleguide, редиректов,
-// черновиков и /privacy (пока в ней нет текста политики)
-const sitemapPaths = ['/', ...servicePaths]
+// настоящие страницы сайта — для sitemap.xml. без 404, /styleguide, редиректов
+// и черновиков
+const sitemapPaths = ['/', ...servicePaths, '/privacy', '/consent']
 
 function writeSitemap() {
   const lastmod = new Date().toISOString().slice(0, 10)

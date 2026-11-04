@@ -334,6 +334,27 @@ html {
   --gift-tab-h:       3.25rem;  /* 52 — ярлык «Ваш подарок» */
   --gift-icon:        1.125rem; /* 18 — иконка подарка */
 
+  /* окно согласия при входе (ConsentGate) */
+  --z-consent:        700;      /* над галереей (300), под лоадером (800) */
+  --consent-w:        32.5rem;  /* 520 */
+  --consent-pad:      2.25rem 2.25rem 1.75rem; /* 36 36 28 */
+  --r-consent:        2rem;     /* 32 */
+  --consent-veil:     rgba(29, 30, 34, .35); /* --ink с прозрачностью */
+  --consent-blur:     blur(1.125rem); /* 18 */
+  --t-consent-tag:    .6875rem; /* 11 — метки «обязательно», «по желанию» */
+  --consent-tag-px:   .375rem;  /* 6 */
+
+  /* чекбокс согласия (ConsentCheckbox) */
+  --check-box:    1.375rem;  /* 22 */
+  --check-icon:   .875rem;   /* 14 — галочка */
+  --check-line:   1.5px;     /* обводка — линия, в px намеренно */
+  --check-border: #B8B4AE;
+  --error:        #E5484D;
+
+  /* страницы политики и согласия */
+  --legal-top:   var(--s-60);
+  --legal-toc-w: 17.5rem;    /* 280 — колонка «Содержание» */
+
   /* страница услуги — сторис «Как я делаю карточку» */
   --story-w:        26.25rem; /* 420 — ширина кадра 3:4 */
   --story-bar:      .125rem;  /* 2 — полоска прогресса этапа */
@@ -409,6 +430,9 @@ html {
 
 @media (max-width: 767px) {
   :root {
+    --consent-pad: 1.75rem 1.375rem 1.25rem; /* 28 22 20 */
+    --r-consent:   var(--r-stage); /* 27 */
+    --legal-top:   var(--s-40);
     --t-addon:   1rem;      /* 16 — в две колонки на 360 */
     --t-display: 2.125rem;  /* 34 */
     --t-h2:      1.5rem;    /* 24 */

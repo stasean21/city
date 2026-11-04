@@ -61,6 +61,8 @@ async function shoot(browser, name) {
     reducedMotion: 'reduce',
     ...device,
   })
+  // окно согласия при входе в снимок не нужно: выбор уже сделан, Метрика не грузится
+  await context.addInitScript(() => localStorage.setItem('cookie-consent', 'necessary'))
   const page = await context.newPage()
   await page.goto(URL, { waitUntil: 'load' })
 

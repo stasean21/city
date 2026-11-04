@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import BaseButton from '../components/ui/BaseButton.vue'
 import HeroSection from '../components/sections/HeroSection.vue'
+import ConsentCheckbox from '../components/ui/ConsentCheckbox.vue'
 
 // служебная страница: живая копия эталона docs/mockups/foundation.html,
 // собранная только из классов и токенов проекта. В sitemap не входит
@@ -45,6 +46,11 @@ const steps = [
   ['02', 'Бриф', 'Разбираю товар, аудиторию и конкурентов', 'бриф-документ'],
   ['03', 'Смета', 'Фиксируем объём, стоимость и срок', 'смета и дата сдачи'],
 ]
+
+// чекбокс согласия: три состояния для будущей формы
+const consentEmpty = ref(false)
+const consentError = ref(false)
+const consentChecked = ref(true)
 
 // плашки «ширина · масштаб» и переключатель масштаба — только здесь
 const width = ref(0)
@@ -209,10 +215,59 @@ onUnmounted(() => {
       <button type="button" :aria-pressed="scaleOff" @click="setScaleOff(true)">без масштаба (как сейчас)</button>
     </div>
     <span class="sg-vw">ширина экрана {{ width }}px · масштаб {{ scale }}×</span>
+
+    <section>
+      <div class="container">
+        <div class="sg-divider"><span>5 · Согласие в форме — ConsentCheckbox</span></div>
+        <div class="sg-consent">
+          <div class="sg-consent__card">
+            <span class="caption">Не отмечен — кнопка неактивна</span>
+            <ConsentCheckbox v-model:checked="consentEmpty" />
+            <BaseButton class="sg-consent__btn" :disabled="!consentEmpty">Отправить заявку</BaseButton>
+          </div>
+          <div class="sg-consent__card">
+            <span class="caption">Ошибка — нажали «Отправить» без галочки</span>
+            <ConsentCheckbox v-model:checked="consentError" :error="!consentError" />
+            <BaseButton class="sg-consent__btn">Отправить заявку</BaseButton>
+          </div>
+          <div class="sg-consent__card">
+            <span class="caption">Отмечен — можно отправлять</span>
+            <ConsentCheckbox v-model:checked="consentChecked" />
+            <BaseButton class="sg-consent__btn" :disabled="!consentChecked">Отправить заявку</BaseButton>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
 
 <style scoped>
+.sg-consent {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--s-16);
+}
+
+.sg-consent__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+  padding: var(--s-20);
+  border-radius: var(--r-card);
+  background: var(--white);
+}
+
+.sg-consent__btn {
+  justify-content: center;
+  margin-top: auto;
+}
+
+@media (max-width: 991px) {
+  .sg-consent {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* служебные пометки макета (разделители, плашки, подписи) — не часть
    системы, поэтому их мелкие размеры заданы здесь, а не токенами */
 

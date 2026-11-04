@@ -1,9 +1,11 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { consentReady } from '../../utils/consent.js'
 
 // декоративный зацикленный ролик без звука: MP4 подставляется только при
 // первом появлении в экране (preload="none" + src по требованию), играет,
-// пока виден и вкладка активна. reduced motion — только постер.
+// пока виден и вкладка активна. Пока открыто окно согласия — стоит и ничего не
+// качает. reduced motion — только постер.
 // смысл несёт подпись рядом, поэтому видео aria-hidden
 const props = defineProps({
   src: { type: String, required: true },
@@ -19,7 +21,7 @@ let reduce = false
 
 function play() {
   const video = videoEl.value
-  if (!video || reduce || !visible || document.hidden) return
+  if (!video || reduce || !visible || document.hidden || !consentReady.value) return
   // play() отклоняется, пока файла нет или браузер не разрешил — это не ошибка
   video.play()?.catch(() => {})
 }
@@ -27,6 +29,18 @@ function play() {
 function pause() {
   videoEl.value?.pause()
 }
+
+// в экране и окно согласия закрыто: подставляем файл при первом разе и запускаем
+function start() {
+  if (reduce || !visible || !consentReady.value) return
+  if (!activeSrc.value) activeSrc.value = props.src
+  requestAnimationFrame(play)
+}
+
+watch(consentReady, (ready) => {
+  if (ready) start()
+  else pause()
+})
 
 function onVisibility() {
   if (document.hidden) pause()
@@ -38,8 +52,7 @@ onMounted(() => {
   if (reduce) return
   observer = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting
-    if (visible && !activeSrc.value) activeSrc.value = props.src
-    if (visible) requestAnimationFrame(play)
+    if (visible) start()
     else pause()
   }, { threshold: 0.3 })
   observer.observe(videoEl.value)
