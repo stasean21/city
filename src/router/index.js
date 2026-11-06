@@ -16,7 +16,6 @@ export const routes = [
   ...redirects,
   { path: '/services/:slug', name: 'service-detail', component: () => import('../views/ServiceDetailView.vue'), beforeEnter: serviceExists },
   { path: '/privacy', name: 'privacy', component: () => import('../views/PrivacyView.vue') },
-  { path: '/consent', name: 'consent', component: () => import('../views/ConsentView.vue') },
   // всё остальное — 404; пререндерится как /404 → dist/404.html
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue') },
 ]

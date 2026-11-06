@@ -10,7 +10,7 @@ export const consentReady = ref(false)
 export const consentOpen = ref(false)
 
 export const CONSENT_KEY = 'cookie-consent'
-const DOCUMENT_ROUTES = ['privacy', 'consent']
+const DOCUMENT_ROUTES = ['privacy']
 const VALUES = ['all', 'necessary']
 
 export function readConsent() {
