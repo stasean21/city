@@ -1,0 +1,123 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Окно согласия → политика</title>
+<style>
+@font-face { font-family: Gilroy; src: url(img/Gilroy-Medium.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-400-normal.woff2); font-weight: 400; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-cyrillic-500-normal.woff2); font-weight: 500; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: Inter; src: url(/home/user/city-main/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2); font-weight: 500; unicode-range: U+0000-00FF; }
+:root { --ink:#1D1E22; --bg:#F6F4F2; --bg-3:#ECEAE7; --text:#4A4B50; --text-3:#A1A09F; --accent:#F59958; --line:#E2DFDB; --ease: cubic-bezier(.65,0,.35,1); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font: 400 15px/25px Inter, sans-serif; background: var(--bg); }
+.bg { position: fixed; inset: -30px; background: url(img/bg-pc.png) center top / cover no-repeat; filter: blur(18px) saturate(.8); }
+.veil { position: fixed; inset: 0; background: rgba(29,30,34,.35); }
+/* одно окно: меняет размер, внутри сменяются два вида */
+.win { position: fixed; left: 50%; top: 50%; translate: -50% -50%; width: 520px; height: 590px; background: #fff; border-radius: 32px; overflow: hidden;
+  transition: width .6s var(--ease), height .6s var(--ease), border-radius .6s var(--ease); }
+.win.wide { width: min(980px, calc(100vw - 48px)); height: calc(100vh - 48px); border-radius: 32px; }
+.view { position: absolute; inset: 0; transition: opacity .25s ease; }
+.view.off { opacity: 0; pointer-events: none; }
+.form { padding: 36px 36px 28px; }
+.logo { height: 24px; }
+h2 { font: 500 30px/1.15 Gilroy; letter-spacing: -.6px; color: var(--ink); margin: 24px 0 12px; }
+.lead { color: var(--text); }
+a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent); cursor: pointer; }
+.cbs { display: grid; gap: 8px; margin-top: 22px; }
+.cb { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 14px 16px; background: var(--bg); border-radius: 15px; font: 400 14px/21px Inter; color: var(--ink); cursor: pointer; }
+.box { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #B8B4AE; background: #fff; display: grid; place-items: center; transition: background .2s, border-color .2s; }
+.box.on { background: var(--ink); border-color: var(--ink); }
+.box.on::after { content: ""; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px,-1px); }
+.cb em { font-style: normal; font: 500 11px/18px Inter; color: var(--text-3); background: #fff; border-radius: 6px; padding: 0 6px; margin-left: 4px; white-space: nowrap; }
+.cb em.req { color: var(--accent); }
+.btn { display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 15px; font: 500 16px Inter; margin-top: 24px; background: #E4E1DC; color: var(--text-3); transition: background .2s, color .2s; }
+.btn.on { background: var(--ink); color: #fff; }
+.hint { margin-top: 10px; font-size: 13px; line-height: 18px; color: var(--text-3); text-align: center; }
+/* вид «политика» */
+.doc { display: grid; grid-template-rows: auto 1fr; }
+.top { display: flex; align-items: center; gap: 16px; padding: 22px 28px; border-bottom: 1px solid var(--line); }
+.back { display: inline-flex; gap: 8px; align-items: center; font: 500 13px/20px Inter; color: var(--ink); background: var(--bg-3); border-radius: 999px; padding: 6px 14px; }
+.top b { font: 500 18px Gilroy; color: var(--ink); }
+.x { margin-left: auto; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-3); display: grid; place-items: center; font: 400 22px Inter; color: var(--ink); }
+.scroll { overflow: auto; padding: 32px 56px 40px; scroll-behavior: smooth; }
+.scroll h3 { font: 500 24px/1.25 Gilroy; color: var(--ink); margin: 32px 0 12px; display: flex; gap: 10px; align-items: baseline; }
+.scroll h3 span { font: 500 14px Inter; color: var(--accent); }
+.scroll h1 { font: 500 38px/1.12 Gilroy; letter-spacing: -1px; color: var(--ink); max-width: 640px; }
+.scroll .date { font: 500 13px Inter; color: var(--text-3); margin: 10px 0 8px; }
+.scroll p { color: var(--text); margin-bottom: 12px; max-width: 680px; }
+.end { margin-top: 40px; padding: 24px; border-radius: 24px; background: var(--bg); max-width: 680px; }
+.end .cb { background: #fff; }
+.end .btn { margin-top: 16px; }
+.end p.t { font: 500 18px Gilroy; color: var(--ink); margin-bottom: 14px; }
+@media (max-width: 767px) {
+  .bg { background-image: url(img/bg-mob.png); }
+  .win { left: 12px; right: 12px; top: auto; bottom: 12px; translate: none; width: auto; height: 560px; border-radius: 27px; }
+  .win.wide { width: auto; height: calc(100svh - 24px); border-radius: 27px; }
+  .form { padding: 28px 22px 20px; } h2 { font-size: 24px; margin-top: 18px; } .lead { font-size: 14px; line-height: 22px; }
+  .top { padding: 14px 16px; } .top b { display: none; } .scroll { padding: 22px 20px 28px; } .scroll h1 { font-size: 26px; } .scroll h3 { font-size: 19px; }
+}
+</style></head><body>
+<div class="bg"></div><div class="veil"></div>
+<div class="win" id="win">
+  <div class="view form" id="form">
+    <img class="logo" src="img/logo-light.svg" alt="m/design">
+    <h2>Прежде чем начать</h2>
+    <p class="lead">Мы используем файлы cookie и сервис Яндекс.Метрика, чтобы анализировать посещаемость и улучшать сайт. Подробнее — в <a class="open">Политике обработки персональных данных</a>.</p>
+    <div class="cbs">
+      <label class="cb c1"><span class="box"></span><span>Я ознакомлен(а) с <a class="open">Политикой обработки персональных данных</a> <em class="req">обязательно</em></span></label>
+      <label class="cb c2"><span class="box"></span><span>Разрешаю cookie и Яндекс.Метрику для анализа посещаемости <em>по желанию</em></span></label>
+    </div>
+    <span class="btn">Перейти на сайт</span>
+    <p class="hint">Отметьте первый пункт, чтобы продолжить</p>
+  </div>
+  <div class="view doc off" id="doc">
+    <div class="top"><span class="back" id="back">← Назад к выбору</span><b>Политика обработки персональных данных</b><span class="x" id="x">×</span></div>
+    <div class="scroll" id="scroll">
+      <h1>Политика в отношении обработки персональных данных</h1>
+      <p class="date">Дата редакции: 09.11.2026</p>
+      <h3><span>1</span>Общие положения</h3>
+      <p>1.1. Настоящая Политика индивидуального предпринимателя Мунтяну Станислава в отношении обработки персональных данных (далее — Политика) разработана во исполнение требований п. 2 ч. 1 ст. 18.1 Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных»…</p>
+      <p>1.2. Политика действует в отношении всех персональных данных, которые обрабатывает индивидуальный предприниматель Мунтяну Станислав…</p>
+      <h3><span>2</span>Термины и определения</h3>
+      <p>2.1. Персональные данные — любая информация, относящаяся к прямо или косвенно определённому или определяемому физическому лицу…</p>
+      <p>2.2. Оператор — государственный орган, муниципальный орган, юридическое или физическое лицо…</p>
+      <h3><span>3</span>Цели обработки, категории данных и субъектов, правовые основания</h3>
+      <p>3.1. Цель 1: обработка заявок, поступивших через форму на Сайте и мессенджеры, обратная связь с потенциальными клиентами.</p>
+      <p style="color:var(--text-3)">… разделы 4–9 — полный текст политики …</p>
+      <h3><span>10</span>Реквизиты Оператора</h3>
+      <p>Индивидуальный предприниматель Мунтяну Станислав · ИНН 366609497266 · E-mail: stasean21@yandex.ru</p>
+      <div class="end">
+        <p class="t">Прочитали? Отметьте и продолжайте</p>
+        <div class="cbs" style="margin-top:0">
+          <label class="cb c1"><span class="box"></span><span>Я ознакомлен(а) с Политикой обработки персональных данных <em class="req">обязательно</em></span></label>
+          <label class="cb c2"><span class="box"></span><span>Разрешаю cookie и Яндекс.Метрику для анализа посещаемости <em>по желанию</em></span></label>
+        </div>
+        <span class="btn">Перейти на сайт</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// общее состояние галочек для обоих видов
+const st = { c1: false, c2: false }
+function render() {
+  document.querySelectorAll('.c1 .box').forEach(b => b.classList.toggle('on', st.c1))
+  document.querySelectorAll('.c2 .box').forEach(b => b.classList.toggle('on', st.c2))
+  document.querySelectorAll('.btn').forEach(b => b.classList.toggle('on', st.c1))
+  document.querySelector('.hint').textContent = st.c1 ? (st.c2 ? 'Метрика подключится после перехода' : 'Метрика не подключится') : 'Отметьте первый пункт, чтобы продолжить'
+}
+const win = document.getElementById('win'), form = document.getElementById('form'), doc = document.getElementById('doc')
+function openDoc() { form.classList.add('off'); setTimeout(() => win.classList.add('wide'), 120); setTimeout(() => doc.classList.remove('off'), 520) }
+function closeDoc() { doc.classList.add('off'); setTimeout(() => win.classList.remove('wide'), 120); setTimeout(() => form.classList.remove('off'), 520) }
+document.querySelectorAll('.open').forEach(a => a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openDoc() }))
+document.getElementById('x').onclick = closeDoc; document.getElementById('back').onclick = closeDoc
+document.querySelectorAll('.cb').forEach(cb => cb.addEventListener('click', e => { if (e.target.closest('a')) return; const k = cb.classList.contains('c1') ? 'c1' : 'c2'; st[k] = !st[k]; render() }))
+render()
+window.demo = async () => {
+  const w = ms => new Promise(r => setTimeout(r, ms))
+  await w(900); openDoc(); await w(1500)
+  const sc = document.getElementById('scroll'); sc.scrollTo({ top: sc.scrollHeight }); await w(1300)
+  st.c1 = true; render(); await w(700); st.c2 = true; render(); await w(1000)
+  closeDoc(); await w(1400)
+}
+</script></body></html>
