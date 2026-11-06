@@ -343,6 +343,10 @@ html {
   --consent-blur:     blur(1.125rem); /* 18 */
   --t-consent-tag:    .6875rem; /* 11 — метки «обязательно», «по желанию» */
   --consent-tag-px:   .375rem;  /* 6 */
+  --consent-wide-w:   61.25rem; /* 980 — окно с текстом политики; высота и поля — по подложке */
+  --consent-doc-w:    42.5rem;  /* 680 — колонка текста в нём */
+  --consent-doc-px:   3.5rem;   /* 56 */
+  --consent-close:    2.5rem;   /* 40 — крестик в полосе */
 
   /* чекбокс согласия (ConsentCheckbox) */
   --check-box:    1.375rem;  /* 22 */
@@ -432,6 +436,8 @@ html {
   :root {
     --consent-pad: 1.75rem 1.375rem 1.25rem; /* 28 22 20 */
     --r-consent:   var(--r-stage); /* 27 */
+    --consent-wide-w: none;     /* во всю ширину подложки */
+    --consent-doc-px: var(--s-20);
     --legal-top:   var(--s-40);
     --t-addon:   1rem;      /* 16 — в две колонки на 360 */
     --t-display: 2.125rem;  /* 34 */

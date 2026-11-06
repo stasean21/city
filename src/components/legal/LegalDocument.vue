@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import LegalBody from './LegalBody.vue'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
 
 // юридический документ: «← На главную», h1, «Содержание» и разделы.
@@ -17,7 +18,7 @@ const LINE = 0.33 // линия чтения: на трети окна
 const HOLD_MS = 200 // прокрутка после клика затихла столько — выбор кликом отпускаем
 
 const route = useRoute()
-const partEls = ref([])
+const bodyEl = ref(null)
 const activeIndex = ref(0)
 const tocOpen = ref(false)
 
@@ -32,7 +33,7 @@ let holdTimer = 0
 function updateActive() {
   frame = 0
   if (holding) return
-  const tops = partEls.value.map((el) => el.getBoundingClientRect().top)
+  const tops = bodyEl.value.parts.map((el) => el.getBoundingClientRect().top)
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight
   const lastAtEnd = tops[tops.length - 1] + window.scrollY - maxScroll
   const base = window.innerHeight * LINE
@@ -117,38 +118,7 @@ onUnmounted(() => {
           <div class="legal__text">
             <p v-if="intro" class="legal__intro">{{ intro }}</p>
 
-            <div
-              v-for="(section, i) in sections"
-              :key="section.id"
-              ref="partEls"
-              class="legal__part"
-            >
-              <h2 :id="section.id" class="card-title legal__heading">
-                <span class="body legal__num">{{ section.num }}</span>
-                <span>
-                  {{ section.title }}
-                  <RouterLink
-                    :to="{ hash: `#${section.id}` }"
-                    class="body legal__anchor"
-                    :aria-label="`Ссылка на раздел ${section.num}`"
-                    active-class=""
-                    exact-active-class=""
-                    @click="select(i)"
-                  >#</RouterLink>
-                </span>
-              </h2>
-
-              <template v-for="item in section.items" :key="item.text">
-                <p>{{ item.text }}</p>
-                <ul v-if="item.list" class="legal__list">
-                  <li v-for="line in item.list" :key="line">{{ line }}</li>
-                </ul>
-              </template>
-
-              <div v-if="section.requisites" class="legal__requisites">
-                <p v-for="line in section.requisites" :key="line">{{ line }}</p>
-              </div>
-            </div>
+            <LegalBody ref="bodyEl" :sections="sections" @select="select" />
           </div>
         </div>
       </div>
@@ -243,8 +213,7 @@ onUnmounted(() => {
 }
 
 .legal-toc__link:focus-visible,
-.legal-toc__more:focus-visible,
-.legal__anchor:focus-visible {
+.legal-toc__more:focus-visible {
   outline: var(--focus-ring) solid var(--ink);
   outline-offset: var(--focus-ring);
 }
@@ -252,78 +221,6 @@ onUnmounted(() => {
 /* ---------- текст ---------- */
 .legal__intro {
   margin-bottom: var(--s-60);
-}
-
-.legal__part {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-12);
-  padding-bottom: var(--s-60);
-}
-
-.legal__part:last-of-type {
-  padding-bottom: 0;
-}
-
-.legal__heading {
-  display: flex;
-  align-items: baseline;
-  gap: var(--s-12);
-  margin-bottom: var(--s-4);
-}
-
-.legal__num {
-  flex: none;
-  color: var(--accent);
-}
-
-.legal__anchor {
-  margin-left: var(--s-4);
-  color: var(--text-3);
-  opacity: 0;
-  transition: opacity var(--ease), color var(--ease);
-}
-
-.legal__heading:hover .legal__anchor,
-.legal__anchor:focus-visible {
-  opacity: 1;
-}
-
-.legal__anchor:hover {
-  color: var(--ink);
-}
-
-/* ховера на таче нет — ссылка видна всегда */
-@media (hover: none) {
-  .legal__anchor {
-    opacity: 1;
-  }
-}
-
-.legal__list {
-  display: grid;
-  gap: var(--s-8);
-}
-
-.legal__list li {
-  position: relative;
-  max-width: var(--measure-paragraph);
-  padding-left: var(--s-20);
-}
-
-.legal__list li::before {
-  content: '/';
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.legal__requisites {
-  padding: var(--s-24);
-  border-radius: var(--r-card);
-  background: var(--white);
-  color: var(--ink);
 }
 
 @media (max-width: 767px) {
@@ -350,10 +247,6 @@ onUnmounted(() => {
 
   .legal__intro {
     margin-bottom: var(--s-40);
-  }
-
-  .legal__part {
-    padding-bottom: var(--s-40);
   }
 }
 </style>
