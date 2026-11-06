@@ -115,17 +115,54 @@ function checkDark() {
   })
 }
 
+// ---------- подвал ----------
+// ярлык едет с экраном, но на подвал не заходит: упирается в него с зазором
+// и дальше поднимается вместе с ним. translate, а не transform: transform занят
+// подъёмом при наведении
+let tabBottom = 0 // нижний отступ ярлыка от края окна, px: на телефоне — над нижней панелью
+let footerGap = 0 // --s-12, px
+
+function measureLift() {
+  const tab = tabEl.value
+  if (!tab) return
+  tabBottom = parseFloat(getComputedStyle(tab).bottom)
+  const root = getComputedStyle(document.documentElement)
+  footerGap = parseFloat(root.getPropertyValue('--s-12')) * parseFloat(root.fontSize)
+}
+
+function updateLift() {
+  const footer = document.querySelector('.site-footer')
+  const lift = footer
+    ? Math.max(0, window.innerHeight - footer.getBoundingClientRect().top - tabBottom + footerGap)
+    : 0
+  tabEl.value?.style.setProperty('--gift-lift', `${lift}px`)
+}
+
+// один кадр на всё: сначала подъём, потом цвет — ярлык мог оказаться над другим блоком
+function updateTab() {
+  updateLift()
+  checkDark()
+}
+
 function queueDark() {
-  if (!darkFrame) darkFrame = requestAnimationFrame(checkDark)
+  if (!darkFrame) darkFrame = requestAnimationFrame(updateTab)
+}
+
+function onResize() {
+  measureLift()
+  queueDark()
 }
 
 // ярлык появился (state === 'tab') или сменил ширину вместе с подписью —
 // ResizeObserver присылает и первый замер, и каждое изменение
 watch(tabEl, (el, prev) => {
   if (prev) tabObserver?.unobserve(prev)
-  if (el) tabObserver?.observe(el)
+  if (el) {
+    measureLift()
+    tabObserver?.observe(el)
+  }
 }, { flush: 'post' })
-// другая страница — другие тёмные блоки
+// другая страница — другие тёмные блоки и другая высота до подвала
 watch(() => route.fullPath, queueDark, { flush: 'post' })
 
 watch(label, measureLabel)
@@ -220,10 +257,12 @@ onMounted(() => {
   ready.value = true
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('scroll', queueDark, { passive: true })
-  window.addEventListener('resize', queueDark, { passive: true })
+  window.addEventListener('resize', onResize, { passive: true })
   // выше 1440 кегль растёт с экраном — и подпись вместе с ним
   window.addEventListener('resize', measureLabel, { passive: true })
   tabObserver = new ResizeObserver(queueDark)
+  // высота страницы меняется и без прокрутки (картинки, раскрытые блоки) — подвал едет
+  tabObserver.observe(document.body)
   // ярлык виден сразу (повторный визит) — подпись замерена запасным шрифтом,
   // с Inter она шире и обрезалась бы: перемеряем, когда шрифты загрузятся
   document.fonts?.ready.then(measureLabel)
@@ -243,7 +282,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('scroll', queueDark)
-  window.removeEventListener('resize', queueDark)
+  window.removeEventListener('resize', onResize)
   window.removeEventListener('resize', measureLabel)
   tabObserver?.disconnect()
   cancelAnimationFrame(darkFrame)
@@ -481,6 +520,8 @@ onUnmounted(() => {
   background: var(--ink);
   color: var(--white);
   cursor: pointer;
+  /* над подвалом; без transition — идёт ровно за ним, без запаздывания */
+  translate: 0 calc(-1 * var(--gift-lift, 0px));
   transition: background-color var(--ease), color var(--ease);
 }
 

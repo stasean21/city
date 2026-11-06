@@ -29,7 +29,7 @@ function toTop() {
 </script>
 
 <template>
-  <footer class="site-footer on-dark">
+  <footer class="site-footer on-dark" data-dark-zone>
     <div class="container">
       <div class="site-footer__top">
         <RouterLink to="/" class="site-footer__logo">
