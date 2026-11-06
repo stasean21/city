@@ -8,10 +8,7 @@ const clients = summary.clients.slice(0, 5)
 // фоны кругов с буквой идут по кругу
 const AVATAR_BG = ['var(--bg-3)', 'var(--bg-4)', 'var(--bg-2)']
 
-const items = reviews.items.map((item) => ({
-  ...item,
-  caption: [item.name, item.niche, item.service].filter(Boolean).join(' · '),
-}))
+const items = reviews.items
 
 // на мобилке стена — одна горизонтальная лента в естественном порядке;
 // до монтирования (и в пререндере) — две вертикальные
@@ -43,8 +40,7 @@ function syncMedia() {
   reduced.value = mqReduced.matches
 }
 
-// картинки догружаются лениво и меняют высоту лент — пересчитываем
-// разом, а не на каждую картинку
+// высота лент зависит от шрифтов: когда они загрузятся — пересчитываем
 function queueRefresh() {
   if (refreshQueued) return
   refreshQueued = true
@@ -54,10 +50,6 @@ function queueRefresh() {
   })
 }
 
-function onImageLoad(event) {
-  if (event.target.tagName === 'IMG') queueRefresh()
-}
-
 onMounted(async () => {
   mqMobile = window.matchMedia('(max-width: 767px)')
   mqReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -65,8 +57,6 @@ onMounted(async () => {
   mqMobile.addEventListener('change', syncMedia)
   mqReduced.addEventListener('change', syncMedia)
 
-  // load не всплывает — ловим на погружении
-  wallEl.value.addEventListener('load', onImageLoad, true)
   window.addEventListener('load', queueRefresh)
 
   // gsap — только в браузере: страница пререндерится
@@ -105,7 +95,6 @@ onBeforeUnmount(() => {
   unmounted = true
   // revert убивает и твины, и их ScrollTrigger'ы, возвращает transform
   mm?.revert()
-  wallEl.value?.removeEventListener('load', onImageLoad, true)
   window.removeEventListener('load', queueRefresh)
   mqMobile?.removeEventListener('change', syncMedia)
   mqReduced?.removeEventListener('change', syncMedia)
@@ -129,27 +118,23 @@ onBeforeUnmount(() => {
             class="reviews__lane"
             :aria-label="laneIndex === 0 ? 'Отзывы клиентов' : null"
           >
-            <li v-for="item in lane" :key="item.alt" class="reviews__card">
-              <img
-                v-if="item.image"
-                class="reviews__img"
-                :src="item.image"
-                :width="item.width"
-                :height="item.height"
-                :alt="item.alt"
-                loading="lazy"
-                decoding="async"
-              />
-              <div
-                v-else
-                class="reviews__placeholder"
-                role="img"
-                :aria-label="item.alt"
-                :style="{ aspectRatio: `${item.width} / ${item.height}` }"
-              >
-                <span class="caption" aria-hidden="true">скрин отзыва</span>
+            <li v-for="item in lane" :key="item.text" class="reviews__card">
+              <span v-if="item.service" class="pill reviews__service">{{ item.service }}</span>
+              <p>{{ item.text }}</p>
+              <div class="reviews__author">
+                <!-- имя рядом прочитается текстом -->
+                <span class="reviews__author-mark" aria-hidden="true">
+                  <span v-if="item.initial" class="h3">{{ item.initial }}</span>
+                  <svg v-else class="reviews__person" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <circle cx="9" cy="6" r="3.25" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M3 15.5c.6-3 3-4.5 6-4.5s5.400 1.500 6 4.500" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <span class="reviews__who">
+                  <span class="ui reviews__name">{{ item.name }}</span>
+                  <span class="caption reviews__source">{{ item.source }} · {{ item.date }}</span>
+                </span>
               </div>
-              <p v-if="item.caption" class="caption reviews__caption">{{ item.caption }}</p>
             </li>
           </ul>
         </div>
@@ -252,32 +237,55 @@ onBeforeUnmount(() => {
   will-change: transform;
 }
 
-/* карточка-скрин */
+/* карточка: метка услуги, текст отзыва, автор */
 .reviews__card {
-  padding: var(--s-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+  padding: var(--s-24);
   background: var(--white);
   border-radius: var(--r-card);
 }
 
-.reviews__img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: var(--r-lg);
+.reviews__service {
+  align-self: flex-start;
 }
 
-.reviews__placeholder {
+.reviews__author {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: var(--bg-2);
-  border-radius: var(--r-lg);
+  gap: var(--s-12);
+  margin-top: var(--s-8);
 }
 
-.reviews__caption {
-  margin-top: var(--s-8);
-  color: var(--text-3);
+.reviews__author-mark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--reviews-avatar);
+  height: var(--reviews-avatar);
+  background: var(--bg-3);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+}
+
+.reviews__person {
+  width: var(--reviews-person);
+  height: var(--reviews-person);
+}
+
+.reviews__who {
+  min-width: 0;
+}
+
+.reviews__name,
+.reviews__source {
+  display: block;
+}
+
+.reviews__source {
+  white-space: nowrap;
 }
 
 .reviews__swipe {
