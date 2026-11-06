@@ -77,7 +77,7 @@ function toTop() {
       </div>
 
       <div class="site-footer__bottom">
-        <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266 · ОГРНИП 324366800118693</span>
+        <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266</span>
         <div class="site-footer__meta">
           <RouterLink to="/privacy" class="caption site-footer__doc">Политика обработки персональных данных</RouterLink>
           <RouterLink to="/consent" class="caption site-footer__doc">Согласие на обработку персональных данных</RouterLink>
