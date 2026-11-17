@@ -1,6 +1,6 @@
-// Яндекс Метрика — только после согласия (ConsentGate). Ни <script>, ни <noscript>
-// в index.html: без согласия на mc.yandex.ru не уходит ни одного запроса.
-// Вебвизор выключен: в политике (п. 5.1) он не описан
+// Яндекс Метрика — грузится при входе на сайт (main.js), без ожидания согласия:
+// о cookie сообщает плашка CookieBar. Вебвизор включён и описан в политике (п. 5.1).
+// Не через <script> в index.html: только в браузере, пререндер её не трогает
 const COUNTER = 108640080
 const SRC = 'https://mc.yandex.ru/metrika/tag.js'
 
@@ -18,7 +18,7 @@ export function loadMetrika() {
   script.async = true
   script.src = SRC
   document.head.appendChild(script)
-  window.ym(COUNTER, 'init', { defer: true, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: false })
+  window.ym(COUNTER, 'init', { defer: true, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true })
   window.ym(COUNTER, 'hit', window.location.href)
 }
 

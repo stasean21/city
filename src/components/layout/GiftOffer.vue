@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import BaseButton from '../ui/BaseButton.vue'
 import gift from '../../data/gift.json'
 import { scrollToSameAnchor } from '../../utils/headerOffset.js'
+import { cookieBarVisible } from '../../utils/consent.js'
 
 // подарок к первому заказу: hidden → open (окно) → tab (ярлык в углу).
 // Окно само всплывает один раз, через 10 с после первой загрузки в этой вкладке;
@@ -350,7 +351,7 @@ onUnmounted(() => {
         class="ui gift-tab"
         aria-label="Ваш подарок: открыть"
         aria-haspopup="dialog"
-        :class="{ 'is-shaking': shaking, 'is-on-dark': onDark }"
+        :class="{ 'is-shaking': shaking, 'is-on-dark': onDark, 'is-under-cookie': cookieBarVisible }"
         @click="open(true)"
         @mouseenter="holdTab"
         @mouseleave="releaseTab"
@@ -701,6 +702,11 @@ onUnmounted(() => {
   .gift__note {
     margin-left: 0;
     text-align: center;
+  }
+
+  /* на телефоне ярлык на месте плашки cookie — пока она на экране, его нет */
+  .gift-tab.is-under-cookie {
+    display: none;
   }
 
   /* над нижней панелью шапки */

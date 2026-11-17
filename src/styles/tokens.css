@@ -336,19 +336,12 @@ html {
   --gift-tab-h:       3.25rem;  /* 52 — ярлык «Ваш подарок» */
   --gift-icon:        1.125rem; /* 18 — иконка подарка */
 
-  /* окно согласия при входе (ConsentGate) */
-  --z-consent:        700;      /* над галереей (300), под лоадером (800) */
-  --consent-w:        32.5rem;  /* 520 */
-  --consent-pad:      2.25rem 2.25rem 1.75rem; /* 36 36 28 */
-  --r-consent:        2rem;     /* 32 */
-  --consent-veil:     rgba(29, 30, 34, .35); /* --ink с прозрачностью */
-  --consent-blur:     blur(1.125rem); /* 18 */
-  --t-consent-tag:    .6875rem; /* 11 — метки «обязательно», «по желанию» */
-  --consent-tag-px:   .375rem;  /* 6 */
-  --consent-wide-w:   61.25rem; /* 980 — окно с текстом политики; высота и поля — по подложке */
-  --consent-doc-w:    42.5rem;  /* 680 — колонка текста в нём */
-  --consent-doc-px:   3.5rem;   /* 56 */
-  --consent-close:    2.5rem;   /* 40 — крестик в полосе */
+  /* плашка cookie (CookieBar) */
+  --z-cookie:      90;       /* как ярлык подарка: под шапкой и шторкой меню, под окном подарка (250) */
+  --cookie-w:      35rem;    /* 560 */
+  --cookie-gift:   21rem;    /* 336 — место справа под ярлык подарка: самая длинная подпись даёт ~290 */
+  --cookie-x:      2.5rem;   /* 40 — крестик */
+  --cookie-x-icon: .875rem;  /* 14 */
 
   /* чекбокс согласия (ConsentCheckbox) */
   --check-box:    1.375rem;  /* 22 */
@@ -436,10 +429,6 @@ html {
 
 @media (max-width: 767px) {
   :root {
-    --consent-pad: 1.75rem 1.375rem 1.25rem; /* 28 22 20 */
-    --r-consent:   var(--r-stage); /* 27 */
-    --consent-wide-w: none;     /* во всю ширину подложки */
-    --consent-doc-px: var(--s-20);
     --legal-top:   var(--s-40);
     --t-addon:   1rem;      /* 16 — в две колонки на 360 */
     --t-display: 2.125rem;  /* 34 */

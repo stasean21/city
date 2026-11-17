@@ -2,12 +2,10 @@
 import { ref } from 'vue'
 
 // разделы документа: номер, заголовок, абзацы, списки, реквизиты. Один источник вёрстки
-// для страниц (LegalDocument) и для политики в окне согласия (ConsentGate).
-// sections: [{ id, num, title, items?: [{ text, list? }], requisites? }].
-// anchors — ссылки «#» и якоря; в окне их нет: адрес страницы там другой
+// страницы документа (LegalDocument).
+// sections: [{ id, num, title, items?: [{ text, list? }], requisites? }]
 defineProps({
   sections: { type: Array, required: true },
-  anchors: { type: Boolean, default: true },
 })
 
 defineEmits(['select'])
@@ -23,12 +21,11 @@ defineExpose({ parts })
     ref="parts"
     class="legal__part"
   >
-    <h2 :id="anchors ? section.id : null" class="card-title legal__heading">
+    <h2 :id="section.id" class="card-title legal__heading">
       <span class="body legal__num">{{ section.num }}</span>
       <span>
         {{ section.title }}
         <RouterLink
-          v-if="anchors"
           :to="{ hash: `#${section.id}` }"
           class="body legal__anchor"
           :aria-label="`Ссылка на раздел ${section.num}`"

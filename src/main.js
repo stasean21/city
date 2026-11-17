@@ -7,7 +7,7 @@ import '@fontsource/inter/500.css'
 import './styles/tokens.css'
 import './styles/base.css'
 import { headerOffset, scrollBehaviorMode } from './utils/headerOffset.js'
-import { hitMetrika } from './utils/metrika.js'
+import { hitMetrika, loadMetrika } from './utils/metrika.js'
 
 export const createApp = ViteSSG(
   App,
@@ -26,9 +26,12 @@ export const createApp = ViteSSG(
   },
   ({ router, isClient }) => {
     if (!isClient) return
-    // переходы между страницами; якоря внутри страницы — не новый просмотр
+    // первый просмотр отправляет сам loadMetrika
+    loadMetrika()
+    // переходы между страницами; первая навигация уже засчитана,
+    // якоря внутри страницы — не новый просмотр
     router.afterEach((to, from, failure) => {
-      if (failure || to.path === from.path) return
+      if (failure || from.matched.length === 0 || to.path === from.path) return
       const { origin } = window.location
       hitMetrika(origin + to.fullPath, origin + from.fullPath)
     })

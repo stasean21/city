@@ -7,8 +7,8 @@ import TheHeader from './components/layout/TheHeader.vue'
 import TheFooter from './components/layout/TheFooter.vue'
 import TheLoader from './components/layout/TheLoader.vue'
 import GiftOffer from './components/layout/GiftOffer.vue'
-import ConsentGate from './components/layout/ConsentGate.vue'
-import { consentOpen, consentReady } from './utils/consent.js'
+import CookieBar from './components/layout/CookieBar.vue'
+import { consentReady } from './utils/consent.js'
 
 // без этого vite-ssg ставит в пререндер lang="en" поверх index.html.
 // og-теги — общие для всех страниц; og:image — запасная картинка превью,
@@ -30,10 +30,9 @@ useHead({
 // 404 — полноэкранный тёмный экран, как загрузчик: без шапки и футера
 const route = useRoute()
 const chrome = computed(() => route.name !== 'not-found')
-// подарок к первому заказу — ни на 404, ни на служебном стайлгайде,
-// и отсчёт его показа начинается только после окна согласия. consentOpen — отдельно:
-// на документе без выбора окна на экране нет, но подарку ещё рано
-const gift = computed(() => chrome.value && route.name !== 'styleguide' && consentReady.value && !consentOpen.value)
+// подарок к первому заказу — ни на 404, ни на служебном стайлгайде;
+// consentReady — приложение смонтировано (ставит CookieBar)
+const gift = computed(() => chrome.value && route.name !== 'styleguide' && consentReady.value)
 </script>
 
 <template>
@@ -42,5 +41,5 @@ const gift = computed(() => chrome.value && route.name !== 'styleguide' && conse
   <TheFooter v-if="chrome" />
   <GiftOffer v-if="gift" />
   <TheLoader />
-  <ConsentGate />
+  <CookieBar />
 </template>
