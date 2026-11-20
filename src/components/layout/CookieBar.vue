@@ -41,7 +41,7 @@ onMounted(() => {
 <template>
   <Transition name="cookie" appear>
     <div v-if="shown" class="cookie" role="region" aria-label="Уведомление о cookie">
-      <p class="small cookie__text">Мы используем <RouterLink to="/privacy" class="text-link">cookies</RouterLink>, чтобы анализировать, как вы пользуетесь сайтом, и улучшать его</p>
+      <p class="small cookie__text">Мы используем <RouterLink to="/cookies" class="text-link">cookies</RouterLink>, чтобы анализировать, как вы пользуетесь сайтом, и улучшать его</p>
       <div class="cookie__actions">
         <BaseButton class="cookie__accept" variant="primary" type="button" @click="close">Принять</BaseButton>
         <button type="button" class="cookie__x" aria-label="Закрыть" @click="close">

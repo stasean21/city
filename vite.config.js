@@ -17,7 +17,7 @@ const servicePaths = services
 
 // настоящие страницы сайта — для sitemap.xml. без 404, /styleguide, редиректов
 // и черновиков
-const sitemapPaths = ['/', ...servicePaths, '/privacy']
+const sitemapPaths = ['/', ...servicePaths, '/privacy', '/cookies', '/consent']
 
 function writeSitemap() {
   const lastmod = new Date().toISOString().slice(0, 10)

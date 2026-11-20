@@ -72,6 +72,8 @@ function toTop() {
         <span class="caption site-footer__legal">© {{ year }} m/design · ИП Мунтяну Станислав · ИНН 366609497266</span>
         <div class="site-footer__meta">
           <RouterLink to="/privacy" class="caption site-footer__doc">Политика обработки персональных данных</RouterLink>
+          <RouterLink to="/cookies" class="caption site-footer__doc">Политика использования файлов cookie</RouterLink>
+          <RouterLink to="/consent" class="caption site-footer__doc">Согласие на обработку персональных данных</RouterLink>
           <button type="button" class="caption site-footer__up" @click="toTop">
             Наверх
             <svg class="site-footer__up-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
